@@ -196,13 +196,7 @@ class S:
     auto = None       # card data for automatic pictures
     area = 0          # editor the mouse was last in
     what = None       # last thing seen under the mouse (for checking)
-    pull = None       # socket a wire was pulled from: (node, socket id, is_output, kind, name, time)
-    pull_line = None  # [area, start, end] of the wire being pulled
-    pull_h = None
-    last_combo = None # the recipe built last (for Remix)
     layout_edit = False
-    last_gcombo = None
-    last_ccombo = None
 
 
 def prefs():
@@ -298,20 +292,9 @@ def socket_card(sock):
         return k
     t = text_for(sock, "default_value")
     if t:
-        S.text = (t[0], t[1] + fx_hint(sock))
+        S.text = t
         return "__text__:sock:" + sock.node.name + sock.identifier
     return None
-
-
-def fx_hint(sock):
-    """If Infocard Recipes is installed, say how many of its effects fit this socket."""
-    rec = next((mod for name, mod in list(sys.modules.items())
-                if name.split(".")[-1] == "infocard_recipes" and hasattr(mod, "fx_hint")), None)
-    try:
-        n = rec.fx_hint(sock) if rec else 0
-    except Exception:
-        n = 0
-    return f"  Alt-drag from this dot: {n} effects fit here." if n else ""
 
 
 def node_card(node_idname, name=None):
@@ -677,8 +660,8 @@ def hook_menus():
     tool buttons, Add Node...). We listen there and swap the card."""
     S.hooks = []
     for cls in _all_op_classes():
-        if not cls.__module__.startswith("bl_"):
-            continue  # only Blender's own operators, never other add-ons
+        if not cls.__module__.startswith("bl_") or cls.__module__.startswith(("bl_pkg", "bl_ext", "bl_app")):
+            continue  # only Blender's own UI operators, never other add-ons or the extensions system
         own = cls.__dict__.get("description")
         base = own
         if base is None:
@@ -688,28 +671,32 @@ def hook_menus():
                     break
         if base is None or not isinstance(base, classmethod):
             continue
-        f = base.__func__
-
-        def description(c, context, properties, f=f):
-            d = f(c, context, properties)
-            try:
-                t = None
-                try:
-                    t = properties["type"]
-                except Exception:
-                    t = getattr(properties, "type", None)
-                if c.__name__ == "NODE_OT_add_node" and t:
-                    show_node(t)
-                else:
-                    show_op(c, d)
-            except Exception:
-                pass
-            return d
+        description = _make_desc(base.__func__)
         try:
             cls.description = classmethod(description)
             S.hooks.append((cls, own))
         except Exception:
             pass
+
+
+def _make_desc(f):
+    """A tooltip function with exactly Blender's signature (cls, context, properties)."""
+    def description(c, context, properties):
+        d = f(c, context, properties)
+        try:
+            t = None
+            try:
+                t = properties["type"]
+            except Exception:
+                t = getattr(properties, "type", None)
+            if c.__name__ == "NODE_OT_add_node" and t:
+                show_node(t)
+            else:
+                show_op(c, d)
+        except Exception:
+            pass
+        return d
+    return description
 
 
 class PTIPS_OT_modifier_add(bpy.types.Operator):
@@ -1785,13 +1772,5 @@ def unregister():
     S.handlers = []
     S.tex = {}
     S.key = None
-    if S.pull_h is not None:
-        bpy.types.SpaceNodeEditor.draw_handler_remove(S.pull_h, "WINDOW")
-        S.pull_h = None
-    for a in ("ptips_fx_search", "ptips_cb_search", "ptips_cb_theme", "ptips_cb_a", "ptips_gr_search", "ptips_gr_theme", "ptips_gr_a", "ptips_cr_search", "ptips_cr_theme", "ptips_cr_a"):
-        try:
-            delattr(bpy.types.WindowManager, a)
-        except Exception:
-            pass
     for c in reversed(classes):
         bpy.utils.unregister_class(c)
