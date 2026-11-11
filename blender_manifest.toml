@@ -1,0 +1,21 @@
+schema_version = "1.0.0"
+
+id = "infocard"
+version = "1.0.0"
+name = "Infocard"
+tagline = "Hover any setting to see a picture of what it does"
+maintainer = "Yotam Kiper"
+type = "add-on"
+
+website = "https://github.com/yotamkiper1/infocard"
+
+tags = ["User Interface", "Material", "Geometry Nodes", "Compositing", "Physics"]
+
+blender_version_min = "4.2.0"
+
+license = [
+  "SPDX:GPL-3.0-or-later",
+]
+copyright = [
+  "2026 Yotam Kiper",
+]

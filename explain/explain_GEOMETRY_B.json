@@ -1,0 +1,1118 @@
+{
+ "GeometryNodeInputIndex": {
+  "node": "Gives every element (point, face, and so on) its position number in the list, starting at 0. Use it to treat elements differently, like every second one.",
+  "inputs": {}
+ },
+ "GeometryNodeInputInstanceBounds": {
+  "node": "Finds the smallest box around each instance's geometry and gives its corners. Use it to know how big each instance is.",
+  "inputs": {
+   "Use Radius": "When on, point and curve radius count toward the box size. When off, only the raw point positions are used."
+  }
+ },
+ "GeometryNodeInputInstanceReference": {
+  "node": "Gives the number of the instance reference each instance uses. Handy for telling which kind of object each instance is.",
+  "inputs": {}
+ },
+ "GeometryNodeInputInstanceRotation": {
+  "node": "Gives the rotation of each instance as a value you can read or change with fields. Use it to see how each copy is turned.",
+  "inputs": {}
+ },
+ "GeometryNodeInputInstanceScale": {
+  "node": "Gives the size of each instance as a vector (X, Y, Z). Use it to read how big or small each copy is.",
+  "inputs": {}
+ },
+ "GeometryNodeInputMaterial": {
+  "node": "Outputs one material you pick in the node. Plug it into Set Material or Replace Material to use that material.",
+  "inputs": {}
+ },
+ "GeometryNodeInputMaterialIndex": {
+  "node": "Gives which material slot number each face or element uses. Use it to find or sort parts by material.",
+  "inputs": {}
+ },
+ "GeometryNodeInputMeshEdgeAngle": {
+  "node": "Gives the angle between the two faces touching each edge. Flat edges give a low value, sharp corners give a high one. Good for finding sharp edges.",
+  "inputs": {}
+ },
+ "GeometryNodeInputMeshEdgeNeighbors": {
+  "node": "Counts how many faces touch each edge. Normal closed shapes give 2, open border edges give 1. Use it to find holes and borders.",
+  "inputs": {}
+ },
+ "GeometryNodeInputMeshEdgeVertices": {
+  "node": "Gives the two vertex numbers at the ends of each edge, plus their positions. Use it to find where an edge starts and ends.",
+  "inputs": {}
+ },
+ "GeometryNodeInputMeshFaceArea": {
+  "node": "Gives the surface size of each face. Big faces give big numbers. Use it to treat large and small faces differently.",
+  "inputs": {}
+ },
+ "GeometryNodeInputMeshFaceIsPlanar": {
+  "node": "Tells if each face is flat (true) or bent (false). Use it to find faces that are warped.",
+  "inputs": {
+   "Threshold": "How much bending still counts as flat. Low is strict, only perfectly flat faces pass. High allows slightly bent faces."
+  }
+ },
+ "GeometryNodeInputMeshFaceNeighbors": {
+  "node": "Gives how many faces and vertices each face has around it. Use it to tell triangles, quads and bigger faces apart.",
+  "inputs": {}
+ },
+ "GeometryNodeInputMeshIsland": {
+  "node": "Finds separate pieces of a mesh that are not connected to each other. Gives each piece a number and the total count of pieces.",
+  "inputs": {}
+ },
+ "GeometryNodeInputMeshVertexNeighbors": {
+  "node": "Gives how many edges and faces touch each vertex. Use it to find crowded corners or isolated points.",
+  "inputs": {}
+ },
+ "GeometryNodeInputNamedAttribute": {
+  "node": "Reads a saved attribute by its name and gives you the values. Use it to get data stored earlier or painted in the mesh.",
+  "inputs": {
+   "Name": "The exact name of the attribute to read. Names must match exactly, including capital letters."
+  }
+ },
+ "GeometryNodeInputNamedLayerSelection": {
+  "node": "Gives true for the Grease Pencil layer you name, and false for the others. Use it to pick one drawing layer.",
+  "inputs": {
+   "Name": "The name of the Grease Pencil layer to select. It must match the layer name exactly."
+  }
+ },
+ "GeometryNodeInputNormal": {
+  "node": "Gives the direction each face or vertex points away from the surface, like an arrow sticking out. Use it to push or align things outward.",
+  "inputs": {}
+ },
+ "GeometryNodeInputObject": {
+  "node": "Outputs one object you pick in the node. Plug it into Object Info or other nodes that need an object.",
+  "inputs": {}
+ },
+ "GeometryNodeInputPosition": {
+  "node": "Gives the location of each point in 3D space as X, Y, Z. Use it to base changes on where something is.",
+  "inputs": {}
+ },
+ "GeometryNodeInputRadius": {
+  "node": "Gives the thickness of each curve point or point cloud point. Use it to read or reuse the sizes already set.",
+  "inputs": {}
+ },
+ "GeometryNodeInputSceneTime": {
+  "node": "Gives the current time of the animation in seconds and in frames. Use it to animate things as the timeline plays.",
+  "inputs": {}
+ },
+ "GeometryNodeInputShadeSmooth": {
+  "node": "Tells if each face is set to smooth shading (true) or flat shading (false). Use it to find which faces look smooth.",
+  "inputs": {}
+ },
+ "GeometryNodeInputShortestEdgePaths": {
+  "node": "For each vertex, finds the next step on the shortest route along edges to the nearest end vertex. Use it to make paths like rivers or cracks.",
+  "inputs": {
+   "End Vertex": "Marks which vertices are the goals where paths end. Every path runs toward the closest marked vertex.",
+   "Edge Cost": "How hard it is to travel along each edge. Low means easy, paths prefer it. High means costly, paths avoid it."
+  }
+ },
+ "GeometryNodeInputSplineCyclic": {
+  "node": "Tells if each curve closes into a loop (true) or has open ends (false). Use it to find the closed curves.",
+  "inputs": {}
+ },
+ "GeometryNodeInputSplineResolution": {
+  "node": "Gives how many points each curve gets when it is drawn. Higher numbers mean smoother curves.",
+  "inputs": {}
+ },
+ "GeometryNodeInputTangent": {
+  "node": "Gives the direction a curve is heading at each point, like which way a train faces on a track. Use it to align things along a curve.",
+  "inputs": {}
+ },
+ "GeometryNodeInputVoxelIndex": {
+  "node": "Gives the whole-number X, Y, Z address of the voxel (a 3D pixel) being checked. Use it to tell voxels apart inside a volume grid.",
+  "inputs": {}
+ },
+ "GeometryNodeInstanceOnPoints": {
+  "node": "Places a copy of some geometry on every point. Copies are cheap instances. Use it to scatter trees, rocks or bolts.",
+  "inputs": {
+   "Selection": "Picks which points get a copy. True places an instance there, false leaves the point empty.",
+   "Pick Instance": "When on, each point picks one item from the instances you give it. When off, all items are placed together at every point.",
+   "Instance Index": "Chooses which item to use at each point when Pick Instance is on. 0 is the first, 1 the second, and so on.",
+   "Rotation": "Turns each copy. Zero keeps it straight. Plug in a random value or a normal-based rotation for variety.",
+   "Scale": "Sizes each copy. 1 is original size, lower is smaller, higher is bigger. Different X, Y, Z values stretch it."
+  }
+ },
+ "GeometryNodeInstanceTransform": {
+  "node": "Gives the full position, rotation and size of each instance packed into one matrix. Use it to copy or reuse an instance's placement.",
+  "inputs": {}
+ },
+ "GeometryNodeInstancesToPoints": {
+  "node": "Turns each instance into a single point at its center. Use it when you want to work with where the copies are, not what they look like.",
+  "inputs": {
+   "Selection": "Picks which instances become points. True means converted, false means skipped.",
+   "Position": "Where each new point is placed. By default it uses the instance's own origin, so you rarely change this.",
+   "Radius": "The size of each created point. Low is tiny dots, high is big dots. Only matters for display and some later nodes."
+  }
+ },
+ "GeometryNodeInterpolateCurves": {
+  "node": "Makes new hair-like curves by blending between existing guide curves. Use it to fill a hairy area from a few guide strands.",
+  "inputs": {
+   "Guide Up": "The up direction of the guide curves. It helps new curves bend the same way as their guides.",
+   "Guide Group ID": "Sorts guide curves into groups. New curves only blend with guides that share their group number.",
+   "Point Up": "The up direction at each new point's start. It keeps the new curves facing the right way.",
+   "Point Group ID": "Group number of each new point. It only uses guides that have the same group number.",
+   "Max Neighbors": "How many nearby guide curves are blended. Low (1) copies one guide exactly. High mixes many for a smoother, softer result."
+  }
+ },
+ "GeometryNodeIsViewport": {
+  "node": "Tells if the nodes are running for the 3D viewport (true) or for a final render (false). Use it to keep the viewport light and render detailed.",
+  "inputs": {}
+ },
+ "GeometryNodeJoinGeometry": {
+  "node": "Glues many separate geometries into one. Use it to combine a mesh, curves and points so they travel as a single piece.",
+  "inputs": {}
+ },
+ "GeometryNodeListGetItem": {
+  "node": "Picks one value out of a list by its position number. Use it to grab, for example, the third item.",
+  "inputs": {
+   "List": "The list of values you want to pick from.",
+   "Index": "The position of the item to take. 0 is the first item. Too high a number gives a default empty value."
+  }
+ },
+ "GeometryNodeListLength": {
+  "node": "Counts how many items are in a list. Use it to know the size of a list before looping or picking items.",
+  "inputs": {
+   "List": "The list to count. Its number of items is returned."
+  }
+ },
+ "GeometryNodeMaterialSelection": {
+  "node": "Gives true for faces that use the chosen material and false for the rest. Use it to change only the parts with that material.",
+  "inputs": {
+   "Material": "The material to look for. Faces using it are selected."
+  }
+ },
+ "GeometryNodeMenuSwitch": {
+  "node": "Lets you choose one of several named inputs from a drop-down menu. Use it to switch between versions of a setup.",
+  "inputs": {
+   "Menu": "Picks which named option is passed through. You can plug in a value to choose it from outside the node."
+  }
+ },
+ "GeometryNodeMergeByDistance": {
+  "node": "Joins points or vertices that are close together into one. Use it to clean up doubled points left after combining meshes.",
+  "inputs": {
+   "Selection": "Picks which points can be merged. Unselected points stay as they are.",
+   "Mode": "All merges any points within the distance. Connected only merges points that already share an edge.",
+   "Distance": "How close points must be to merge. Zero merges only overlapping points. Higher values merge points that are further apart."
+  }
+ },
+ "GeometryNodeMergeLayers": {
+  "node": "Joins groups of Grease Pencil layers into single layers. Use it to simplify a drawing with many layers.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Group ID": "Layers with the same number are merged into one layer. Different numbers stay separate."
+  }
+ },
+ "GeometryNodeMergePoints": {
+  "node": "Merges points that share the same ID number into one. Use it to weld chosen points together, even if they are far apart.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Merge ID": "Points with the same number are merged together. Points with different numbers stay apart."
+  }
+ },
+ "GeometryNodeMeshBevel": {
+  "node": "Rounds or cuts off sharp edges or corners so they catch light nicely. Use it to make shapes look less razor sharp.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Affect Kind": "Chooses whether edges or vertices get bevelled. Edges rounds the sides, vertices rounds the corners.",
+   "Start Left Offset": "How far the bevel reaches on the left side at the start of each edge. Zero means none, higher cuts deeper.",
+   "Start Right Offset": "How far the bevel reaches on the right side at the start of each edge. Zero means none, higher cuts deeper.",
+   "End Left Offset": "How far the bevel reaches on the left side at the end of each edge. Zero means none, higher cuts deeper.",
+   "End Right Offset": "How far the bevel reaches on the right side at the end of each edge. Zero means none, higher cuts deeper.",
+   "Offset": "How wide the bevel is. Low gives a tiny rounded edge. High gives a big chamfer that eats into the shape.",
+   "Miter": "When on, bevels meeting at a corner end in sharp points instead of rounding over.",
+   "Spread": "How far a mitered corner extends. Low keeps the corner tight, high spreads it wider.",
+   "Segments": "How many slices make up the bevel. 1 is a flat cut, higher numbers make it smoother and rounder.",
+   "Shape": "Curve of the bevel profile. Low looks flat or concave, 0.5 is round, high looks bulging or squarish."
+  }
+ },
+ "GeometryNodeMeshBoolean": {
+  "node": "Cuts, subtracts or joins meshes using solid-shape logic. Use it to carve holes in a mesh or merge solid shapes together.",
+  "inputs": {
+   "Self Intersection": "When on, parts of the same mesh that cross each other are also handled. Slower but safer for messy meshes.",
+   "Hole Tolerant": "When on, tries to work even if the mesh has holes. It is slower, so turn it on only if results look wrong."
+  }
+ },
+ "GeometryNodeMeshCircle": {
+  "node": "Makes a ring of vertices joined by edges, like a hoop. Use it as a profile for pipes or as a base for curves.",
+  "inputs": {
+   "Vertices": "How many points the ring has. Low like 3 gives a triangle, high like 64 looks like a smooth circle.",
+   "Radius": "How far the ring is from its center. Small is a tight ring, large is a wide ring."
+  }
+ },
+ "GeometryNodeMeshCone": {
+  "node": "Makes a cone or a cut-off cone shape. Use it for spikes, funnels, cups or trees.",
+  "inputs": {
+   "Vertices": "How many points around the circle base. Low looks chunky and faceted, high looks smooth and round.",
+   "Side Segments": "How many rings of faces go up the side. More gives more detail for bending or bumps.",
+   "Fill Segments": "How many rings of faces fill the top and bottom caps. 1 is a plain flat cap.",
+   "Radius Top": "Width of the top. 0 makes a sharp point. The same as the bottom makes a cylinder.",
+   "Radius Bottom": "Width of the bottom. Small gives a thin cone, large gives a wide base.",
+   "Depth": "The height of the cone. Small is flat and squat, large is tall and thin."
+  }
+ },
+ "GeometryNodeMeshCube": {
+  "node": "Makes a box with any size on each side. Use it as a quick block, wall, floor or building piece.",
+  "inputs": {
+   "Size": "Length of the box on X, Y and Z. Small numbers make a tiny box, big numbers make a huge one.",
+   "Vertices X": "How many points along the X side. 2 is just the corners, more adds cuts for bending or detail.",
+   "Vertices Y": "How many points along the Y side. 2 is just the corners, more adds cuts for bending or detail.",
+   "Vertices Z": "How many points along the Z side. 2 is just the corners, more adds cuts for bending or detail."
+  }
+ },
+ "GeometryNodeMeshCylinder": {
+  "node": "Makes a tube shape with flat ends. Use it for pipes, columns, cans or wheels.",
+  "inputs": {
+   "Vertices": "How many points around the circle. Low looks like a prism with flat sides, high looks round and smooth.",
+   "Side Segments": "How many rings of faces go along the side. More gives more detail for bending.",
+   "Fill Segments": "How many rings of faces fill each end cap. 1 is a plain flat cap.",
+   "Radius": "How wide the cylinder is. Small is thin like a pencil, large is wide like a barrel.",
+   "Depth": "How tall the cylinder is. Small is flat like a coin, large is long like a pole."
+  }
+ },
+ "GeometryNodeMeshFaceSetBoundaries": {
+  "node": "Finds edges that sit between faces with different group numbers. Use it to outline regions, like borders on a map.",
+  "inputs": {
+   "Face Set": "The group number of each face. Edges where the number changes are selected."
+  }
+ },
+ "GeometryNodeMeshGrid": {
+  "node": "Makes a flat sheet of squares lying on the ground (X and Y). Use it for floors, terrain or cloth.",
+  "inputs": {
+   "Size X": "Width of the grid along X. Small is a tiny patch, large is a wide field.",
+   "Size Y": "Length of the grid along Y. Small is a tiny patch, large is a long field.",
+   "Vertices X": "How many points along X. Low gives big squares, high gives fine detail for bending or displacing.",
+   "Vertices Y": "How many points along Y. Low gives big squares, high gives fine detail for bending or displacing."
+  }
+ },
+ "GeometryNodeMeshIcoSphere": {
+  "node": "Makes a ball built from equal triangles. Use it when you want a sphere without squeezed spots at the poles.",
+  "inputs": {
+   "Radius": "Distance from the center to the surface. Small is marble-sized, large is planet-sized.",
+   "Subdivisions": "How many times the triangles are split. 1 is a rough shape, higher is smoother but heavier. Very high values get slow."
+  }
+ },
+ "GeometryNodeMeshLine": {
+  "node": "Makes a row of points joined by edges. Use it as a path, a base for curves or a line of copies.",
+  "inputs": {
+   "Count": "How many points are in the line. Low gives a short chain, high gives a dense line.",
+   "Resolution": "The spacing between points when using length mode. Small packs them close, large spreads them out.",
+   "Start Location": "Where the first point sits in 3D space. Change it to move the whole line.",
+   "Offset": "The step from one point to the next as X, Y, Z. It sets the direction and spacing of the line."
+  }
+ },
+ "GeometryNodeMeshToCurve": {
+  "node": "Turns mesh edges into curves. Use it to make pipes, wires or paths from a mesh outline.",
+  "inputs": {
+   "Selection": "Picks which edges become curves. True means used, false means skipped."
+  }
+ },
+ "GeometryNodeMeshToDensityGrid": {
+  "node": "Fills the inside of a mesh with a volume grid of density numbers. Use it for clouds or smoke shaped like a mesh.",
+  "inputs": {
+   "Density": "How thick the volume is inside the mesh. Low is thin like mist, high is thick and dark.",
+   "Voxel Size": "Size of each tiny 3D cell. Small gives sharp detail but is slow and heavy. Large is fast but blocky.",
+   "Gradient Width": "How soft the edge is where the volume fades out. Low is a hard edge, high is a soft fuzzy fade."
+  }
+ },
+ "GeometryNodeMeshToPoints": {
+  "node": "Turns mesh vertices (or other parts) into a cloud of points. Use it to scatter things on a mesh or show only the dots.",
+  "inputs": {
+   "Selection": "Picks which vertices become points. True means used, false means skipped.",
+   "Position": "Where each point goes. By default it keeps the original vertex position.",
+   "Radius": "Size of each point. Low is tiny dots, high is big dots. It matters for display and later nodes."
+  }
+ },
+ "GeometryNodeMeshToSDFGrid": {
+  "node": "Turns a mesh into a signed distance field, a 3D grid that stores how far each spot is from the surface. Use it to smooth or merge shapes.",
+  "inputs": {
+   "Voxel Size": "Size of each 3D cell in the grid. Small gives fine detail but is slow. Large is fast but rough.",
+   "Band Width": "How many cells around the surface are stored. Low is fast but limits later effects. High gives more room to work."
+  }
+ },
+ "GeometryNodeMeshToVolume": {
+  "node": "Turns a mesh into a fog volume that looks like its surface. Use it for clouds, smoke or glowing shapes.",
+  "inputs": {
+   "Density": "How thick the fog is. Low is faint mist, high is dense and dark.",
+   "Resolution Mode": "Choose Amount to set how many cells fit the object, or Size to set the exact cell size.",
+   "Voxel Size": "Size of each 3D cell when using Size mode. Small means fine detail but heavy. Large means fast but blocky.",
+   "Voxel Amount": "How many cells span the object when using Amount mode. Low is coarse and fast, high is detailed and slow.",
+   "Interior Band Width": "How deep the fog goes inside the surface. Low makes a thin shell, high fills the shape further."
+  }
+ },
+ "GeometryNodeMeshUVSphere": {
+  "node": "Makes a ball from rings and segments, like a globe with lines of latitude and longitude. Use it for planets, eyes or balls.",
+  "inputs": {
+   "Segments": "How many slices around the ball, like orange wedges. Low looks faceted, high looks smooth.",
+   "Rings": "How many horizontal bands from top to bottom. Low looks chunky, high looks round.",
+   "Radius": "Distance from center to surface. Small is marble-sized, large is planet-sized."
+  }
+ },
+ "GeometryNodeObjectInfo": {
+  "node": "Reads info from another object, such as its position, rotation, size and shape. Use it to bring another object into your node setup.",
+  "inputs": {
+   "Object": "The object to read from. Pick one from your scene.",
+   "As Instance": "Off copies the real geometry. On brings it as a light instance, which is faster and can be placed many times."
+  }
+ },
+ "GeometryNodeOffsetCornerInFace": {
+  "node": "Finds a neighbouring corner in the same face, a set number of steps away. Use it to look at the next or previous corner of a face.",
+  "inputs": {
+   "Corner Index": "The starting corner. By default it is each corner itself.",
+   "Offset": "How many corners to step around the face. Positive goes forward, negative goes backward, 0 stays put."
+  }
+ },
+ "GeometryNodeOffsetPointInCurve": {
+  "node": "Finds a point a set number of steps along the same curve. Use it to look at the next or previous point on a curve.",
+  "inputs": {
+   "Point Index": "The starting point. By default it is each point itself.",
+   "Offset": "How many points to step along the curve. Positive goes forward, negative goes backward, 0 stays put."
+  }
+ },
+ "GeometryNodePoints": {
+  "node": "Makes a cloud of loose points, each with its own position and size. Use it to build a starting set of dots to instance on.",
+  "inputs": {
+   "Count": "How many points to make. Low gives just a few, high gives a dense cloud.",
+   "Position": "Where each point is placed in 3D space. Plug in a field such as random values to spread them out.",
+   "Radius": "Size of each point. Low is tiny dots, high is large dots."
+  }
+ },
+ "GeometryNodePointsOfCurve": {
+  "node": "Finds a point index that belongs to a chosen curve. Use it to pick, for example, the first or last point of each curve.",
+  "inputs": {
+   "Curve Index": "Which curve to look in. By default it is each curve's own number.",
+   "Weights": "Numbers used to sort the points. Lower values come first in the order.",
+   "Sort Index": "Which spot in the sorted order to take. 0 is the first point, 1 the second, and so on."
+  }
+ },
+ "GeometryNodePointsToCurves": {
+  "node": "Joins points into curves. Points sharing a group number become one curve, ordered by weight. Use it to draw lines through points.",
+  "inputs": {
+   "Curve Group ID": "Points with the same number end up in the same curve. Different numbers make different curves.",
+   "Weight": "Sets the order of points along each curve. Lower weights come first, higher weights come later."
+  }
+ },
+ "GeometryNodePointsToSDFGrid": {
+  "node": "Turns points into a signed distance field made of little spheres. Use it to blob points together into a smooth shape.",
+  "inputs": {
+   "Radius": "Size of the sphere around each point. Small gives separate blobs, large makes them overlap and merge.",
+   "Voxel Size": "Size of each 3D cell. Small gives fine detail but is slow. Large is fast but rough."
+  }
+ },
+ "GeometryNodePointsToVertices": {
+  "node": "Turns each point in a point cloud into a mesh vertex. Use it to get real mesh dots you can connect or edit.",
+  "inputs": {
+   "Selection": "Picks which points become mesh vertices. True means used, false means skipped."
+  }
+ },
+ "GeometryNodePointsToVolume": {
+  "node": "Puts a ball of fog around every point. Use it for clouds, sparks or glowing particles.",
+  "inputs": {
+   "Density": "How thick the fog is. Low is faint mist, high is dense and dark.",
+   "Resolution Mode": "Choose Amount to set how many cells fit the object, or Size to set the exact cell size.",
+   "Voxel Size": "Size of each 3D cell when using Size mode. Small means fine detail but heavy. Large means fast but blocky.",
+   "Voxel Amount": "How many cells span the object when using Amount mode. Low is coarse and fast, high is detailed and slow.",
+   "Radius": "Size of the fog ball at each point. Small gives little puffs, large gives big clouds that overlap."
+  }
+ },
+ "GeometryNodeProximity": {
+  "node": "Finds the closest spot on another shape for each element. Gives that position and the distance. Use it to react to nearby objects.",
+  "inputs": {
+   "Group ID": "Splits the target into groups. Only target parts with the matching number are searched.",
+   "Source Position": "The spot to measure from. By default it is each element's own position.",
+   "Sample Group ID": "Group number of the element that is searching. It matches against the target's Group ID."
+  }
+ },
+ "GeometryNodeRaycast": {
+  "node": "Shoots invisible rays and finds where they hit another shape. Use it to drop things onto a surface or check for walls.",
+  "inputs": {
+   "Attribute": "The value to read from the surface where the ray hits, like a color or number.",
+   "Interpolation": "How the value is read at the hit spot. Interpolated blends nearby values smoothly, Nearest takes the closest one.",
+   "Source Position": "Where each ray starts. Move it to shoot from different spots.",
+   "Ray Direction": "Which way the ray points. (0, 0, -1) shoots straight down.",
+   "Ray Length": "How far the ray can travel. Short rays only find nearby things, long rays reach far."
+  }
+ },
+ "GeometryNodeRealizeInstances": {
+  "node": "Turns light instances into real geometry you can edit point by point. Use it when you need to change or join the copies.",
+  "inputs": {
+   "Selection": "Picks which instances are turned into real geometry. The rest stay as instances.",
+   "Realize All": "On realizes every level of nested instances. Off lets you choose how deep with Depth.",
+   "Depth": "How many layers of nested instances to make real. 1 only goes one level, higher goes deeper."
+  }
+ },
+ "GeometryNodeRemoveAttribute": {
+  "node": "Deletes attributes from the geometry by name. Use it to clean up data you no longer need and make things lighter.",
+  "inputs": {
+   "Pattern Mode": "Exact removes only the attribute with that name. Wildcard lets you use * to match many names at once.",
+   "Name": "The attribute name to delete. In wildcard mode, * matches any text."
+  }
+ },
+ "GeometryNodeRenameAttribute": {
+  "node": "Changes the name of an attribute. Use it to match names used by other nodes or materials.",
+  "inputs": {
+   "Mode": "Exact renames one attribute. Wildcard renames many whose names match a pattern.",
+   "Old": "The current name of the attribute you want to change.",
+   "New": "The new name to give it.",
+   "Overwrite": "When on, an attribute that already has the new name is replaced. When off, nothing is replaced."
+  }
+ },
+ "GeometryNodeRepeatInput": {
+  "node": "Starts a repeat zone that runs the nodes inside it again and again. Use it to build things step by step, like growing a pattern.",
+  "inputs": {
+   "Iterations": "How many times the zone runs. 0 skips it, 1 runs once, larger numbers repeat more but get slower."
+  }
+ },
+ "GeometryNodeRepeatOutput": {
+  "node": "Ends a repeat zone and sends out the result after the last loop. What you plug in here feeds back into the next loop.",
+  "inputs": {}
+ },
+ "GeometryNodeReplaceMaterial": {
+  "node": "Swaps one material for another on the geometry. Use it to recolor or restyle parts without editing the mesh.",
+  "inputs": {
+   "Old": "The material to look for and replace.",
+   "New": "The material to use in its place."
+  }
+ },
+ "GeometryNodeResampleCurve": {
+  "node": "Rebuilds curves with new evenly spaced points, as straight pieces. Use it to simplify or even out a curve.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Mode": "Count makes a set number of points. Length places points a set distance apart. Evaluated keeps the curve's own points.",
+   "Count": "How many points each curve gets in Count mode. Low is rough and angular, high is smooth.",
+   "Length": "The gap between points in Length mode. Small gives many close points, large gives few spread points."
+  }
+ },
+ "GeometryNodeReverseCurve": {
+  "node": "Flips the direction of curves so the end becomes the start. Use it when something runs the wrong way along the curve.",
+  "inputs": {
+   "Selection": "Picks which curves get flipped. True means reversed, false means left as is."
+  }
+ },
+ "GeometryNodeRotateInstances": {
+  "node": "Turns instances around, in their own space or the world. Use it to spin or tilt each copy differently.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Rotation": "How much to turn each instance. Zero changes nothing. Bigger angles turn them more.",
+   "Pivot Point": "The center they spin around. By default it is each instance's own origin.",
+   "Local Space": "On rotates each instance around its own axes. Off rotates around the world axes."
+  }
+ },
+ "GeometryNodeSDFGridBoolean": {
+  "node": "Combines signed distance field grids by union, intersect or difference. Use it to merge or carve smooth volume shapes.",
+  "inputs": {
+   "Grid 1": "The first grid used in the operation.",
+   "Grid 2": "The second grid used in the operation."
+  }
+ },
+ "GeometryNodeSDFGridFillet": {
+  "node": "Rounds off inner corners of a signed distance field surface. Use it to soften sharp creases where shapes meet.",
+  "inputs": {
+   "Grid": "The signed distance grid to round off.",
+   "Iterations": "How many times the rounding repeats. Low is subtle, high rounds more but takes longer."
+  }
+ },
+ "GeometryNodeSDFGridLaplacian": {
+  "node": "Smooths a signed distance field using Laplacian flow. Use it to even out bumps and noise on a volume surface.",
+  "inputs": {
+   "Grid": "The signed distance grid to smooth.",
+   "Iterations": "How many smoothing passes run. Low is slight, high is very smooth and may shrink details."
+  }
+ },
+ "GeometryNodeSDFGridMean": {
+  "node": "Smooths a signed distance field by averaging nearby values (box filter). Fast way to soften a volume shape.",
+  "inputs": {
+   "Grid": "The signed distance grid to smooth.",
+   "Width": "How far around each cell is averaged. Low is a light blur, high is a heavy blur.",
+   "Iterations": "How many times the filter repeats. Low is subtle, high is very smooth."
+  }
+ },
+ "GeometryNodeSDFGridMeanCurvature": {
+  "node": "Smooths a signed distance field by flattening curved bumps (mean curvature flow). Use it to round surfaces evenly.",
+  "inputs": {
+   "Grid": "The signed distance grid to smooth.",
+   "Iterations": "How many smoothing passes run. Low is slight, high shrinks and rounds the shape more."
+  }
+ },
+ "GeometryNodeSDFGridMedian": {
+  "node": "Smooths a signed distance field with a median filter, picking the middle value nearby. Removes noise but keeps edges fairly sharp.",
+  "inputs": {
+   "Grid": "The signed distance grid to clean up.",
+   "Width": "How far around each cell is checked. Low touches only tiny noise, high changes more.",
+   "Iterations": "How many times the filter repeats. Low is subtle, high cleans more."
+  }
+ },
+ "GeometryNodeSDFGridOffset": {
+  "node": "Pushes the surface of a signed distance field outward or inward. Use it to make a volume shape fatter or thinner.",
+  "inputs": {
+   "Grid": "The signed distance grid to grow or shrink.",
+   "Distance": "How far to move the surface. Positive grows it, negative shrinks it, 0 changes nothing."
+  }
+ },
+ "GeometryNodeSampleCurve": {
+  "node": "Reads a value at a chosen spot along a curve, by length or by factor. Use it to find the position or direction partway along a path.",
+  "inputs": {
+   "Value": "The data to read from the curve at the chosen spot, like its position or radius.",
+   "Factor": "How far along the curve, from 0 (start) to 1 (end). 0.5 is the middle.",
+   "Length": "How far along the curve in distance units. 0 is the start, the curve's total length is the end.",
+   "Curve Index": "Which curve to sample when there are several. 0 is the first curve."
+  }
+ },
+ "GeometryNodeSampleGrid": {
+  "node": "Reads the value of a volume grid at any position in space. Use it to see how dense or far from the surface a spot is.",
+  "inputs": {
+   "Grid": "The volume grid to read from.",
+   "Position": "The spot in space to read. Change it to sample different places.",
+   "Interpolation": "How values between cells are read. Nearest takes the closest cell, higher options blend smoothly."
+  }
+ },
+ "GeometryNodeSampleGridIndex": {
+  "node": "Reads volume grid values at exact voxel addresses. Use it when you know which cell you want.",
+  "inputs": {
+   "Grid": "The volume grid to read from.",
+   "X": "The cell number along X. Counts in whole steps from the grid origin.",
+   "Y": "The cell number along Y. Counts in whole steps from the grid origin.",
+   "Z": "The cell number along Z. Counts in whole steps from the grid origin."
+  }
+ },
+ "GeometryNodeSampleIndex": {
+  "node": "Reads a value from one chosen element by its index number. Use it to copy data from a specific point, face or edge.",
+  "inputs": {
+   "Value": "The data to read from the chosen element.",
+   "Index": "The number of the element to read from. 0 is the first one."
+  }
+ },
+ "GeometryNodeSampleNearest": {
+  "node": "Finds the index of the closest element (point, edge, face) to a position. Use it with Sample Index to copy data from the nearest one.",
+  "inputs": {
+   "Sample Position": "The spot to search from. By default it is each element's own position."
+  }
+ },
+ "GeometryNodeSampleNearestSurface": {
+  "node": "Reads a value from the closest spot on a mesh surface, blending between nearby values. Use it to copy colors or data between meshes.",
+  "inputs": {
+   "Value": "The data to read from the mesh surface.",
+   "Group ID": "Splits the target mesh into groups. Only parts with the matching number are used.",
+   "Sample Position": "The spot to search from. By default it is each element's own position.",
+   "Sample Group ID": "The group number of the searching element. It matches the target's Group ID."
+  }
+ },
+ "GeometryNodeSampleSoundFrequencies": {
+  "node": "Reads how loud a sound is in a range of pitches at a given time. Use it to drive visuals from music.",
+  "inputs": {
+   "Sound": "The sound file to listen to.",
+   "Time": "The moment in the sound to check, in seconds.",
+   "All Channels": "When on, mixes all audio channels (like left and right). When off, uses just one.",
+   "Channel": "Which single audio channel to read when All Channels is off. 0 is the first.",
+   "Low": "The lowest pitch (in Hz) to measure. Low numbers include deep bass.",
+   "High": "The highest pitch (in Hz) to measure. High numbers include treble sounds.",
+   "FFT Size": "How finely the sound is split into pitches. Larger gives more precise pitches but less precise timing.",
+   "Window Function": "How the slice of sound is shaped before analysis. It changes how clean the result is. Hann is a common choice."
+  }
+ },
+ "GeometryNodeSampleUVSurface": {
+  "node": "Reads a mesh value at a spot you give on its UV map. Use it to pick up colors or data using texture coordinates.",
+  "inputs": {
+   "Value": "The data to read from the mesh at the UV spot.",
+   "Source UV Map": "The UV coordinates of the mesh, which tell where each part sits on the flat texture.",
+   "Sample UV": "The flat 2D spot to look up. (0, 0) is the bottom left of the UV square, (1, 1) is the top right."
+  }
+ },
+ "GeometryNodeScaleElements": {
+  "node": "Grows or shrinks connected faces or edges around their own centers. Use it to shrink faces for gaps or inset panels.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Scale": "How much to resize. 1 keeps the size, below 1 shrinks, above 1 grows, 0 squeezes to the center.",
+   "Center": "The point things scale from, when set manually. By default it is the center of each group.",
+   "Scale Mode": "Uniform scales evenly in all directions. Single Axis scales only along the chosen axis.",
+   "Axis": "The direction used in Single Axis mode. Only stretching along this line happens."
+  }
+ },
+ "GeometryNodeScaleInstances": {
+  "node": "Resizes instances, in their own space or the world. Use it to make each copy bigger or smaller.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Scale": "The size factor on X, Y, Z. 1 keeps the size, below 1 shrinks, above 1 grows.",
+   "Center": "The point instances scale from. By default it is each instance's own origin.",
+   "Local Space": "On scales along each instance's own axes. Off scales along the world axes."
+  }
+ },
+ "GeometryNodeSelfObject": {
+  "node": "Gives the object that this Geometry Nodes modifier is on. Use it to read the object's own position or settings.",
+  "inputs": {}
+ },
+ "GeometryNodeSeparateComponents": {
+  "node": "Splits geometry into its types: mesh, curves, point cloud, volume, instances and more. Use it to handle each type separately.",
+  "inputs": {}
+ },
+ "GeometryNodeSeparateGeometry": {
+  "node": "Splits geometry in two: the selected part and the leftover part. Use it to keep one part and deal with the rest differently.",
+  "inputs": {
+   "Selection": "True parts go to the Selection output, false parts go to the Inverted output."
+  }
+ },
+ "GeometryNodeSetCurveHandlePositions": {
+  "node": "Moves the handles of Bézier curve points to shape the curve. Use it to change how smooth or sharp each bend is.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Position": "The new location of the handle in space. Leave it alone to keep the current handle.",
+   "Offset": "Moves the handle by this extra amount from where it is. Zero keeps it, bigger values push it away."
+  }
+ },
+ "GeometryNodeSetCurveNormal": {
+  "node": "Chooses how the sideways (normal) direction of curves is worked out. Use it to control how shapes twist when spread along a curve.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Mode": "Minimum Twist keeps it from spinning. Z Up keeps it pointing up. Free uses a normal you give.",
+   "Normal": "The direction to use in Free mode. It decides which way the curve's sides face."
+  }
+ },
+ "GeometryNodeSetCurveRadius": {
+  "node": "Sets the thickness at each curve point. Use it to make pipes or hair fatter in some spots and thinner in others.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Radius": "Thickness at each point. 0 makes it vanish, small is thin, large is thick."
+  }
+ },
+ "GeometryNodeSetCurveTilt": {
+  "node": "Twists the curve around its own direction at each point. Use it to roll ribbons or profile shapes along a path.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Tilt": "The twist angle in degrees. 0 is no twist, larger angles roll it more, and a full turn returns to the start."
+  }
+ },
+ "GeometryNodeSetGeometryBundle": {
+  "node": "Attaches a bundle (a packed group of values) to a geometry. Use it to carry extra data along with the geometry.",
+  "inputs": {
+   "Bundle": "The group of values to attach to the geometry."
+  }
+ },
+ "GeometryNodeSetGeometryName": {
+  "node": "Gives a geometry a name. It helps you tell pieces apart when debugging, and it does not change how it looks.",
+  "inputs": {
+   "Name": "The text name to give the geometry."
+  }
+ },
+ "GeometryNodeSetGreasePencilColor": {
+  "node": "Sets the color and see-through level of Grease Pencil strokes or fills. Use it to recolor a drawing.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Color": "The color to apply to the strokes.",
+   "Opacity": "How solid the color is. 0 is fully invisible, 1 is fully solid."
+  }
+ },
+ "GeometryNodeSetGreasePencilDepth": {
+  "node": "Chooses how Grease Pencil strokes are layered in depth: by 2D order or by 3D position. Use it to fix strokes that overlap wrongly.",
+  "inputs": {}
+ },
+ "GeometryNodeSetGreasePencilSoftness": {
+  "node": "Sets how soft the edges of Grease Pencil strokes are. Use it for a blurry or crisp look.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Softness": "How fuzzy the stroke edge is. 0 is crisp and sharp, 1 is very soft and blurry."
+  }
+ },
+ "GeometryNodeSetGridBackground": {
+  "node": "Sets the value used for empty cells in a volume grid. Use it to define what 'nothing' means outside the active area.",
+  "inputs": {
+   "Grid": "The volume grid to change.",
+   "Background": "The value for empty space. For a density grid, 0 means no fog out there.",
+   "Update Inactive": "When on, existing empty cells are updated to the new background. When off, they keep their old values."
+  }
+ },
+ "GeometryNodeSetGridTransform": {
+  "node": "Changes how a volume grid sits in space (its position, rotation and size). Use it to move or scale a whole grid.",
+  "inputs": {
+   "Grid": "The volume grid to move.",
+   "Transform": "The matrix that places the grid into the object's space. The identity matrix means no change."
+  }
+ },
+ "GeometryNodeSetID": {
+  "node": "Sets the ID number on each element. Used for random effects and keeping things steady over time.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "ID": "The number to store. Elements with different IDs get different random results in some nodes."
+  }
+ },
+ "GeometryNodeSetInstanceTransform": {
+  "node": "Sets the full placement (move, turn, size) of every instance at once with a matrix. Use it for exact control of copies.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Transform": "The matrix that decides where each instance sits, how it is turned and how big it is."
+  }
+ },
+ "GeometryNodeSetMaterial": {
+  "node": "Gives a material to the selected faces or elements. Use it to color or texture parts of a shape.",
+  "inputs": {
+   "Selection": "Picks which faces get the material. True means assigned, false means left alone.",
+   "Material": "The material to apply to the selected parts."
+  }
+ },
+ "GeometryNodeSetMaterialIndex": {
+  "node": "Changes which material slot number each face uses. Use it to switch a face from one slot's material to another.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Material Index": "The slot number. 0 is the first slot, 1 the second, and so on."
+  }
+ },
+ "GeometryNodeSetMeshNormal": {
+  "node": "Stores custom normals (shading directions) or sharpness on a mesh. Use it to control how light and shadow look across faces.",
+  "inputs": {
+   "Remove Custom": "When on, clears custom normals and goes back to ones computed automatically.",
+   "Edge Sharpness": "When on, the edge sharpness marks decide where shading breaks. When off, edges blend smoothly.",
+   "Face Sharpness": "When on, the face smooth setting decides if faces look flat or smooth. When off, faces follow the other normals."
+  }
+ },
+ "GeometryNodeSetNURBSOrder": {
+  "node": "Changes how many control points influence each part of a NURBS curve. Use it to make the curve stiffer or looser.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Order": "Low (2) follows the control points closely like straight lines. Higher values (up to 6) give smoother, rounder curves."
+  }
+ },
+ "GeometryNodeSetNURBSWeight": {
+  "node": "Changes how strongly each NURBS control point pulls the curve. Use it to bend a curve closer to or away from points.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Weight": "Pull strength of the point. 1 is normal, higher pulls the curve nearer, lower lets it move away."
+  }
+ },
+ "GeometryNodeSetPointRadius": {
+  "node": "Sets the size of points in a point cloud. Use it to make dots bigger or smaller.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Radius": "Size of each point. Small gives tiny dots, large gives big balls."
+  }
+ },
+ "GeometryNodeSetPosition": {
+  "node": "Moves points to a new place, or pushes them by an offset. Use it to bend, wiggle or reshape geometry.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Position": "The new location of each point. By default it keeps its current place.",
+   "Offset": "An extra move added to the position. Zero keeps points still, larger values push them further."
+  }
+ },
+ "GeometryNodeSetShadeSmooth": {
+  "node": "Makes faces look smooth or flat in shading, without changing the shape. Use it to fix a faceted look on round objects.",
+  "inputs": {
+   "Selection": "Picks which faces change shading. True means changed, false means left alone.",
+   "Shade Smooth": "On makes faces look smooth and blended. Off makes each face look flat and edgy."
+  }
+ },
+ "GeometryNodeSetSplineCyclic": {
+  "node": "Opens or closes curves into loops. Use it to join the ends of a curve or cut a loop open.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Cyclic": "On connects the end back to the start to make a loop. Off leaves the curve open."
+  }
+ },
+ "GeometryNodeSetSplineResolution": {
+  "node": "Sets how many points are made along each curve segment when drawn. Use it for smoother or lighter curves.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Resolution": "Low gives rough, angular curves. High gives smooth curves but costs more memory."
+  }
+ },
+ "GeometryNodeSimulationInput": {
+  "node": "Starts a simulation zone, where the result of each frame feeds the next one. Use it for things that change over time, like falling or growing.",
+  "inputs": {}
+ },
+ "GeometryNodeSimulationOutput": {
+  "node": "Ends a simulation zone and passes out the result of the current frame. Use it to store state over time.",
+  "inputs": {
+   "Skip": "When on, the simulation pauses and skips this frame's update. When off, it runs normally."
+  }
+ },
+ "GeometryNodeSortElements": {
+  "node": "Reorders elements by a weight number, which changes their index. Use it to control which element comes first, second, and so on.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Group ID": "Elements are sorted separately inside each group number.",
+   "Sort Weight": "Lower weights come first, higher weights come last."
+  }
+ },
+ "GeometryNodeSortList": {
+  "node": "Reorders a list of values based on weights. Use it to put list items in a chosen order.",
+  "inputs": {
+   "List": "The list of values to sort.",
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Group ID": "Items are sorted separately inside each group number.",
+   "Sort Weight": "Lower weights come first, higher weights come last."
+  }
+ },
+ "GeometryNodeSplineLength": {
+  "node": "Gives each curve's total length, and the number of points on it. Use it to size things to fit a curve.",
+  "inputs": {}
+ },
+ "GeometryNodeSplineParameter": {
+  "node": "Tells how far along its curve each point is: as a factor from 0 to 1, as a length, and as an index. Use it to grade effects along a path.",
+  "inputs": {}
+ },
+ "GeometryNodeSplitEdges": {
+  "node": "Separates faces by splitting the edges between them. Use it to make hard breaks, like cut seams or a low-poly look.",
+  "inputs": {
+   "Selection": "Picks which edges are split apart. True means split, false means kept joined."
+  }
+ },
+ "GeometryNodeSplitToInstances": {
+  "node": "Turns each group of elements into its own instance. Use it to treat chunks of a mesh as separate pieces.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Group ID": "Elements with the same number go in the same piece. Different numbers become different pieces."
+  }
+ },
+ "GeometryNodeStoreNamedAttribute": {
+  "node": "Saves a value as an attribute with a name you pick. Use it to pass data to materials or later nodes.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Name": "The name for the stored attribute. Use the same name later to read it back.",
+   "Value": "The data to save on each element. It can be a number, vector, color and so on."
+  }
+ },
+ "GeometryNodeStoreNamedGrid": {
+  "node": "Saves a volume grid under a name inside volume geometry. Use it to keep several grids together in one volume.",
+  "inputs": {
+   "Name": "The name to save the grid under. Use it later to find the grid again.",
+   "Grid": "The volume grid to save."
+  }
+ },
+ "GeometryNodeStringJoin": {
+  "node": "Glues several text strings into one, with a separator between them. Use it to build labels or names.",
+  "inputs": {
+   "Delimiter": "Text placed between each string, like a comma or space. Empty means they are stuck right together.",
+   "Strings": "The pieces of text to join, in order."
+  }
+ },
+ "GeometryNodeStringToCurves": {
+  "node": "Turns text into 3D letter shapes made of curves. Use it for titles and signs.",
+  "inputs": {
+   "String": "The text to turn into shapes.",
+   "Size": "How tall the letters are. Small is tiny text, large is big text.",
+   "Font": "The font that gives the letters their look.",
+   "Align X": "How text lines up sideways: left, center, right, justified or flush.",
+   "Align Y": "How text lines up up and down: top, middle, bottom and similar.",
+   "Pivot Point": "The point the whole text block is positioned around, such as top left or center.",
+   "Character Spacing": "Space between letters. Less than 1 packs them tight, more than 1 spreads them out.",
+   "Word Spacing": "Space between words. Less than 1 brings words close, more than 1 pushes them apart.",
+   "Line Spacing": "Space between lines. Less than 1 stacks lines tight, more than 1 spreads them out.",
+   "Overflow": "What happens when text does not fit the box: let it overflow, scale it to fit, or cut it off.",
+   "Text Box Width": "Width of the box that holds the text. 0 means no limit, small values wrap text onto more lines.",
+   "Text Box Height": "Height of the box that holds the text. 0 means no limit, small values cut or shrink long text."
+  }
+ },
+ "GeometryNodeSubdivideCurve": {
+  "node": "Splits each curve segment into smaller pieces by adding points. Use it to get more points to bend or move.",
+  "inputs": {
+   "Cuts": "How many new points are added in each segment. 0 does nothing, higher gives more detail."
+  }
+ },
+ "GeometryNodeSubdivideMesh": {
+  "node": "Splits faces into smaller ones without smoothing the shape. Use it to add more points to a mesh before bending or displacing.",
+  "inputs": {
+   "Level": "How many times faces are split. Each level makes about 4 times more faces, so high values get heavy fast."
+  }
+ },
+ "GeometryNodeSubdivisionSurface": {
+  "node": "Splits a mesh into many faces and rounds it into a smooth shape. Use it to turn a blocky model into a smooth one.",
+  "inputs": {
+   "Level": "How smooth it gets. 0 changes nothing. Each level adds many more faces, so high values are slow.",
+   "Edge Crease": "Keeps chosen edges sharp. 0 lets them round off, 1 keeps them fully sharp.",
+   "Vertex Crease": "Keeps chosen corner points sharp. 0 lets them round off, 1 keeps them fully sharp.",
+   "Limit Surface": "When on, points are moved to the final smooth surface. When off, they are placed in a quicker way.",
+   "Quality": "Accuracy of the smoothing on the GPU or CPU. Low is faster but rough. High is slower but more exact.",
+   "UV Smooth": "Decides how UV maps are smoothed, so textures do not stretch or warp at borders.",
+   "Boundary Smooth": "Decides how open borders of the mesh are smoothed. All smooths them, Keep Corners keeps corner points fixed."
+  }
+ },
+ "GeometryNodeSwitch": {
+  "node": "Chooses between two inputs with a true or false switch. Use it to turn parts of your setup on and off.",
+  "inputs": {
+   "Switch": "False passes the False input, True passes the True input.",
+   "False": "The value that goes out when the switch is off.",
+   "True": "The value that goes out when the switch is on."
+  }
+ },
+ "GeometryNodeTagFilter": {
+  "node": "Checks if a filter text matches a list of tags. Use it to pick items by labels, like in simulation setups.",
+  "inputs": {
+   "Tag Filter": "The text pattern to test, where * can stand for any text.",
+   "Tags": "The list of tags to check against the filter."
+  }
+ },
+ "GeometryNodeTool3DCursor": {
+  "node": "Gives the location and rotation of the 3D cursor. Use it in tools to act where the cursor is placed.",
+  "inputs": {}
+ },
+ "GeometryNodeToolActiveElement": {
+  "node": "Gives the index of the active (last clicked) element in Edit mode. Use it in tools to act on that element.",
+  "inputs": {}
+ },
+ "GeometryNodeToolFaceSet": {
+  "node": "Gives each face's sculpt face set number. Use it in tools to work with sculpt face groups.",
+  "inputs": {}
+ },
+ "GeometryNodeToolMousePosition": {
+  "node": "Gives where the mouse pointer is in the viewport. Use it in tools to react to the cursor.",
+  "inputs": {}
+ },
+ "GeometryNodeToolSelection": {
+  "node": "Gives true for the elements the user has selected in Edit mode. Use it in tools to affect only the selection.",
+  "inputs": {}
+ },
+ "GeometryNodeToolSetFaceSet": {
+  "node": "Writes sculpt face set numbers onto faces. Use it in tools to create or change face groups.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Face Set": "The face set number to store. Faces with the same number form a group."
+  }
+ },
+ "GeometryNodeToolSetSelection": {
+  "node": "Changes which elements are selected in Edit mode. Use it in tools to select parts based on rules.",
+  "inputs": {
+   "Selection": "True selects the element, false deselects it."
+  }
+ },
+ "GeometryNodeTransferAttributes": {
+  "node": "Copies attributes from one geometry to another using index numbers. Use it to pass data between two shapes that match in order.",
+  "inputs": {
+   "Target Point ID": "Index of the point in the target used to match the source.",
+   "Target Edge ID": "Index of the edge in the target used to match the source.",
+   "Target Face ID": "Index of the face in the target used to match the source.",
+   "Target Corner ID": "Index of the face corner in the target used to match the source.",
+   "Target Curve ID": "Index of the curve in the target used to match the source.",
+   "Target Instance ID": "Index of the instance in the target used to match the source.",
+   "Source Point ID": "Index of the point in the source that data is copied from.",
+   "Source Edge ID": "Index of the edge in the source that data is copied from.",
+   "Source Face ID": "Index of the face in the source that data is copied from.",
+   "Source Corner ID": "Index of the face corner in the source that data is copied from.",
+   "Source Curve ID": "Index of the curve in the source that data is copied from.",
+   "Source Instance ID": "Index of the instance in the source that data is copied from.",
+   "Pattern Mode": "Exact copies the attributes you name. Wildcard lets * match many attribute names.",
+   "Attribute Names": "Which attributes to copy. In wildcard mode, * matches any text.",
+   "Exclude Names": "When on, the names listed are skipped and everything else is copied."
+  }
+ },
+ "GeometryNodeTransform": {
+  "node": "Moves, turns and resizes geometry. Use it to place things in the scene or to flip and stretch them.",
+  "inputs": {
+   "Mode": "Components lets you set move, turn and size separately. Matrix uses one combined transform.",
+   "Translation": "How far to move on X, Y, Z. 0 keeps the place, bigger numbers move further.",
+   "Rotation": "How much to turn around each axis. 0 means no turn.",
+   "Scale": "How much to resize. 1 keeps the size, below 1 shrinks, above 1 grows, negative flips it.",
+   "Transform": "One matrix that holds move, turn and size together. Used in Matrix mode."
+  }
+ },
+ "GeometryNodeTranslateInstances": {
+  "node": "Moves instances without changing the geometry inside. Use it to shift or spread out copies.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Translation": "How far to move on X, Y, Z. 0 keeps the place, bigger numbers move further.",
+   "Local Space": "On moves along each instance's own axes. Off moves along the world axes."
+  }
+ },
+ "GeometryNodeTriangulate": {
+  "node": "Splits all faces into triangles. Use it before exporting, or to get a predictable face shape.",
+  "inputs": {
+   "Selection": "Picks which faces are split into triangles. Unselected faces stay as they are.",
+   "Quad Method": "How a four-sided face is cut into two triangles. It changes which diagonal is used and how the shading looks.",
+   "N-gon Method": "How faces with five or more sides are cut into triangles. Beauty makes even triangles, Clip works from the edge."
+  }
+ },
+ "GeometryNodeTrimCurve": {
+  "node": "Cuts off parts of curves at the start or end. Use it to grow or shrink a line, like drawing it on.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Start": "Where the curve begins, from 0 (original start) to 1 (original end). Raising it cuts more from the start.",
+   "End": "Where the curve ends, from 0 to 1. Lowering it cuts more from the end.",
+   "Start_001": "Where the curve begins, as a distance along its length. Raising it cuts more from the start.",
+   "End_001": "Where the curve ends, as a distance along its length. Lowering it cuts more from the end."
+  }
+ },
+ "GeometryNodeUVPackIslands": {
+  "node": "Arranges UV islands (pieces of the flat map) to fill the UV square. Use it to use texture space well and avoid overlap.",
+  "inputs": {
+   "UV": "The UV coordinates to pack.",
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Margin": "Gap between islands. 0 packs them touching, higher leaves space so textures do not bleed.",
+   "Rotate": "When on, islands may be turned to fit tighter. When off, they keep their rotation.",
+   "Method": "How the islands are fitted together. It decides whether packing is by shape or by bounding box.",
+   "Bottom Left": "Corner of the area where packing starts. Usually (0, 0).",
+   "Top Right": "Opposite corner of the packing area. Usually (1, 1)."
+  }
+ },
+ "GeometryNodeUVTangent": {
+  "node": "Gives the direction of the texture's U axis on the surface. Use it for normal maps and hair-like effects.",
+  "inputs": {
+   "Method": "Chooses how the tangent is calculated, from the UV map or from a given direction.",
+   "UV": "The UV coordinates used to find the direction."
+  }
+ },
+ "GeometryNodeUVUnwrap": {
+  "node": "Flattens a 3D mesh into a 2D UV map, cutting along seams. Use it to prepare a model for textures.",
+  "inputs": {
+   "Selection": "Picks which elements this node changes. True means changed, false means skipped. Leave it on to affect everything.",
+   "Seam": "Marks the edges where the mesh is cut open when flattening.",
+   "Margin": "Gap between flattened pieces. 0 lets them touch, higher leaves space between them.",
+   "Fill Holes": "When on, holes in the flattened map are closed to reduce stretching. When off, they stay open.",
+   "Method": "Angle Based keeps shapes natural. Conformal keeps angles better but can stretch sizes.",
+   "Iterations": "How many times it refines the result. Low is quicker but can be rough, high is more even but slower.",
+   "No Flip": "When on, it stops pieces from folding over themselves. Off can allow flipped faces."
+  }
+ },
+ "GeometryNodeVertexOfCorner": {
+  "node": "Gives which vertex a face corner belongs to. Use it to go from a corner to the point it sits on.",
+  "inputs": {
+   "Corner Index": "The number of the corner to check. By default it is each corner itself."
+  }
+ },
+ "GeometryNodeViewer": {
+  "node": "Shows the data plugged into it in the Spreadsheet and the viewport. Use it to peek at values while building.",
+  "inputs": {}
+ },
+ "GeometryNodeViewportTransform": {
+  "node": "Gives the position and direction of the 3D view you are looking through. Use it in tools to react to the camera view.",
+  "inputs": {}
+ },
+ "GeometryNodeVolumeCube": {
+  "node": "Makes a box of volume where a field decides the density at each spot. Use it to make fog, clouds or noise in 3D.",
+  "inputs": {
+   "Density": "How thick the fog is at each spot. 0 is empty, higher is thicker and darker.",
+   "Background": "The value for empty space outside the active area. Usually 0.",
+   "Min": "One corner of the box in space. Set the smaller X, Y, Z here.",
+   "Max": "The opposite corner of the box in space. Set the larger X, Y, Z here.",
+   "Resolution X": "How many cells across X. Low is rough and fast, high is detailed and slow.",
+   "Resolution Y": "How many cells across Y. Low is rough and fast, high is detailed and slow.",
+   "Resolution Z": "How many cells across Z. Low is rough and fast, high is detailed and slow."
+  }
+ },
+ "GeometryNodeVolumeToMesh": {
+  "node": "Turns a volume or a signed distance field into a solid mesh surface. Use it to get a real model from clouds or blobs.",
+  "inputs": {
+   "Resolution Mode": "Grid uses the volume's own cells. Amount sets the cell count. Size sets an exact cell size.",
+   "Voxel Size": "Cell size in Size mode. Small gives a detailed mesh but is heavy. Large is rough and fast.",
+   "Voxel Amount": "Number of cells across the object in Amount mode. Low is rough, high is detailed and slow.",
+   "Threshold": "Density value where the surface appears. Low makes a fatter shape, high makes a thinner shape.",
+   "Adaptivity": "How much flat areas are simplified. 0 keeps every face, higher merges them for fewer faces."
+  }
+ },
+ "GeometryNodeWarning": {
+  "node": "Shows a custom warning message on the node group. Use it to tell users when something is set up wrong.",
+  "inputs": {
+   "Show": "When on, the warning appears. When off, it stays hidden.",
+   "Message": "The text of the warning shown to the user."
+  }
+ },
+ "GeometryNodeXPBDSolver": {
+  "node": "Runs a physics simulation using the XPBD method, which moves bodies and constraints step by step. Use it for simple physics in nodes.",
+  "inputs": {
+   "World": "The group of data that describes the simulated world, its bodies and constraints.",
+   "Delta Time": "How much time passes each step. Small is slower and more accurate, large is faster but less stable.",
+   "Filter": "Text filter that chooses which parts of the world take part in the simulation.",
+   "Simulation to World": "Matrix that moves the simulation space into the world space.",
+   "Substeps": "How many small steps each frame is split into. More is more stable but slower.",
+   "Constraint Iterations": "How many times constraints are solved per step. More makes joints stiffer and more exact but slower.",
+   "Solver Path": "Where in the world data the solver looks for the things it simulates.",
+   "Begin": "The time when the simulation starts.",
+   "End": "The time when the simulation stops."
+  }
+ }
+}

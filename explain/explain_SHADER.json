@@ -1,0 +1,828 @@
+{
+ "ShaderNodeAddShader": {
+  "node": "Adds two shaders together so both effects happen at once. Use it to combine things like glow and shine.",
+  "inputs": {
+   "Shader": "A shader to use here. Plug in any shader node output.",
+   "Shader_001": "A shader to use here. Plug in any shader node output."
+  }
+ },
+ "ShaderNodeAmbientOcclusion": {
+  "node": "Darkens spots where surfaces are close together, like corners and creases. Use it for dirt and grime masks.",
+  "inputs": {
+   "Color": "The color to tint the result with. White keeps the occlusion output as is; other colors tint it.",
+   "Distance": "How far to look for nearby surfaces. Small values only darken tight corners; large values darken wide areas.",
+   "Normal": "The direction the surface faces for lighting. Plug in Bump or Normal Map for fake detail. Empty uses the real surface."
+  }
+ },
+ "ShaderNodeAttribute": {
+  "node": "Reads a named piece of data stored on the object or mesh, such as a color or number, so the material can use it.",
+  "inputs": {}
+ },
+ "ShaderNodeBackground": {
+  "node": "Makes the world light up the whole scene with one color. Only use it in the World, not on objects.",
+  "inputs": {
+   "Color": "The color of the light coming from the world. Dark is a dim night; bright is a bright sky.",
+   "Strength": "How bright the world light is. 0 is no light; 1 is normal; higher values light the scene more.",
+   "Weight": "Hidden helper value used internally to scale this shader when it is mixed. You normally leave it alone."
+  }
+ },
+ "ShaderNodeBevel": {
+  "node": "Fakes rounded edges by bending the shading near corners, so sharp edges catch light like real ones. Cycles only, and it can be slow.",
+  "inputs": {
+   "Radius": "How big the fake rounded edge is. Small is a sharp edge with a tiny highlight; large is a soft, round edge.",
+   "Normal": "The direction the surface faces for lighting. Plug in Bump or Normal Map for fake detail. Empty uses the real surface."
+  }
+ },
+ "ShaderNodeBlackbody": {
+  "node": "Turns a temperature in Kelvin into the color of glowing hot things. Low is red-orange like embers, high is white-blue.",
+  "inputs": {
+   "Temperature": "Temperature in Kelvin. About 1000 is red; 6500 is white-ish daylight; 10000 and above is blue."
+  }
+ },
+ "ShaderNodeBrightContrast": {
+  "node": "Makes a color lighter or darker, and pushes bright and dark parts further apart. Use it to quickly tune a texture.",
+  "inputs": {
+   "Color": "The color or image you want to adjust.",
+   "Bright": "Makes the color lighter or darker. Negative is darker; 0 is no change; positive is lighter.",
+   "Contrast": "Pushes lights and darks apart. Negative looks flat and gray; positive looks punchy and harsh."
+  }
+ },
+ "ShaderNodeBsdfAnisotropic": {
+  "node": "Shiny, mirror-like surface like metal, which can also stretch its highlights in one direction, like brushed steel.",
+  "inputs": {
+   "Color": "The tint of the reflection. White gives a plain mirror look; colors tint it like gold or copper.",
+   "Roughness": "How blurry the shine is. 0 is a sharp mirror; 1 is a very blurry, soft reflection.",
+   "Anisotropy": "Stretches the highlight in one direction. 0 is round; near 1 or -1 makes long streaks, like brushed metal.",
+   "Rotation": "Turns the stretched highlight around the surface. 0 to 1 is one full turn.",
+   "Normal": "The direction the surface faces for lighting. Plug in Bump or Normal Map for fake detail. Empty uses the real surface.",
+   "Tangent": "Direction along the surface that the stretched highlight follows. Empty uses an automatic direction.",
+   "Weight": "Hidden helper value used internally to scale this shader when it is mixed. You normally leave it alone."
+  }
+ },
+ "ShaderNodeBsdfDiffuse": {
+  "node": "A flat, matte surface that scatters light in all directions, like chalk or paper. The simplest 'not shiny' material.",
+  "inputs": {
+   "Color": "The color of the surface. Dark colors absorb light and look dark; bright colors look bright.",
+   "Roughness": "How rough the matte surface is. 0 is smooth and even; 1 looks flatter and dustier, like clay or moon dust.",
+   "Normal": "The direction the surface faces for lighting. Plug in Bump or Normal Map for fake detail. Empty uses the real surface.",
+   "Weight": "Hidden helper value used internally to scale this shader when it is mixed. You normally leave it alone."
+  }
+ },
+ "ShaderNodeBsdfGlass": {
+  "node": "Clear glass that bends light passing through and reflects at steep angles. Use it for windows, bottles and glasses.",
+  "inputs": {
+   "Color": "The tint of the glass. White is clear; colors tint the light that passes through.",
+   "Roughness": "How frosted the glass is. 0 is perfectly clear; higher gets blurry like frosted glass.",
+   "IOR": "Index of Refraction: how strongly light bends. 1 is no bend; glass is about 1.45; water is 1.33.",
+   "Normal": "The direction the surface faces for lighting. Plug in Bump or Normal Map for fake detail. Empty uses the real surface.",
+   "Weight": "Hidden helper value used internally to scale this shader when it is mixed. You normally leave it alone.",
+   "Thin Film Thickness": "Thickness of a thin oily or soapy film on the surface, in nanometers. 0 is off; higher gives rainbow colors.",
+   "Thin Film IOR": "Index of Refraction of the thin film layer. Changes the strength and color of the rainbow effect."
+  }
+ },
+ "ShaderNodeBsdfHair": {
+  "node": "A shader for hair strands that shows shine and see-through glow. Older, simpler hair look than Principled Hair.",
+  "inputs": {
+   "Color": "The color of the hair.",
+   "Offset": "Tilts the highlight along the hair strand, in radians. Moves where the shine appears.",
+   "RoughnessU": "Blur of the shine along the hair strand. Low is a thin sharp line; high is soft and wide.",
+   "RoughnessV": "Blur of the shine across the hair strand's width. Low is sharp; high is spread out.",
+   "Tangent": "Direction the hair strand runs. Empty uses the strand's own direction.",
+   "Weight": "Hidden helper value used internally to scale this shader when it is mixed. You normally leave it alone."
+  }
+ },
+ "ShaderNodeBsdfHairPrincipled": {
+  "node": "An easy, realistic shader for hair and fur. Set the color by melanin (natural dyes) or directly, then tune shine.",
+  "inputs": {
+   "Color": "Hair color, used when the parametrization is Direct Coloring. Dark is black hair; bright is blond or dyed.",
+   "Melanin": "Amount of natural pigment. 0 is white or gray hair; 1 is very dark hair.",
+   "Melanin Redness": "Mix of pigment types. Low is black or brown hair; high is red or ginger hair.",
+   "Tint": "Dye color added on top of the natural hair color. White does nothing.",
+   "Absorption Coefficient": "Sets how strongly each color is absorbed in the hair. Used in Absorption Coefficient mode for exact control.",
+   "Aspect Ratio": "Squashes the hair cross-section from round to flat. Only used by the Huang model. Changes shine shape.",
+   "Roughness": "How blurry the main shine is. Low is glossy and sharp; high is soft and dull.",
+   "Radial Roughness": "Blur of the shine around the strand's width. Low gives a tight band; high spreads it across.",
+   "Coat": "Adds a smooth shiny layer, like conditioner. 0 is none; 1 is very glossy.",
+   "IOR": "How strongly light bends inside the hair. Hair is about 1.55. Affects shine strength and glow.",
+   "Offset": "Tilts the highlights along the strand, in radians. Mimics scales on the hair surface.",
+   "Random Color": "Randomly changes hair color per strand. 0 is all alike; 1 is lots of variety.",
+   "Random Roughness": "Randomly changes shine blur per strand. 0 is all alike; higher looks more natural.",
+   "Random": "A random number per strand, often from the Curves Info node. Drives the random color and roughness.",
+   "Weight": "Hidden helper value used internally to scale this shader when it is mixed. You normally leave it alone.",
+   "R lobe": "Strength of the direct shine bounced off the hair surface. 0 removes it; 1 is normal. For Huang model.",
+   "TT lobe": "Strength of light passing straight through the hair, giving back-glow. 0 removes it; 1 is normal.",
+   "TRT lobe": "Strength of light that enters, bounces inside and leaves, giving a second tinted shine. 0 removes it."
+  }
+ },
+ "ShaderNodeBsdfMetallic": {
+  "node": "A realistic metal shader using real metal data (IOR and Extinction) or simple colors. Use it for gold, steel, copper and more.",
+  "inputs": {
+   "Base Color": "The main color of the metal when looking straight at it. Gold is yellow; silver is near white.",
+   "Edge Tint": "The color of the metal at steep angles near the edges. Usually a brighter, lighter version of the base color.",
+   "IOR": "Real-metal data (per color) for how light bends in the metal. Used in Physical Conductor mode.",
+   "Extinction": "Real-metal data for how fast each color is absorbed. Used in Physical Conductor mode with IOR.",
+   "Roughness": "How blurry the metal reflection is. 0 is a polished mirror; 1 is dull and brushed.",
+   "Anisotropy": "Stretches the highlight in one direction. 0 is round; near 1 or -1 makes long streaks, like brushed metal.",
+   "Rotation": "Turns the stretched highlight around the surface. 0 to 1 is one full turn.",
+   "Normal": "The direction the surface faces for lighting. Plug in Bump or Normal Map for fake detail. Empty uses the real surface.",
+   "Tangent": "Direction along the surface that the stretched highlight follows. Empty uses an automatic direction.",
+   "Weight": "Hidden helper value used internally to scale this shader when it is mixed. You normally leave it alone.",
+   "Thin Film Thickness": "Thickness of a thin oily or soapy film on the surface, in nanometers. 0 is off; higher gives rainbow colors.",
+   "Thin Film IOR": "Index of Refraction of the thin film layer. Changes the strength and color of the rainbow effect."
+  }
+ },
+ "ShaderNodeBsdfPrincipled": {
+  "node": "The all-in-one material node. One node can make plastic, metal, glass, skin and more by mixing its settings.",
+  "inputs": {
+   "Base Color": "The main color of the surface. For metals, it tints the reflection.",
+   "Metallic": "0 is a non-metal like plastic or wood; 1 is a pure metal. Use 0 or 1; avoid in-between values.",
+   "Roughness": "How blurry the shine is. 0 is a mirror; 1 is fully matte and rough.",
+   "IOR": "How strongly light bends and reflects on non-metals. Plastic is about 1.45; water 1.33; diamond 2.4.",
+   "Alpha": "Opacity. 1 is solid; 0 is fully see-through; values between are partly transparent.",
+   "Thin Wall": "On means a thin sheet like a soap bubble or leaf, so light is not bent inside. Off treats it as solid.",
+   "Normal": "The direction the surface faces for lighting. Plug in Bump or Normal Map for fake detail. Empty uses the real surface.",
+   "Weight": "Hidden helper value used internally to scale this shader when it is mixed. You normally leave it alone.",
+   "Diffuse Roughness": "Roughness of the matte part. 0 is smooth; higher looks flatter and dustier, like clay.",
+   "Subsurface Weight": "How much light scatters inside, like skin or wax. 0 is solid; 1 is fully soft and glowy.",
+   "Subsurface Radius": "How far light travels inside for red, green and blue. Larger gives a softer, deeper look.",
+   "Subsurface Scale": "Overall multiplier for the Radius. Small is a thin, tight glow; large spreads light deeper.",
+   "Subsurface IOR": "How strongly light bends at the surface when scattering. Used in the Random Walk (Skin) method only.",
+   "Subsurface Anisotropy": "Direction light scatters inside. Negative bounces back; 0 is even; positive pushes it forward.",
+   "Specular IOR Level": "Strength of the shine on non-metals. 0 is no shine; 0.5 is normal; 1 is extra bright.",
+   "Specular Tint": "Color that tints the shine at head-on angles. White is plain; other colors tint it.",
+   "Anisotropic": "Stretches the highlight in one direction. 0 is round; 1 makes long streaks like brushed metal.",
+   "Anisotropic Rotation": "Turns the stretched highlight around the surface. 0 to 1 is a full turn.",
+   "Tangent": "Direction along the surface that the stretched highlight follows. Empty uses an automatic direction.",
+   "Transmission Weight": "How see-through like glass the surface is. 0 is solid; 1 is fully glass.",
+   "Coat Weight": "Adds a shiny clear layer on top, like car paint or lacquer. 0 is none; 1 is full coat.",
+   "Coat Roughness": "How blurry the clear coat shine is. 0 is a sharp mirror; 1 is soft.",
+   "Coat IOR": "How strongly light bends in the clear coat. About 1.5 for a normal varnish.",
+   "Coat Tint": "Color of the clear coat layer. White is clear; colors tint like colored lacquer.",
+   "Coat Normal": "Surface direction for the coat only. Lets the coat be smooth while the base is bumpy.",
+   "Sheen Weight": "Adds a soft fuzzy glow at edges, like cloth. 0 is none; 1 is full.",
+   "Sheen Roughness": "How wide the sheen glow spreads. Low is a thin tight rim; high is broad and soft.",
+   "Sheen Tint": "Color of the sheen glow. White is plain; other colors tint the fuzz.",
+   "Emission Color": "The color of the glow the surface gives off.",
+   "Emission Strength": "How bright the glow is. 0 is off; 1 is normal; higher is brighter and lights nearby things.",
+   "Thin Film Thickness": "Thickness of a thin oily or soapy film on the surface, in nanometers. 0 is off; higher gives rainbow colors.",
+   "Thin Film IOR": "Index of Refraction of the thin film layer. Changes the strength and color of the rainbow effect."
+  }
+ },
+ "ShaderNodeBsdfRayPortal": {
+  "node": "Makes light rays jump to a new place and direction, like a portal. Used for tricks such as fake windows or teleporting views.",
+  "inputs": {
+   "Color": "Tints the light passing through the portal. White passes light unchanged.",
+   "Position": "The new place where the ray continues from, in world space.",
+   "Direction": "The new direction the ray travels in after the portal.",
+   "Weight": "Hidden helper value used internally to scale this shader when it is mixed. You normally leave it alone."
+  }
+ },
+ "ShaderNodeBsdfRefraction": {
+  "node": "Bends light as it passes into a see-through material, like glass without the mirror reflection. Mix it with Glossy yourself.",
+  "inputs": {
+   "Color": "The tint of the see-through material. White is clear; colors tint the light.",
+   "Roughness": "How frosted it is. 0 is clear and sharp; higher gets blurry.",
+   "IOR": "Index of Refraction: how strongly light bends. 1 is no bend; glass is about 1.45; water is 1.33.",
+   "Normal": "The direction the surface faces for lighting. Plug in Bump or Normal Map for fake detail. Empty uses the real surface.",
+   "Weight": "Hidden helper value used internally to scale this shader when it is mixed. You normally leave it alone."
+  }
+ },
+ "ShaderNodeBsdfSheen": {
+  "node": "Adds the soft, fuzzy glow seen at the edges of cloth like velvet. Usually mixed with another shader.",
+  "inputs": {
+   "Color": "The color of the soft fuzzy glow at the edges.",
+   "Roughness": "How wide the glow spreads. Low is a thin tight rim; high is broad and soft.",
+   "Normal": "The direction the surface faces for lighting. Plug in Bump or Normal Map for fake detail. Empty uses the real surface.",
+   "Weight": "Hidden helper value used internally to scale this shader when it is mixed. You normally leave it alone."
+  }
+ },
+ "ShaderNodeBsdfToon": {
+  "node": "Gives light a cartoon look with hard color bands instead of smooth shading. Use it for cel-shaded art.",
+  "inputs": {
+   "Color": "The color of the surface. Dark colors absorb light and look dark; bright colors look bright.",
+   "Size": "How big the bright cartoon area is. Small gives a tiny spot; large lights most of the surface.",
+   "Smooth": "Softens the hard edge between light and dark. 0 is a sharp cartoon edge; higher blends smoothly.",
+   "Normal": "The direction the surface faces for lighting. Plug in Bump or Normal Map for fake detail. Empty uses the real surface.",
+   "Weight": "Hidden helper value used internally to scale this shader when it is mixed. You normally leave it alone."
+  }
+ },
+ "ShaderNodeBsdfTranslucent": {
+  "node": "Lets light pass through a thin object and glow from the other side, like a leaf or lampshade. Not clear like glass.",
+  "inputs": {
+   "Color": "The color of the light that glows through. Dark blocks light; bright lets more through.",
+   "Normal": "The direction the surface faces for lighting. Plug in Bump or Normal Map for fake detail. Empty uses the real surface.",
+   "Weight": "Hidden helper value used internally to scale this shader when it is mixed. You normally leave it alone."
+  }
+ },
+ "ShaderNodeBsdfTransparent": {
+  "node": "Makes a surface fully see-through with no bending. Mix it with another shader to cut out shapes.",
+  "inputs": {
+   "Color": "Tints light passing through. White is fully clear; colors tint it; black blocks it.",
+   "Weight": "Hidden helper value used internally to scale this shader when it is mixed. You normally leave it alone."
+  }
+ },
+ "ShaderNodeBump": {
+  "node": "Fakes small bumps from a grayscale height map without changing the real shape. Its output goes into a Normal input.",
+  "inputs": {
+   "Strength": "How strong the bumps look. 0 is flat; 1 is full bumps; values in between soften them.",
+   "Distance": "How tall the bumps are in scene units. Small is shallow detail; large is deep, dramatic bumps.",
+   "Filter Width": "How wide the area used to read the height is. Small is sharp; larger blurs and smooths bumps.",
+   "Height": "A grayscale value or texture. White is high, black is low. This makes the bumps.",
+   "Normal": "Base surface direction to add bumps to. Empty uses the real surface."
+  }
+ },
+ "ShaderNodeCameraData": {
+  "node": "Gives facts about how far and in what direction a point is from the camera. Use it for distance fades and depth effects.",
+  "inputs": {}
+ },
+ "ShaderNodeClamp": {
+  "node": "Squeezes a number so it never goes below a minimum or above a maximum, like a ceiling and a floor.",
+  "inputs": {
+   "Value": "The number to limit.",
+   "Min": "The lowest the result can be. Anything below it is raised to this.",
+   "Max": "The highest the result can be. Anything above it is lowered to this."
+  }
+ },
+ "ShaderNodeCombineColor": {
+  "node": "Builds one color from three separate numbers (like red, green, blue). Opposite of Separate Color.",
+  "inputs": {
+   "Red": "The red amount for the new color. 0 is none; 1 is full. (Name changes with the chosen color model.)",
+   "Green": "The green amount for the new color. 0 is none; 1 is full. (Name changes with the chosen color model.)",
+   "Blue": "The blue amount for the new color. 0 is none; 1 is full. (Name changes with the chosen color model.)"
+  }
+ },
+ "ShaderNodeCombineXYZ": {
+  "node": "Builds one vector (a point or direction) from three separate X, Y and Z numbers. Opposite of Separate XYZ.",
+  "inputs": {
+   "X": "The left-right part of the vector.",
+   "Y": "The forward-back part of the vector.",
+   "Z": "The up-down part of the vector."
+  }
+ },
+ "ShaderNodeDisplacement": {
+  "node": "Pushes the surface in or out along its normal using a height value. Plug into Material Output Displacement for real bumps.",
+  "inputs": {
+   "Height": "How much to push the surface out. Higher values push farther along the normal.",
+   "Midlevel": "The height value that means no movement. Below it pushes in; above it pushes out.",
+   "Scale": "Overall multiplier for the push. 0 means no change; larger exaggerates the bumps.",
+   "Normal": "The direction to push along. Empty uses the surface normal."
+  }
+ },
+ "ShaderNodeEeveeSpecular": {
+  "node": "An older EEVEE-only material where you pick the shine color directly instead of using Metallic. Not used in Cycles.",
+  "inputs": {
+   "Base Color": "The main color of the surface (diffuse color).",
+   "Specular": "The color and strength of the shine. Dark is no shine; bright is strong shine.",
+   "Roughness": "How blurry the shine is. 0 is a sharp mirror; 1 is a very blurry, soft reflection.",
+   "Emissive Color": "The color of light the surface gives off.",
+   "Transparency": "Opacity. 1 is solid; 0 is invisible.",
+   "Normal": "The direction the surface faces for lighting. Plug in Bump or Normal Map for fake detail. Empty uses the real surface.",
+   "Clear Coat": "Adds a shiny clear layer on top. 0 is none; 1 is full.",
+   "Clear Coat Roughness": "Blur of the clear coat shine. 0 is a sharp mirror; 1 is soft.",
+   "Clear Coat Normal": "Surface direction used only for the clear coat layer.",
+   "Weight": "Hidden helper value used internally to scale this shader when it is mixed. You normally leave it alone."
+  }
+ },
+ "ShaderNodeEmission": {
+  "node": "Makes a surface glow and give off light, like a lamp or screen. Use it for lights, neon and glowing parts.",
+  "inputs": {
+   "Color": "The color of the light given off.",
+   "Strength": "How bright the glow is. 0 is off; 1 is normal; higher is brighter.",
+   "Weight": "Hidden helper value used internally to scale this shader when it is mixed. You normally leave it alone."
+  }
+ },
+ "ShaderNodeFloatCurve": {
+  "node": "Reshapes a number using a curve you draw. Plot input on one side and the new output on the other.",
+  "inputs": {
+   "Factor": "How much of the curve change to apply. 0 gives the original value; 1 gives the full curve result.",
+   "Value": "The number to reshape. Its position on the curve decides the output."
+  }
+ },
+ "ShaderNodeFresnel": {
+  "node": "Outputs more at steep, grazing angles and less when looking straight on. Real glass, water and varnish behave like this.",
+  "inputs": {
+   "IOR": "How strongly light bends. Higher means more reflection even head-on. Glass is about 1.45; water 1.33.",
+   "Normal": "The direction the surface faces for lighting. Plug in Bump or Normal Map for fake detail. Empty uses the real surface."
+  }
+ },
+ "ShaderNodeGamma": {
+  "node": "Brightens or darkens the middle tones of a color while keeping pure black and white. Gamma above 1 brightens.",
+  "inputs": {
+   "Color": "The color to adjust.",
+   "Gamma": "Changes the mid-tones. Below 1 is darker; 1 is no change; above 1 is brighter."
+  }
+ },
+ "ShaderNodeHairInfo": {
+  "node": "Reads facts about a hair strand, like how far along it you are, its thickness and its random value. Use for hair color variation.",
+  "inputs": {}
+ },
+ "ShaderNodeHoldout": {
+  "node": "Cuts a see-through hole in the render, leaving transparent pixels. Useful for compositing objects into other images.",
+  "inputs": {
+   "Weight": "Hidden helper value used internally to scale this shader when it is mixed. You normally leave it alone."
+  }
+ },
+ "ShaderNodeHueSaturation": {
+  "node": "Changes the shade, color strength and brightness of a color. Use it to tint or recolor textures.",
+  "inputs": {
+   "Hue": "Shifts the color around the color wheel. 0.5 is no change; other values change the shade.",
+   "Saturation": "How colorful it is. 0 is gray; 1 is normal; above 1 is extra vivid.",
+   "Value": "How bright it is. 0 is black; 1 is normal; above 1 is brighter.",
+   "Fac": "How strongly the effect is applied. 0 leaves the input unchanged; 1 applies the effect fully.",
+   "Color": "The color or image you want to adjust."
+  }
+ },
+ "ShaderNodeInvert": {
+  "node": "Flips a color to its opposite, like a photo negative. Black becomes white and red becomes cyan.",
+  "inputs": {
+   "Fac": "How strongly the effect is applied. 0 leaves the input unchanged; 1 applies the effect fully.",
+   "Color": "The color to flip into its opposite."
+  }
+ },
+ "ShaderNodeLayerWeight": {
+  "node": "Outputs a mask that changes between the center of an object and its edges. Good for rim effects.",
+  "inputs": {
+   "Blend": "Moves the line between the center and edge. Low shows mostly the edge; high shows mostly the center.",
+   "Normal": "The direction the surface faces for lighting. Plug in Bump or Normal Map for fake detail. Empty uses the real surface."
+  }
+ },
+ "ShaderNodeLightFalloff": {
+  "node": "Changes how fast a light fades with distance. Useful for non-realistic lighting, since real light has fixed falloff.",
+  "inputs": {
+   "Strength": "The light brightness to adjust. Higher is brighter.",
+   "Smooth": "Softens bright spots near the light. 0 is none; higher removes harsh hot spots close to it."
+  }
+ },
+ "ShaderNodeLightPath": {
+  "node": "Tells the shader what kind of light ray is hitting it, such as camera or shadow. Use it to make things look different to rays.",
+  "inputs": {}
+ },
+ "ShaderNodeMapRange": {
+  "node": "Takes a number from one range and rescales it into another range, like turning 0 to 1 into 10 to 50.",
+  "inputs": {
+   "Value": "The number to remap.",
+   "From Min": "The low end of the range you start from.",
+   "From Max": "The high end of the range you start from.",
+   "To Min": "The value the From Min end becomes.",
+   "To Max": "The value the From Max end becomes.",
+   "Steps": "Number of steps, used in Stepped mode. Low gives chunky bands; high gives fine ones.",
+   "Vector": "The vector to remap, one value per axis.",
+   "From_Min_FLOAT3": "The low end of the range you start from, per X, Y and Z.",
+   "From_Max_FLOAT3": "The high end of the range you start from, per X, Y and Z.",
+   "To_Min_FLOAT3": "The values that From Min becomes, per X, Y and Z.",
+   "To_Max_FLOAT3": "The values that From Max becomes, per X, Y and Z.",
+   "Steps_FLOAT3": "Number of steps per axis, used in Stepped mode. Low is chunky; high is fine."
+  }
+ },
+ "ShaderNodeMapping": {
+  "node": "Moves, rotates and scales texture coordinates. Use it to place, tilt and resize a texture on an object.",
+  "inputs": {
+   "Vector": "The coordinates to change. Plug in Texture Coordinate. Empty uses the default position.",
+   "Location": "Slides the pattern in X, Y and Z. 0 means no shift; larger values move it farther.",
+   "Rotation": "Turns the pattern around X, Y and Z, in degrees.",
+   "Scale": "Resizes the pattern. Above 1 makes the texture look smaller and repeat more; below 1 makes it bigger."
+  }
+ },
+ "ShaderNodeMath": {
+  "node": "Does math on numbers, such as add, multiply, round or compare. Pick the operation from the drop-down.",
+  "inputs": {
+   "Value": "The first number for the math operation.",
+   "Value_001": "The second number for the math operation. Hidden for one-input operations.",
+   "Value_002": "The third number for the math operation. Only shown for three-input operations."
+  }
+ },
+ "ShaderNodeMix": {
+  "node": "Blends two things (numbers, vectors, colors or rotations) by a factor. 0 gives A, 1 gives B.",
+  "inputs": {
+   "Factor_Float": "How much of B to mix in. 0 is all A; 1 is all B; 0.5 is half and half.",
+   "Factor_Vector": "How much of B to mix in for each axis. 0 is all A; 1 is all B.",
+   "A_Float": "The first number, shown when Factor is 0.",
+   "B_Float": "The second number, shown when Factor is 1.",
+   "A_Vector": "The first vector, shown when Factor is 0.",
+   "B_Vector": "The second vector, shown when Factor is 1.",
+   "A_Color": "The first color, shown when Factor is 0.",
+   "B_Color": "The second color, shown when Factor is 1.",
+   "A_Rotation": "The first rotation, shown when Factor is 0.",
+   "B_Rotation": "The second rotation, shown when Factor is 1."
+  }
+ },
+ "ShaderNodeMixRGB": {
+  "node": "Old color-mixing node. Blends two colors using a blend mode and a factor. Use the new Mix node for new work.",
+  "inputs": {
+   "Fac": "How much of Color2 to mix in. 0 is all Color1; 1 is all Color2.",
+   "Color1": "The first color, or the base layer.",
+   "Color2": "The second color, or the layer blended on top."
+  }
+ },
+ "ShaderNodeMixShader": {
+  "node": "Blends two shaders together by a factor. 0 shows the first, 1 shows the second. Great for layering materials.",
+  "inputs": {
+   "Fac": "How much of the second shader to show. 0 is only the first; 1 is only the second; 0.5 is half each.",
+   "Shader": "The first shader, shown when Factor is 0.",
+   "Shader_001": "The second shader, shown when Factor is 1."
+  }
+ },
+ "ShaderNodeNewGeometry": {
+  "node": "Gives raw facts about the surface point being shaded, such as its position, normal, and whether it is a back face.",
+  "inputs": {}
+ },
+ "ShaderNodeNormal": {
+  "node": "Gives you a direction vector you can set with a ball widget and shows how closely it matches the input direction.",
+  "inputs": {
+   "Normal": "The direction you want to compare against. Turn the ball to set it, or plug a vector in."
+  }
+ },
+ "ShaderNodeNormalMap": {
+  "node": "Turns a blue-purple normal map image into fake surface detail. Plug its output into the Normal input of a shader.",
+  "inputs": {
+   "Strength": "How strong the fake detail looks. 0 is flat; 1 is full; higher exaggerates it.",
+   "Color": "The normal map image. It looks blue-purple. Use Non-Color for the image's color space."
+  }
+ },
+ "ShaderNodeObjectInfo": {
+  "node": "Reads facts about the object being shaded, such as its position and a random number unique per object.",
+  "inputs": {}
+ },
+ "ShaderNodeOutputAOV": {
+  "node": "Sends a custom color or number to its own render pass, which you can use later in compositing.",
+  "inputs": {
+   "Color": "A color to send out to the AOV render pass of the same name.",
+   "Value": "A number to send out to the AOV render pass of the same name."
+  }
+ },
+ "ShaderNodeOutputLight": {
+  "node": "The end of a light's node tree. Whatever you connect here decides how that light object shines.",
+  "inputs": {
+   "Surface": "The shader that decides how the light shines. Usually an Emission shader."
+  }
+ },
+ "ShaderNodeOutputLineStyle": {
+  "node": "The end of a Freestyle line style tree. It controls the color and transparency of the drawn lines.",
+  "inputs": {
+   "Color": "The texture or color to mix into the line color.",
+   "Color Fac": "How much of Color replaces the base line color. 0 keeps the base; 1 uses Color fully.",
+   "Alpha": "The texture or value to mix into line transparency.",
+   "Alpha Fac": "How much of Alpha replaces the base line opacity. 0 keeps the base; 1 uses Alpha fully."
+  }
+ },
+ "ShaderNodeOutputMaterial": {
+  "node": "The end of a material. Whatever you connect here is what Blender shows on the object.",
+  "inputs": {
+   "Surface": "The shader that makes the object's look. Plug your main shader here.",
+   "Volume": "A shader that fills the inside of the object, like smoke or fog.",
+   "Displacement": "Moves the real surface in or out. Plug in a Displacement or Bump node.",
+   "Thickness": "How thick the object counts as for subsurface and light bending. Mostly used by EEVEE. Empty uses the real shape."
+  }
+ },
+ "ShaderNodeOutputWorld": {
+  "node": "The end of the World node tree. It decides the color and light of the sky and background.",
+  "inputs": {
+   "Surface": "The shader for the sky and background light. Usually a Background node.",
+   "Volume": "A shader for fog or air that fills the whole scene."
+  }
+ },
+ "ShaderNodeParticleInfo": {
+  "node": "Reads data about the particle that made this object, such as its age, size and speed.",
+  "inputs": {}
+ },
+ "ShaderNodePointInfo": {
+  "node": "Reads data about each point in a point cloud, such as its position, radius and a random value.",
+  "inputs": {}
+ },
+ "ShaderNodeRGB": {
+  "node": "A color picker. It gives out one fixed color you choose, which you can send to other nodes.",
+  "inputs": {}
+ },
+ "ShaderNodeRGBCurve": {
+  "node": "Adjusts colors with curves you draw for all channels or for red, green and blue separately. Like Curves in photo apps.",
+  "inputs": {
+   "Fac": "How strongly the effect is applied. 0 leaves the input unchanged; 1 applies the effect fully.",
+   "Color": "The color to adjust with the curves."
+  }
+ },
+ "ShaderNodeRGBToBW": {
+  "node": "Turns a color into a gray value based on how bright it looks to the eye. Use it to make a mask from a color.",
+  "inputs": {
+   "Color": "The color to turn into gray."
+  }
+ },
+ "ShaderNodeRadialTiling": {
+  "node": "Repeats a pattern around a center like a kaleidoscope or flower, with a set number of sides.",
+  "inputs": {
+   "Vector": "The coordinates to pattern. Empty uses the default position.",
+   "Sides": "How many slices around the center. Low gives big wedges like a triangle; high gives a fine, round pattern.",
+   "Roundness": "How round the shape is. 0 has sharp straight corners; 1 is a smooth circle."
+  }
+ },
+ "ShaderNodeRaycast": {
+  "node": "Shoots a ray from a point in a direction and reports what it hits. Use it for effects like contact shadows or dirt.",
+  "inputs": {
+   "Position": "The start point of the ray, in world space.",
+   "Direction": "The direction the ray travels in.",
+   "Length": "How far the ray looks. Small only finds close hits; large finds far ones."
+  }
+ },
+ "ShaderNodeScript": {
+  "node": "Runs a custom OSL script as a shader. It only works in Cycles on the CPU with Open Shading Language enabled.",
+  "inputs": {}
+ },
+ "ShaderNodeSeparateColor": {
+  "node": "Splits a color into three separate numbers (like red, green, blue). Opposite of Combine Color.",
+  "inputs": {
+   "Color": "The color to split into three numbers."
+  }
+ },
+ "ShaderNodeSeparateXYZ": {
+  "node": "Splits a vector (a point or direction) into its X, Y and Z numbers. Opposite of Combine XYZ.",
+  "inputs": {
+   "Vector": "The vector to split into X, Y and Z."
+  }
+ },
+ "ShaderNodeShaderToRGB": {
+  "node": "Turns the final lit look of a shader into a plain color. EEVEE only. Use it for toon looks and custom shading.",
+  "inputs": {
+   "Shader": "The shader whose final lit look you want as a color."
+  }
+ },
+ "ShaderNodeSqueeze": {
+  "node": "Old node that squishes a number with a curve around a center. Deprecated, so use Math or Map Range instead.",
+  "inputs": {
+   "Value": "The number to squeeze.",
+   "Width": "How strong the squeeze is. Larger values squash faster away from the center.",
+   "Center": "The point the squeeze happens around."
+  }
+ },
+ "ShaderNodeSubsurfaceScattering": {
+  "node": "Lets light enter a surface and spread inside before leaving, like skin, wax or milk. Gives a soft, glowy look.",
+  "inputs": {
+   "Color": "The color of the surface seen after light scatters.",
+   "Scale": "Overall size of the scattering. Small is a tight glow; large spreads light deeper.",
+   "Radius": "How far light travels inside for red, green and blue. Higher in a color means that color spreads farther.",
+   "IOR": "How strongly light bends at the surface. Used by the Random Walk (Skin) method only.",
+   "Roughness": "Roughness of the surface reflection. Used by the Random Walk (Skin) method only.",
+   "Anisotropy": "Direction light scatters inside. Negative bounces back; 0 is even; positive pushes forward.",
+   "Normal": "The direction the surface faces for lighting. Plug in Bump or Normal Map for fake detail. Empty uses the real surface.",
+   "Weight": "Hidden helper value used internally to scale this shader when it is mixed. You normally leave it alone."
+  }
+ },
+ "ShaderNodeTangent": {
+  "node": "Gives a direction that runs along the surface. Plug it into the Tangent input of an Anisotropic shader.",
+  "inputs": {}
+ },
+ "ShaderNodeTexBrick": {
+  "node": "Makes a brick wall pattern with two brick colors and mortar. Use it for walls, paving and tiles.",
+  "inputs": {
+   "Vector": "Where on the surface to read the texture. Empty uses Generated coordinates. Plug in Texture Coordinate or Mapping to control it.",
+   "Color1": "The color of one set of bricks.",
+   "Color2": "The color of the other set of bricks, mixed in to vary the wall.",
+   "Mortar": "The color of the gaps between bricks.",
+   "Scale": "Size of the pattern. Low values make big, few shapes; high values make many tiny ones.",
+   "Mortar Size": "Thickness of the gaps. 0 is no gaps; higher makes wider lines.",
+   "Mortar Smooth": "Softens the edge of the gaps. 0 is sharp; 1 is a soft blend.",
+   "Bias": "Balance of Color1 and Color2. -1 is mostly Color1; 1 is mostly Color2.",
+   "Brick Width": "How wide each brick is compared with the default. Higher is longer bricks.",
+   "Row Height": "How tall each row is compared with the default. Higher is taller bricks."
+  }
+ },
+ "ShaderNodeTexChecker": {
+  "node": "Makes a checkerboard of two colors. Handy for checking how a texture is stretched.",
+  "inputs": {
+   "Vector": "Where on the surface to read the texture. Empty uses Generated coordinates. Plug in Texture Coordinate or Mapping to control it.",
+   "Color1": "The color of the first squares.",
+   "Color2": "The color of the other squares.",
+   "Scale": "Size of the pattern. Low is a few big squares; high is many tiny ones."
+  }
+ },
+ "ShaderNodeTexCoord": {
+  "node": "Gives different ways to find a spot on an object, such as UV, Object, Camera or Generated. Feeds the Vector input of textures.",
+  "inputs": {}
+ },
+ "ShaderNodeTexEnvironment": {
+  "node": "Uses a 360 degree image (like an HDRI) as the world's lighting and background. Use it in the World, not on objects.",
+  "inputs": {
+   "Vector": "The direction to look up in the image. Empty uses the direction of each ray. Plug in Mapping to rotate the sky."
+  }
+ },
+ "ShaderNodeTexGabor": {
+  "node": "Makes a wavy stripe-like noise with a direction, good for fabric, brushed metal or wood grain.",
+  "inputs": {
+   "Vector": "Where on the surface to read the texture. Empty uses Generated coordinates. Plug in Texture Coordinate or Mapping to control it.",
+   "Scale": "Size of the pattern. Low values make big, few shapes; high values make many tiny ones.",
+   "Frequency": "How tight the stripes are. Low gives wide soft waves; high gives fine thin lines.",
+   "Anisotropy": "How aligned the stripes are. 0 is random directions in a blur; 1 is neat parallel stripes.",
+   "Orientation 2D": "The angle of the stripes in radians. Turning it spins the stripe direction.",
+   "Orientation 3D": "The direction of the stripes as a 3D vector. Used in 3D mode."
+  }
+ },
+ "ShaderNodeTexGradient": {
+  "node": "Makes a smooth blend from black to white across space. Pick a shape like linear, radial or spherical.",
+  "inputs": {
+   "Vector": "Where on the surface to read the texture. Empty uses Generated coordinates. Plug in Texture Coordinate or Mapping to control it."
+  }
+ },
+ "ShaderNodeTexIES": {
+  "node": "Shapes light like a real lamp using an IES file, which stores how bright the lamp is in each direction. For Cycles lights.",
+  "inputs": {
+   "Vector": "The direction to look up in the lamp data. Empty uses the light direction.",
+   "Strength": "How bright the light is. 0 is off; 1 is normal; higher is brighter."
+  }
+ },
+ "ShaderNodeTexImage": {
+  "node": "Puts a picture on a surface. Use it for color maps, roughness maps, normal maps and more.",
+  "inputs": {
+   "Vector": "Where on the picture to read. Empty uses UV coordinates. Plug in Texture Coordinate or Mapping to change it."
+  }
+ },
+ "ShaderNodeTexMagic": {
+  "node": "Makes a colorful, swirly pattern. Mostly used for stylized effects or as a quick random pattern.",
+  "inputs": {
+   "Vector": "Where on the surface to read the texture. Empty uses Generated coordinates. Plug in Texture Coordinate or Mapping to control it.",
+   "Scale": "Size of the pattern. Low values make big, few shapes; high values make many tiny ones.",
+   "Distortion": "How warped the pattern is. Low gives neat patterns; high makes a busy, swirly look."
+  }
+ },
+ "ShaderNodeTexNoise": {
+  "node": "Makes smooth, cloudy randomness. A top choice for dirt, clouds, rust, and for bending other textures.",
+  "inputs": {
+   "Vector": "Where on the surface to read the texture. Empty uses Generated coordinates. Plug in Texture Coordinate or Mapping to control it.",
+   "W": "The 4th coordinate used in 4D mode. Changing it morphs the noise over time, like an animation.",
+   "Scale": "Size of the pattern. Low values make big, few shapes; high values make many tiny ones.",
+   "Detail": "How many layers of finer noise are added. 0 is smooth and blobby; high is crisp and rough.",
+   "Roughness": "How strong the finer layers are. Low is smooth; high is rough and grainy.",
+   "Lacunarity": "How much finer each layer gets. Low layers are close in size; high jumps to tiny details fast.",
+   "Offset": "Shifts the noise values. Used by some fractal types. Changes contrast of the details.",
+   "Gain": "Boosts the detail layers. Used by some fractal types. Higher makes more extreme contrast.",
+   "Distortion": "Warps the noise by itself. 0 is plain clouds; higher makes twisted, swirly shapes."
+  }
+ },
+ "ShaderNodeTexSky": {
+  "node": "Makes a realistic sky with a sun, for outdoor lighting. Use it in the World node tree.",
+  "inputs": {
+   "Vector": "The direction to look up in the sky. Empty uses the direction of each ray."
+  }
+ },
+ "ShaderNodeTexVoronoi": {
+  "node": "Makes a pattern of cells, like cracked mud, scales or stones, based on distance to random points.",
+  "inputs": {
+   "Vector": "Where on the surface to read the texture. Empty uses Generated coordinates. Plug in Texture Coordinate or Mapping to control it.",
+   "W": "The 4th coordinate used in 4D mode. Changing it morphs the cells over time.",
+   "Scale": "Size of the pattern. Low values make big, few shapes; high values make many tiny ones.",
+   "Detail": "How many layers of finer cells are added. 0 is one layer; higher adds small details.",
+   "Roughness": "How strong the finer layers are. Low is smooth; high gives strong small details.",
+   "Lacunarity": "How much smaller each layer of cells gets. Higher shrinks detail layers faster.",
+   "Smoothness": "Rounds the cell borders. 0 is sharp cells; 1 is soft blobs. Used by Smooth F1 only.",
+   "Exponent": "Changes the distance shape. Used by Minkowski only. Low is star-like; high is boxy.",
+   "Randomness": "How scattered the cell points are. 0 is a neat grid; 1 is fully random."
+  }
+ },
+ "ShaderNodeTexWave": {
+  "node": "Makes stripes or rings that can be bent with noise. Use it for wood, marble and ripples.",
+  "inputs": {
+   "Vector": "Where on the surface to read the texture. Empty uses Generated coordinates. Plug in Texture Coordinate or Mapping to control it.",
+   "Scale": "Size of the pattern. Low values make big, few shapes; high values make many tiny ones.",
+   "Distortion": "How wobbly the bands are. 0 is perfect lines; higher bends them like wood grain.",
+   "Detail": "How many extra layers of small noise bend the bands. 0 is none; higher adds fine detail.",
+   "Detail Scale": "Size of the small noise details. Low is big wobbles; high is tiny ones.",
+   "Detail Roughness": "How strong the small details are. Low is smooth; high is rough.",
+   "Phase Offset": "Slides the bands along. Changing it moves the stripes or rings, good for animation."
+  }
+ },
+ "ShaderNodeTexWhiteNoise": {
+  "node": "Makes pure random static, a different random number or color for each input value. No smooth blending.",
+  "inputs": {
+   "Vector": "A 3D or 4D position used as the seed. Each different value gives a different random result.",
+   "W": "The 4th seed value used in 1D and 4D modes. Changing it gives a new random value."
+  }
+ },
+ "ShaderNodeUVAlongStroke": {
+  "node": "For Freestyle lines only. Gives UV coordinates that run along the length of a drawn stroke.",
+  "inputs": {}
+ },
+ "ShaderNodeUVMap": {
+  "node": "Gets a chosen UV map from the mesh. Gives the 2D coordinates that tell a texture how to wrap the model.",
+  "inputs": {}
+ },
+ "ShaderNodeValToRGB": {
+  "node": "Turns a number from 0 to 1 into a color using a gradient you edit. Great for coloring noise and masks.",
+  "inputs": {
+   "Fac": "The number from 0 to 1 that picks a color from the gradient. 0 is the left end; 1 is the right end."
+  }
+ },
+ "ShaderNodeValue": {
+  "node": "A single number you type in. Use it as a handy slider to control many parts of your material at once.",
+  "inputs": {}
+ },
+ "ShaderNodeVectorCurve": {
+  "node": "Reshapes the X, Y and Z parts of a vector with separate curves you draw.",
+  "inputs": {
+   "Fac": "How strongly the effect is applied. 0 leaves the input unchanged; 1 applies the effect fully.",
+   "Vector": "The vector to reshape with the curves."
+  }
+ },
+ "ShaderNodeVectorDisplacement": {
+  "node": "Moves the surface in any direction, not only along the normal, using a vector map. Plug into Material Output Displacement.",
+  "inputs": {
+   "Vector": "A color map storing the push direction and amount per spot, like a vector displacement map.",
+   "Midlevel": "The value that means no movement. Used to shift the whole effect in or out.",
+   "Scale": "Overall multiplier for the push. 0 is no movement; larger exaggerates it."
+  }
+ },
+ "ShaderNodeVectorMath": {
+  "node": "Does math on vectors (points or directions), such as add, scale, dot or cross product. Pick the operation from the drop-down.",
+  "inputs": {
+   "Vector": "The first vector for the math operation.",
+   "Vector_001": "The second vector for the math operation. Hidden for one-input operations.",
+   "Vector_002": "The third vector for the math operation. Only shown for operations that need three.",
+   "Scale": "A single number used by the Scale operation. Multiplies the whole vector."
+  }
+ },
+ "ShaderNodeVectorRotate": {
+  "node": "Spins a vector around a center using an axis and angle, or Euler rotation. Use it to rotate textures or directions.",
+  "inputs": {
+   "Vector": "The point or direction to rotate.",
+   "Center": "The pivot point to spin around. 0,0,0 spins around the origin.",
+   "Axis": "The line the vector spins around. Used in Axis Angle mode.",
+   "Angle": "How far to turn, in radians. 0 is no turn; about 3.14 is half a turn.",
+   "Rotation": "How far to turn on X, Y and Z, in radians. Used in Euler mode."
+  }
+ },
+ "ShaderNodeVectorTransform": {
+  "node": "Converts a vector between spaces such as World, Object and Camera. The same arrow can have different numbers in each.",
+  "inputs": {
+   "Vector": "The vector, point or normal to convert between spaces."
+  }
+ },
+ "ShaderNodeVertexColor": {
+  "node": "Reads a color painted on the mesh's vertices, or another color attribute. Use it for hand-painted tint or masks.",
+  "inputs": {}
+ },
+ "ShaderNodeVolumeAbsorption": {
+  "node": "Makes light dim as it travels through a volume, like colored smoke or tinted water. It does not glow or scatter.",
+  "inputs": {
+   "Color": "The color that remains after light passes through. Dark absorbs more and tints the volume.",
+   "Density": "How thick the volume is. 0 is clear; low is thin haze; high is dark and solid.",
+   "Weight": "Hidden helper value used internally to scale this shader when it is mixed. You normally leave it alone."
+  }
+ },
+ "ShaderNodeVolumeCoefficients": {
+  "node": "Expert volume node where you directly set how much light is absorbed, scattered and emitted per color channel.",
+  "inputs": {
+   "Weight": "Hidden helper value used internally to scale this shader when it is mixed. You normally leave it alone.",
+   "Absorption Coefficients": "How strongly each color (red, green, blue) is absorbed per distance. Higher makes that color vanish faster.",
+   "Scatter Coefficients": "How strongly each color is bounced around per distance. Higher makes the volume look thicker and cloudier.",
+   "Anisotropy": "Direction light scatters. Negative bounces back; 0 is even; positive keeps going forward.",
+   "IOR": "Index of refraction of the particles, used in the Mie phase. Changes the glare around lights.",
+   "Backscatter": "Mix of forward and backward scattering in the Fournier-Forand setting. Higher adds more back glow.",
+   "Alpha": "Controls the shape of scattering in the Draine setting. Higher makes more forward-heavy scatter.",
+   "Diameter": "Particle size in micrometers, for the Mie setting. Small is bluish haze; large is white cloud.",
+   "Emission Coefficients": "How much glow each color adds per distance. Higher makes the volume glow brighter."
+  }
+ },
+ "ShaderNodeVolumeInfo": {
+  "node": "Reads data stored in volume grids, like density, color, flame and temperature from smoke simulations or VDB files.",
+  "inputs": {}
+ },
+ "ShaderNodeVolumePrincipled": {
+  "node": "The all-in-one volume node for smoke, fire, fog and clouds. Combines scattering, absorption and glow in one place.",
+  "inputs": {
+   "Color": "The color of the volume. Used for scattering. White is bright fog; dark is dim smoke.",
+   "Color Attribute": "Name of a volume grid that gives the color per spot. Leave empty to use the Color above.",
+   "Density": "How thick the volume is. 0 is clear; low is thin haze; high is dense and opaque.",
+   "Density Attribute": "Name of a volume grid that gives the density per spot, usually 'density' for smoke.",
+   "Anisotropy": "Direction light scatters. Negative bounces back; 0 is even; positive keeps going forward.",
+   "Absorption Color": "The color tint for light being absorbed. Used to give the volume a dark, colored look.",
+   "Emission Strength": "How strongly the volume glows. 0 is none; higher is brighter, like fire.",
+   "Emission Color": "The color of the glow the volume gives off.",
+   "Blackbody Intensity": "How much of the temperature-based fire glow to show. 0 is none; 1 is full.",
+   "Blackbody Tint": "Color tint on the fire glow. White keeps the natural color.",
+   "Temperature": "Heat in Kelvin for the fire glow. Low is red-orange; high is yellow-white or blue.",
+   "Temperature Attribute": "Name of a volume grid that gives temperature per spot, usually 'temperature'.",
+   "Weight": "Hidden helper value used internally to scale this shader when it is mixed. You normally leave it alone."
+  }
+ },
+ "ShaderNodeVolumeScatter": {
+  "node": "Makes light bounce around inside a volume, like fog, mist or clouds. Use it to add atmosphere to a scene.",
+  "inputs": {
+   "Color": "The color of the scattered light. White is bright fog; colors tint it.",
+   "Density": "How thick the fog is. 0 is clear; low is thin mist; high is dense and cloudy.",
+   "Anisotropy": "Direction light scatters. Negative bounces back; 0 is even; positive keeps going forward.",
+   "IOR": "Index of refraction of the particles, used in the Mie phase. Changes the glare around lights.",
+   "Backscatter": "Mix of forward and backward scattering in the Fournier-Forand setting. Higher adds more back glow.",
+   "Alpha": "Controls the shape of scattering in the Draine setting. Higher makes more forward-heavy scatter.",
+   "Diameter": "Particle size in micrometers, for the Mie setting. Small is bluish haze; large is white cloud.",
+   "Weight": "Hidden helper value used internally to scale this shader when it is mixed. You normally leave it alone."
+  }
+ },
+ "ShaderNodeWavelength": {
+  "node": "Turns a wavelength of light in nanometers into its rainbow color. Low is violet, around 550 is green, high is red.",
+  "inputs": {
+   "Wavelength": "Light wavelength in nanometers. About 380 is violet, 550 green, 700 deep red."
+  }
+ },
+ "ShaderNodeWireframe": {
+  "node": "Shows the edges of the mesh triangles as lines, like a see-through cage. Use it for wireframe looks.",
+  "inputs": {
+   "Size": "How thick the lines are. Small is thin wire; large is thick, chunky lines."
+  }
+ }
+}

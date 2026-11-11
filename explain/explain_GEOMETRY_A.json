@@ -1,0 +1,1117 @@
+{
+ "FunctionNodeAlignEulerToVector": {
+  "node": "Turns a rotation (three angles) so one of its axes points along a direction you choose. Use it to make objects face somewhere.",
+  "inputs": {
+   "Rotation": "The starting rotation as X, Y, Z angles. This is the rotation that gets turned toward the direction.",
+   "Factor": "How much to align. 0 keeps the original rotation, 1 aligns fully, 0.5 goes halfway.",
+   "Vector": "The direction to point toward. Only where it points matters, not how long it is."
+  }
+ },
+ "FunctionNodeAlignRotationToVector": {
+  "node": "Turns a rotation so one of its axes points along a direction you choose. Use it to make instances face a direction or a surface normal.",
+  "inputs": {
+   "Rotation": "The starting rotation. This is what gets turned toward the direction.",
+   "Factor": "How much to align. 0 keeps the original rotation, 1 aligns fully, 0.5 goes halfway.",
+   "Vector": "The direction to point toward. Only where it points matters, not how long it is."
+  }
+ },
+ "FunctionNodeAxesToRotation": {
+  "node": "Builds a rotation from two directions. The main axis points exactly along the first, the other tries to follow the second.",
+  "inputs": {
+   "Primary Axis": "Direction the chosen primary axis must point along. This one is matched exactly.",
+   "Secondary Axis": "Direction the second axis tries to match. It is adjusted if it is not at a right angle to the primary."
+  }
+ },
+ "FunctionNodeAxisAngleToRotation": {
+  "node": "Makes a rotation by spinning around an imaginary pole by an angle, like a door turning on its hinge.",
+  "inputs": {
+   "Axis": "The pole to spin around. Only its direction matters, not its length.",
+   "Angle": "How far to spin around the pole, in radians. 0 is no turn, 3.14 is half a turn, 6.28 is a full turn."
+  }
+ },
+ "FunctionNodeBitMath": {
+  "node": "Does math on the individual 0s and 1s (bits) inside whole numbers. Used for flags and advanced tricks.",
+  "inputs": {
+   "A": "The first whole number. Its bits are used in the operation.",
+   "B": "The second whole number, combined with A bit by bit.",
+   "Shift": "How many bit places to slide. Only used by the shift operations. Higher slides the bits further."
+  }
+ },
+ "FunctionNodeBooleanMath": {
+  "node": "Combines true/false values with logic like AND, OR and NOT. Use it to combine selections.",
+  "inputs": {
+   "Boolean": "The first true/false value.",
+   "Boolean_001": "The second true/false value. Ignored by operations that need only one input, like NOT."
+  }
+ },
+ "FunctionNodeCombineColor": {
+  "node": "Builds one color from separate numbers, using RGB, HSV or HSL. Handy for making colors with math.",
+  "inputs": {
+   "Red": "First channel: Red in RGB, Hue in HSV or HSL. 0 is none, 1 is full.",
+   "Green": "Second channel: Green in RGB, Saturation in HSV or HSL. 0 is none, 1 is full.",
+   "Blue": "Third channel: Blue in RGB, Value in HSV, Lightness in HSL. 0 is none, 1 is full.",
+   "Alpha": "How solid the color is. 0 is see-through, 1 is fully solid."
+  }
+ },
+ "FunctionNodeCombineMatrix": {
+  "node": "Builds a 4x4 grid of numbers (a matrix) from 16 separate values. A matrix stores move, rotate and scale together.",
+  "inputs": {
+   "Column 1 Row 1": "Stretch along X when there is no rotation. 1 keeps the size, 2 doubles it.",
+   "Column 1 Row 2": "Rotation and tilt mixing (column 1, row 2). Usually 0 unless you want a turned or sheared shape.",
+   "Column 1 Row 3": "Rotation and tilt mixing (column 1, row 3). Usually 0 unless you want a turned or sheared shape.",
+   "Column 1 Row 4": "Bottom row value. Normally 0; only used for advanced perspective effects.",
+   "Column 2 Row 1": "Rotation and tilt mixing (column 2, row 1). Usually 0 unless you want a turned or sheared shape.",
+   "Column 2 Row 2": "Stretch along Y when there is no rotation. 1 keeps the size, 2 doubles it.",
+   "Column 2 Row 3": "Rotation and tilt mixing (column 2, row 3). Usually 0 unless you want a turned or sheared shape.",
+   "Column 2 Row 4": "Bottom row value. Normally 0; only used for advanced perspective effects.",
+   "Column 3 Row 1": "Rotation and tilt mixing (column 3, row 1). Usually 0 unless you want a turned or sheared shape.",
+   "Column 3 Row 2": "Rotation and tilt mixing (column 3, row 2). Usually 0 unless you want a turned or sheared shape.",
+   "Column 3 Row 3": "Stretch along Z when there is no rotation. 1 keeps the size, 2 doubles it.",
+   "Column 3 Row 4": "Bottom row value. Normally 0; only used for advanced perspective effects.",
+   "Column 4 Row 1": "Movement along X stored in the matrix. Higher values move things farther along X.",
+   "Column 4 Row 2": "Movement along Y stored in the matrix. Higher values move things farther along Y.",
+   "Column 4 Row 3": "Movement along Z stored in the matrix. Higher values move things farther along Z.",
+   "Column 4 Row 4": "Bottom-right corner of the matrix. Normally 1; changing it scales everything."
+  }
+ },
+ "FunctionNodeCombineTransform": {
+  "node": "Packs a move, a rotation and a scale into one transformation matrix, so you can place geometry with a single value.",
+  "inputs": {
+   "Translation": "How far to move along X, Y and Z. 0 means no movement.",
+   "Rotation": "How much to turn.",
+   "Scale": "Size on X, Y and Z. 1 is normal, 2 is double, below 1 shrinks."
+  }
+ },
+ "FunctionNodeCompare": {
+  "node": "Compares two values and outputs true or false, like 'is A bigger than B'. Great for making selections.",
+  "inputs": {
+   "A": "The first value to compare.",
+   "B": "The second value, compared against A."
+  }
+ },
+ "FunctionNodeEulerToRotation": {
+  "node": "Turns three angles (X, Y, Z) into a rotation value that rotation sockets accept.",
+  "inputs": {
+   "Euler": "Three angles in radians, one per axis. 0 is no turn, 3.14 is half a turn."
+  }
+ },
+ "FunctionNodeFindInString": {
+  "node": "Counts how many times a piece of text appears inside another text and tells where the first match starts.",
+  "inputs": {
+   "String": "The text to search inside.",
+   "Search": "The text you are looking for.",
+   "Mode": "A menu that picks how the search is done. Choose an option from the list."
+  }
+ },
+ "FunctionNodeFloatToInt": {
+  "node": "Turns a decimal number into a whole number. You pick how: round, floor, ceiling or truncate.",
+  "inputs": {
+   "Float": "The decimal number to convert. For example 2.7 becomes 3 when rounding and 2 when flooring."
+  }
+ },
+ "FunctionNodeFormatString": {
+  "node": "Builds text from a template by dropping values into it, like 'Count: {n}'. Add an input for each name in braces.",
+  "inputs": {
+   "Format": "The template text. Put a name in curly braces, like {Count}, where a value should appear."
+  }
+ },
+ "FunctionNodeHashValue": {
+  "node": "Turns a number into a random-looking whole number. The same input always gives the same output.",
+  "inputs": {
+   "Value": "The number to scramble. The same value always gives the same result.",
+   "Seed": "Changes the scrambling. A different seed gives a different pattern."
+  }
+ },
+ "FunctionNodeInputBool": {
+  "node": "Gives a single true/false value you set with a checkbox. Plug it into any node that needs a yes/no.",
+  "inputs": {}
+ },
+ "FunctionNodeInputColor": {
+  "node": "Gives a color you choose with the color picker. Plug it into any color input.",
+  "inputs": {}
+ },
+ "FunctionNodeInputInt": {
+  "node": "Gives a whole number that you type in. Plug it into any integer input.",
+  "inputs": {}
+ },
+ "FunctionNodeInputIntVector": {
+  "node": "Gives three whole numbers (X, Y, Z) that you type in, such as grid sizes.",
+  "inputs": {}
+ },
+ "FunctionNodeInputMenu": {
+  "node": "Gives a menu choice you can plug into menu inputs on other nodes, so one switch controls many nodes.",
+  "inputs": {}
+ },
+ "FunctionNodeInputRotation": {
+  "node": "Gives a rotation that you set by typing angles. Plug it into any rotation input.",
+  "inputs": {}
+ },
+ "FunctionNodeInputSpecialCharacters": {
+  "node": "Gives text characters you cannot easily type, like a line break or a tab. Use it when building text.",
+  "inputs": {}
+ },
+ "FunctionNodeInputString": {
+  "node": "Gives a piece of text that you type in. Plug it into any text input.",
+  "inputs": {}
+ },
+ "FunctionNodeInputVector": {
+  "node": "Gives three numbers (X, Y, Z) that you type in. Use it for positions, directions or sizes.",
+  "inputs": {}
+ },
+ "FunctionNodeIntegerMath": {
+  "node": "Does math on whole numbers: add, subtract, multiply, divide, power and more. Results stay whole numbers.",
+  "inputs": {
+   "Value": "The first whole number.",
+   "Value_001": "The second whole number. Some operations ignore it.",
+   "Value_002": "The third whole number. Only used by operations with three inputs, like Multiply Add."
+  }
+ },
+ "FunctionNodeInvertMatrix": {
+  "node": "Finds the matrix that undoes the given one. Use it to get back from a moved or turned space to the original.",
+  "inputs": {
+   "Matrix": "The matrix to reverse. If it squashes space flat it cannot be reversed, and Invertible turns false."
+  }
+ },
+ "FunctionNodeInvertRotation": {
+  "node": "Makes the rotation that undoes the given one, like turning the same amount the opposite way.",
+  "inputs": {
+   "Rotation": "The rotation to reverse."
+  }
+ },
+ "FunctionNodeMatchString": {
+  "node": "Checks if a text starts with, ends with or contains another text. Outputs true or false.",
+  "inputs": {
+   "String": "The text to check.",
+   "Operation": "A menu to choose the test: starts with, ends with, or contains.",
+   "Key": "The text you are looking for inside the first text."
+  }
+ },
+ "FunctionNodeMatrixDeterminant": {
+  "node": "Computes one number from a matrix that tells how much it scales volume. Negative means mirrored, 0 means squashed flat.",
+  "inputs": {
+   "Matrix": "The matrix to measure."
+  }
+ },
+ "FunctionNodeMatrixMultiply": {
+  "node": "Combines two matrices into one that does both transformations. Order matters, the right matrix is applied first.",
+  "inputs": {
+   "Matrix": "The left matrix. It is applied second.",
+   "Matrix_001": "The right matrix. It is applied first."
+  }
+ },
+ "FunctionNodeMatrixSVD": {
+  "node": "Splits a matrix into a turn, a stretch and another turn. Advanced tool for separating rotation from squash and stretch.",
+  "inputs": {
+   "Matrix": "The matrix to split. Only its 3x3 rotation and scale part is used, not the movement."
+  }
+ },
+ "FunctionNodeProjectPoint": {
+  "node": "Moves a point through a matrix with perspective, like how a camera flattens a 3D point onto a screen.",
+  "inputs": {
+   "Vector": "The point to project.",
+   "Transform": "The matrix used to move, turn, scale and apply perspective to the point."
+  }
+ },
+ "FunctionNodeQuaternionToRotation": {
+  "node": "Builds a rotation from four numbers called a quaternion (W, X, Y, Z), another compact way to store rotations.",
+  "inputs": {
+   "W": "The main part of the quaternion. 1 with X, Y and Z at 0 means no rotation.",
+   "X": "The X part of the quaternion. Together with Y and Z it sets the turning axis.",
+   "Y": "The Y part of the quaternion. Together with X and Z it sets the turning axis.",
+   "Z": "The Z part of the quaternion. Together with X and Y it sets the turning axis."
+  }
+ },
+ "FunctionNodeRandomValue": {
+  "node": "Makes a random number, vector, color or true/false. Each element can get its own different value.",
+  "inputs": {
+   "Min": "The lowest value the random result can be.",
+   "Max": "The highest value the random result can be.",
+   "ID": "Picks which random value each element gets. By default it is the element's index, so each one differs.",
+   "Seed": "Changes the whole random pattern. Any new number gives a different but repeatable result."
+  }
+ },
+ "FunctionNodeReplaceString": {
+  "node": "Finds a piece of text and swaps it for another everywhere it appears.",
+  "inputs": {
+   "String": "The text to change.",
+   "Find": "The piece of text to look for.",
+   "Replace": "The text to put in place of each match."
+  }
+ },
+ "FunctionNodeReverseString": {
+  "node": "Flips the order of the letters in a text, so 'abc' becomes 'cba'.",
+  "inputs": {
+   "String": "The text to reverse."
+  }
+ },
+ "FunctionNodeRotateEuler": {
+  "node": "Adds a second turn onto a rotation given as angles. You choose whether the extra turn is global or local.",
+  "inputs": {
+   "Rotation": "The starting rotation, as X, Y, Z angles.",
+   "Rotate By": "The extra turn to add, as X, Y, Z angles."
+  }
+ },
+ "FunctionNodeRotateRotation": {
+  "node": "Adds a second rotation on top of a first one. You choose whether the extra turn is global or local.",
+  "inputs": {
+   "Rotation": "The starting rotation.",
+   "Rotate By": "The extra rotation to add on top."
+  }
+ },
+ "FunctionNodeRotateVector": {
+  "node": "Spins a vector (a position or direction) around the center by a rotation.",
+  "inputs": {
+   "Vector": "The position or direction to spin.",
+   "Rotation": "How to turn the vector."
+  }
+ },
+ "FunctionNodeRotationToAxisAngle": {
+  "node": "Splits a rotation into the pole it spins around and how far it spins.",
+  "inputs": {
+   "Rotation": "The rotation to split."
+  }
+ },
+ "FunctionNodeRotationToEuler": {
+  "node": "Turns a rotation into three angles (X, Y, Z) you can read or change with math.",
+  "inputs": {
+   "Rotation": "The rotation to convert."
+  }
+ },
+ "FunctionNodeRotationToQuaternion": {
+  "node": "Reads out the four quaternion numbers (W, X, Y, Z) that describe a rotation.",
+  "inputs": {
+   "Rotation": "The rotation to convert."
+  }
+ },
+ "FunctionNodeSeparateColor": {
+  "node": "Splits a color into separate numbers: red/green/blue, hue/saturation/value, or hue/saturation/lightness.",
+  "inputs": {
+   "Color": "The color to split into channels."
+  }
+ },
+ "FunctionNodeSeparateMatrix": {
+  "node": "Splits a 4x4 matrix into its 16 individual numbers.",
+  "inputs": {
+   "Matrix": "The matrix to split apart."
+  }
+ },
+ "FunctionNodeSeparateTransform": {
+  "node": "Splits a transformation matrix into its move, its rotation and its scale.",
+  "inputs": {
+   "Transform": "The matrix to split."
+  }
+ },
+ "FunctionNodeSetStringCase": {
+  "node": "Changes text to all capital letters or all small letters.",
+  "inputs": {
+   "String": "The text to change.",
+   "Case": "A menu choosing upper case or lower case."
+  }
+ },
+ "FunctionNodeSliceString": {
+  "node": "Cuts out a part of a text, starting at a position and keeping a number of characters.",
+  "inputs": {
+   "String": "The text to cut from.",
+   "Position": "Where to start cutting. 0 is the first character.",
+   "Length": "How many characters to keep. Higher keeps more of the text."
+  }
+ },
+ "FunctionNodeSplitString": {
+  "node": "Cuts a text into a list of pieces wherever a separator appears, like splitting 'a,b,c' at the commas.",
+  "inputs": {
+   "String": "The text to split.",
+   "Separator": "The text that marks where to cut, such as a comma."
+  }
+ },
+ "FunctionNodeStringLength": {
+  "node": "Counts how many characters are in a text.",
+  "inputs": {
+   "String": "The text to count."
+  }
+ },
+ "FunctionNodeStringToValue": {
+  "node": "Reads a number out of a text, like turning the text '42' into the number 42.",
+  "inputs": {
+   "String": "The text containing the number.",
+   "Base": "The number system used to read the text. 10 is normal, 2 is binary, 16 is hexadecimal."
+  }
+ },
+ "FunctionNodeTransformDirection": {
+  "node": "Applies a matrix's turn and scale to a direction. Movement is ignored, since directions have no place.",
+  "inputs": {
+   "Direction": "The direction to transform.",
+   "Transform": "The matrix to apply. Its movement part is ignored."
+  }
+ },
+ "FunctionNodeTransformPoint": {
+  "node": "Applies a full matrix (move, turn and scale) to a point and gives its new place.",
+  "inputs": {
+   "Vector": "The point to transform.",
+   "Transform": "The matrix to apply."
+  }
+ },
+ "FunctionNodeTransposeMatrix": {
+  "node": "Flips a matrix over its diagonal so columns become rows and rows become columns.",
+  "inputs": {
+   "Matrix": "The matrix to flip."
+  }
+ },
+ "FunctionNodeTrimString": {
+  "node": "Removes unwanted characters from the start and end of a text, like extra spaces.",
+  "inputs": {
+   "String": "The text to clean up.",
+   "Characters": "The specific characters to remove from the edges.",
+   "Whitespace": "If on, also removes spaces, tabs and line breaks at the edges.",
+   "Start": "If on, trims the beginning of the text.",
+   "End": "If on, trims the end of the text."
+  }
+ },
+ "FunctionNodeValueToString": {
+  "node": "Turns a number into text, so it can be shown or joined with other text.",
+  "inputs": {
+   "Value": "The number to turn into text.",
+   "Decimals": "How many digits to show after the decimal point. 0 gives a whole number, higher shows more detail.",
+   "Base": "The number system for the text. 10 is normal, 2 is binary, 16 is hexadecimal.",
+   "Padding": "Minimum length of the text. Shorter results are padded at the front. 0 means no padding."
+  }
+ },
+ "GeometryNodeAccumulateField": {
+  "node": "Makes a running total of a field. Each element gets the sum of all earlier values plus its own, like counting up a tab.",
+  "inputs": {
+   "Value": "The value to add up along the elements.",
+   "Group Index": "Elements with the same ID are totaled separately. Leave it empty to total everything together."
+  }
+ },
+ "GeometryNodeAttributeDomainSize": {
+  "node": "Counts how many points, edges, faces, corners, curves or instances a geometry has. Use it to know how big something is.",
+  "inputs": {}
+ },
+ "GeometryNodeAttributeStatistic": {
+  "node": "Measures a field over a geometry: average, middle value, sum, smallest, biggest, range and spread.",
+  "inputs": {
+   "Selection": "Only selected elements are included in the measurement.",
+   "Attribute": "The values to measure, for example height or distance."
+  }
+ },
+ "GeometryNodeBake": {
+  "node": "Saves the incoming data so it is not recalculated every time. Speeds up heavy setups and can store a simulation or animation.",
+  "inputs": {}
+ },
+ "GeometryNodeBlurAttribute": {
+  "node": "Smooths a value by mixing each element with its neighbors, like a blur filter in a photo editor.",
+  "inputs": {
+   "Value": "The data to blur.",
+   "Iterations": "How many times the blur repeats. Low is a light smoothing, high is very smooth.",
+   "Weight": "How strongly each element pulls on its neighbors. Higher counts more, 0 means it is ignored."
+  }
+ },
+ "GeometryNodeBoneInfo": {
+  "node": "Reads details about one bone of an armature (a skeleton), like its position, rotation and length.",
+  "inputs": {
+   "Armature": "The armature object that contains the bone.",
+   "Bone Name": "The exact name of the bone to look up."
+  }
+ },
+ "GeometryNodeBoundBox": {
+  "node": "Finds the smallest box that fits around a geometry and makes it as a mesh. Also gives the box's min and max corners.",
+  "inputs": {
+   "Use Radius": "If on, the thickness of points and curves is counted when sizing the box."
+  }
+ },
+ "GeometryNodeCameraInfo": {
+  "node": "Reads a camera's settings, like focal length, sensor size and clipping distances.",
+  "inputs": {
+   "Camera": "The camera object to read."
+  }
+ },
+ "GeometryNodeCaptureAttribute": {
+  "node": "Freezes a field's values on a geometry so they can be used later, even after the geometry changes.",
+  "inputs": {
+   "Selection": "Chooses which elements the values are captured for."
+  }
+ },
+ "GeometryNodeClosureToList": {
+  "node": "Runs a closure (a small reusable node recipe) many times and collects the results into a list.",
+  "inputs": {
+   "Count": "How many times to run the closure. This is also the length of the list.",
+   "Closure": "The closure to run for each item."
+  }
+ },
+ "GeometryNodeClusterByConnected": {
+  "node": "Gives the same ID number to mesh vertices that are joined by edges and are close enough to each other.",
+  "inputs": {
+   "Selection": "Chooses which elements are affected. True means the element is used, false means it is left alone.",
+   "Position": "The positions used to measure distance. Usually the vertex positions.",
+   "Distance": "Largest gap between linked vertices that still counts as one cluster. Low gives many small clusters, high gives few big ones."
+  }
+ },
+ "GeometryNodeClusterByDistance": {
+  "node": "Groups nearby elements by giving them the same ID number. Use it to find clumps of points.",
+  "inputs": {
+   "Selection": "Chooses which elements are affected. True means the element is used, false means it is left alone.",
+   "Group ID": "Elements only cluster with others that have the same group ID.",
+   "Position": "The positions used to measure distance between elements.",
+   "Distance": "Elements closer than this join the same cluster. Low gives many small clusters, high gives few big ones."
+  }
+ },
+ "GeometryNodeCollectionChildren": {
+  "node": "Lists the objects and sub-collections inside a collection, in name order.",
+  "inputs": {
+   "Collection": "The collection to look inside.",
+   "Recursive": "If on, also includes what is inside the sub-collections."
+  }
+ },
+ "GeometryNodeCollectionInfo": {
+  "node": "Brings in the objects of a collection as instances, so you can place or copy them with nodes.",
+  "inputs": {
+   "Collection": "The collection to bring in.",
+   "Separate Children": "If on, each object stays its own instance. If off, they come in as one combined instance.",
+   "Reset Children": "If on, each object's own position and rotation are cleared so they sit at the origin."
+  }
+ },
+ "GeometryNodeConvexHull": {
+  "node": "Wraps a tight shape around all points of the geometry, like cling film, using the fewest faces possible.",
+  "inputs": {}
+ },
+ "GeometryNodeCornersOfEdge": {
+  "node": "For each edge, finds one of the face corners attached to it. A corner is where a face meets a vertex.",
+  "inputs": {
+   "Edge Index": "Which edge to look at. By default each edge uses its own index.",
+   "Weights": "Used to sort the corners. Lower weights come first.",
+   "Sort Index": "Which corner to pick from the sorted list. 0 is the first one."
+  }
+ },
+ "GeometryNodeCornersOfFace": {
+  "node": "For each face, finds one of the corners that make it up. A corner is where the face meets a vertex.",
+  "inputs": {
+   "Face Index": "Which face to look at. By default each face uses its own index.",
+   "Weights": "Used to sort the corners. Lower weights come first.",
+   "Sort Index": "Which corner to pick from the sorted list. 0 is the first one."
+  }
+ },
+ "GeometryNodeCornersOfVertex": {
+  "node": "For each vertex, finds one of the face corners attached to it.",
+  "inputs": {
+   "Vertex Index": "Which vertex to look at. By default each vertex uses its own index.",
+   "Weights": "Used to sort the corners. Lower weights come first.",
+   "Sort Index": "Which corner to pick from the sorted list. 0 is the first one."
+  }
+ },
+ "GeometryNodeCubeGridTopology": {
+  "node": "Makes an on/off 3D grid of voxels (3D pixels) inside a box. It is used as a shape guide for Field to Grid.",
+  "inputs": {
+   "Bounds Min": "The lower corner of the box the grid fills.",
+   "Bounds Max": "The upper corner of the box the grid fills.",
+   "Resolution X": "Number of voxels along X. Higher gives finer detail but is heavier to calculate.",
+   "Resolution Y": "Number of voxels along Y. Higher gives finer detail but is heavier to calculate.",
+   "Resolution Z": "Number of voxels along Z. Higher gives finer detail but is heavier to calculate.",
+   "Min X": "Starting voxel index along X. Shifts the grid's start position in whole voxels.",
+   "Min Y": "Starting voxel index along Y. Shifts the grid's start position in whole voxels.",
+   "Min Z": "Starting voxel index along Z. Shifts the grid's start position in whole voxels."
+  }
+ },
+ "GeometryNodeCurveArc": {
+  "node": "Makes a curved arc, either from three points or from a radius and angles. Use it for rounded paths and bends.",
+  "inputs": {
+   "Resolution": "How many points make up the curve. Low looks blocky and angular, high looks smooth.",
+   "Start": "First point of the arc (Points mode).",
+   "Middle": "A point the arc passes through (Points mode).",
+   "End": "Last point of the arc (Points mode).",
+   "Radius": "Size of the circle the arc is cut from. Higher makes a wider, gentler curve.",
+   "Start Angle": "Where the arc begins around the circle, in radians.",
+   "Sweep Angle": "How much of the circle the arc covers, in radians. 3.14 is half a circle, 6.28 is a full circle.",
+   "Offset Angle": "Extra angle that shifts the arc along the circle (Points mode).",
+   "Connect Center": "If on, adds lines from the arc's ends to its center, making a pie slice.",
+   "Invert Arc": "If on, draws the other part of the circle instead."
+  }
+ },
+ "GeometryNodeCurveEndpointSelection": {
+  "node": "Selects the points at the start and end of each curve. Use it to treat the tips differently.",
+  "inputs": {
+   "Start Size": "How many points to select from the start of each curve. 0 selects none.",
+   "End Size": "How many points to select from the end of each curve. 0 selects none."
+  }
+ },
+ "GeometryNodeCurveHandleTypeSelection": {
+  "node": "Selects Bezier points based on their handle type (Auto, Vector, Align or Free).",
+  "inputs": {}
+ },
+ "GeometryNodeCurveLength": {
+  "node": "Gives the total length of all the curves added together.",
+  "inputs": {}
+ },
+ "GeometryNodeCurveOfPoint": {
+  "node": "For a control point, tells you which curve it belongs to and where it sits in that curve.",
+  "inputs": {
+   "Point Index": "Which control point to look up. By default each point uses its own index."
+  }
+ },
+ "GeometryNodeCurvePrimitiveBezierSegment": {
+  "node": "Makes a smooth Bezier curve from two end points and two handles that bend it.",
+  "inputs": {
+   "Resolution": "How many points make up the curve. Low looks blocky and angular, high looks smooth.",
+   "Start": "Where the curve starts.",
+   "Start Handle": "Handle at the start. Pulls the curve's beginning toward it.",
+   "End Handle": "Handle at the end. Pulls the curve's finish toward it.",
+   "End": "Where the curve ends."
+  }
+ },
+ "GeometryNodeCurvePrimitiveCircle": {
+  "node": "Makes a circle curve, either from a radius or from three points it passes through.",
+  "inputs": {
+   "Resolution": "How many points make up the curve. Low looks blocky and angular, high looks smooth.",
+   "Point 1": "First point the circle passes through (Points mode).",
+   "Point 2": "Second point the circle passes through (Points mode).",
+   "Point 3": "Third point the circle passes through (Points mode).",
+   "Radius": "Size of the circle. Higher makes a bigger circle."
+  }
+ },
+ "GeometryNodeCurvePrimitiveLine": {
+  "node": "Makes a straight line, either between two points or from a start point in a direction.",
+  "inputs": {
+   "Start": "Where the line begins.",
+   "End": "Where the line ends (Points mode).",
+   "Direction": "Which way the line points (Direction mode).",
+   "Length": "How long the line is (Direction mode). Higher makes a longer line."
+  }
+ },
+ "GeometryNodeCurvePrimitiveQuadrilateral": {
+  "node": "Makes a four-sided shape such as a rectangle, trapezoid or kite, or a quad from four points.",
+  "inputs": {
+   "Width": "Overall width of the shape.",
+   "Height": "Overall height of the shape.",
+   "Bottom Width": "Width of the bottom edge.",
+   "Top Width": "Width of the top edge.",
+   "Offset": "Slides the top edge sideways compared with the bottom edge.",
+   "Bottom Height": "Height of the lower part, from the middle to the bottom corner (Kite mode).",
+   "Top Height": "Height of the upper part, from the middle to the top corner (Kite mode).",
+   "Point 1": "First corner (Points mode).",
+   "Point 2": "Second corner (Points mode).",
+   "Point 3": "Third corner (Points mode).",
+   "Point 4": "Fourth corner (Points mode)."
+  }
+ },
+ "GeometryNodeCurveQuadraticBezier": {
+  "node": "Makes a smooth curved line from a start, an end, and a middle point that pulls the curve toward it.",
+  "inputs": {
+   "Resolution": "How many points make up the curve. Low looks blocky and angular, high looks smooth.",
+   "Start": "Where the curve starts.",
+   "Middle": "A control point that pulls the curve toward it. The curve usually does not touch it.",
+   "End": "Where the curve ends."
+  }
+ },
+ "GeometryNodeCurveSetHandles": {
+  "node": "Sets the handle type (Auto, Vector, Align or Free) for the selected Bezier control points.",
+  "inputs": {
+   "Selection": "Chooses which elements are affected. True means the element is used, false means it is left alone."
+  }
+ },
+ "GeometryNodeCurveSpiral": {
+  "node": "Makes a spiral curve that winds around while rising or shrinking. Use it for springs and swirls.",
+  "inputs": {
+   "Resolution": "Points per turn. Low looks angular, high looks smooth.",
+   "Rotations": "How many full turns the spiral makes. Higher gives more coils.",
+   "Start Radius": "Width of the spiral at its start.",
+   "End Radius": "Width of the spiral at its end.",
+   "Height": "How tall the spiral is from start to end.",
+   "Reverse": "If on, the spiral winds the opposite way."
+  }
+ },
+ "GeometryNodeCurveSplineType": {
+  "node": "Changes selected curves to another type: Poly, Bezier, NURBS or Catmull Rom.",
+  "inputs": {
+   "Selection": "Chooses which elements are affected. True means the element is used, false means it is left alone."
+  }
+ },
+ "GeometryNodeCurveStar": {
+  "node": "Makes a star-shaped curve by joining points on an inner and an outer circle.",
+  "inputs": {
+   "Points": "How many tips the star has. Higher gives a spikier, rounder star.",
+   "Inner Radius": "Distance of the inner points from the center. Low makes sharp spikes.",
+   "Outer Radius": "Distance of the tips from the center. Higher makes a bigger star.",
+   "Twist": "Rotates the inner points relative to the tips, giving a swirled star."
+  }
+ },
+ "GeometryNodeCurveToMesh": {
+  "node": "Turns curves into a mesh, optionally with a profile shape swept along them. This is how you make pipes and tubes.",
+  "inputs": {
+   "Scale": "Size of the profile along the curve. 1 is normal, below 1 makes it thinner, above 1 thicker.",
+   "Fill Caps": "If on, closes the open ends of the tube when the profile is a closed shape."
+  }
+ },
+ "GeometryNodeCurveToPoints": {
+  "node": "Makes points along curves at chosen spots. Use it to place objects along a path.",
+  "inputs": {
+   "Count": "How many points per curve (Count mode). Higher gives more points.",
+   "Length": "Distance between points (Length mode). Lower gives more points."
+  }
+ },
+ "GeometryNodeCurvesToGreasePencil": {
+  "node": "Converts curves into Grease Pencil layers, so they can be drawn as strokes.",
+  "inputs": {
+   "Selection": "Chooses which elements are affected. True means the element is used, false means it is left alone.",
+   "Instances as Layers": "If on, each top-level instance becomes its own Grease Pencil layer."
+  }
+ },
+ "GeometryNodeDeformCurvesOnSurface": {
+  "node": "Moves and turns hair-like curves to follow a surface when the surface is deformed, such as by shape keys or armatures.",
+  "inputs": {}
+ },
+ "GeometryNodeDeleteGeometry": {
+  "node": "Removes the selected parts of a geometry. You choose whether to delete points, edges, faces and so on.",
+  "inputs": {
+   "Selection": "Elements that are true are deleted. False ones stay."
+  }
+ },
+ "GeometryNodeDistributePointsInGrid": {
+  "node": "Scatters points inside a volume grid, more where the grid values are high.",
+  "inputs": {
+   "Grid": "The volume grid that decides where points can appear.",
+   "Density": "Points per cubic meter (Random mode). Higher gives more points.",
+   "Seed": "Changes the random pattern. Any new number gives a different but repeatable result.",
+   "Spacing": "Distance between points along X, Y and Z (Grid mode). Lower gives more points.",
+   "Threshold": "Cells with a value below this get no points. Higher keeps only the densest regions."
+  }
+ },
+ "GeometryNodeDistributePointsInVolume": {
+  "node": "Scatters points inside a volume, either randomly or in an even grid.",
+  "inputs": {
+   "Mode": "A menu to choose random scattering or a regular grid.",
+   "Density": "Points per cubic meter (Random mode). Higher gives more points.",
+   "Seed": "Changes the random pattern. Any new number gives a different but repeatable result.",
+   "Spacing": "Distance between points along X, Y and Z (Grid mode). Lower gives more points.",
+   "Threshold": "Parts of the volume with a value below this get no points. Higher keeps only denser parts."
+  }
+ },
+ "GeometryNodeDistributePointsOnFaces": {
+  "node": "Scatters points over the surface of a mesh. Use it for grass, rocks, or anything spread on a surface.",
+  "inputs": {
+   "Selection": "Only selected faces get points.",
+   "Distance Min": "Smallest allowed gap between points (Poisson mode). Higher spaces them farther apart.",
+   "Density Max": "Most points allowed per square meter (Poisson mode). Higher allows tighter packing.",
+   "Density": "Points per square meter (Random mode). Higher gives more points.",
+   "Density Factor": "Scales the density per face. 0 gives no points, 1 gives the full amount.",
+   "Seed": "Changes the random pattern. Any new number gives a different but repeatable result."
+  }
+ },
+ "GeometryNodeDualMesh": {
+  "node": "Swaps faces and vertices. Each face becomes a vertex and each vertex becomes a face. Triangles turn into hexagon-like shapes.",
+  "inputs": {
+   "Keep Boundaries": "If on, edges along the mesh border are kept so the outline stays the same."
+  }
+ },
+ "GeometryNodeDuplicateElements": {
+  "node": "Makes copies of the selected points, edges, faces, curves or instances.",
+  "inputs": {
+   "Selection": "Chooses which elements are affected. True means the element is used, false means it is left alone.",
+   "Amount": "How many copies each selected element gets. 0 gives none, higher gives more."
+  }
+ },
+ "GeometryNodeEdgePathsToCurves": {
+  "node": "Turns paths that follow mesh edges into curves. Each path ends at a start vertex.",
+  "inputs": {
+   "Start Vertices": "Vertices where a path begins.",
+   "Next Vertex Index": "For each vertex, the index of the next vertex along the path."
+  }
+ },
+ "GeometryNodeEdgePathsToSelection": {
+  "node": "Selects the edges that lie along paths following the mesh edges.",
+  "inputs": {
+   "Start Vertices": "Vertices where a path begins.",
+   "Next Vertex Index": "For each vertex, the index of the next vertex along the path."
+  }
+ },
+ "GeometryNodeEdgesOfCorner": {
+  "node": "Gives the two edges on either side of a face corner.",
+  "inputs": {
+   "Corner Index": "Which face corner to look at. By default each corner uses its own index."
+  }
+ },
+ "GeometryNodeEdgesOfVertex": {
+  "node": "Finds one of the edges connected to a vertex, and how many edges it has.",
+  "inputs": {
+   "Vertex Index": "Which vertex to look at. By default each vertex uses its own index.",
+   "Weights": "Used to sort the edges. Lower weights come first.",
+   "Sort Index": "Which edge to pick from the sorted list. 0 is the first one."
+  }
+ },
+ "GeometryNodeEdgesToFaceGroups": {
+  "node": "Splits the faces of a mesh into regions fenced in by the chosen boundary edges. Each region gets an ID.",
+  "inputs": {
+   "Boundary Edges": "Edges that act as walls between regions. True means the edge separates regions."
+  }
+ },
+ "GeometryNodeExtrudeMesh": {
+  "node": "Pushes selected parts of a mesh outward to make new geometry, like pulling a box out of a face.",
+  "inputs": {
+   "Selection": "Chooses which elements are affected. True means the element is used, false means it is left alone.",
+   "Offset": "Direction and distance of the push. By default it follows each face's normal.",
+   "Offset Scale": "Multiplies the push distance. 0 adds no height, higher pushes farther, negative pushes inward.",
+   "Individual": "If on, each face is extruded on its own instead of as one connected piece."
+  }
+ },
+ "GeometryNodeFaceOfCorner": {
+  "node": "Tells you which face a face corner belongs to, and the corner's position inside that face.",
+  "inputs": {
+   "Corner Index": "Which face corner to look at. By default each corner uses its own index."
+  }
+ },
+ "GeometryNodeFieldAtIndex": {
+  "node": "Reads a field's value at a chosen element number, so one element can look at another.",
+  "inputs": {
+   "Value": "The field whose value you want to read.",
+   "Index": "The number of the element to read from."
+  }
+ },
+ "GeometryNodeFieldAverage": {
+  "node": "Calculates the mean and the median of a field. The mean is the usual average.",
+  "inputs": {
+   "Value": "The values to average.",
+   "Group Index": "Elements with the same ID are averaged separately. Leave empty to average everything."
+  }
+ },
+ "GeometryNodeFieldMinAndMax": {
+  "node": "Finds the smallest and biggest values of a field.",
+  "inputs": {
+   "Value": "The values to search.",
+   "Group Index": "Elements with the same ID are checked separately. Leave empty to check everything."
+  }
+ },
+ "GeometryNodeFieldOnDomain": {
+  "node": "Converts a field to another domain (points, edges, faces, corners), for example reading face values at points.",
+  "inputs": {
+   "Value": "The field to carry over to the other domain."
+  }
+ },
+ "GeometryNodeFieldToGrid": {
+  "node": "Builds volume grids by calculating field values at every active voxel of an existing grid shape.",
+  "inputs": {
+   "Topology": "A grid whose active voxels set the shape of the new grids."
+  }
+ },
+ "GeometryNodeFieldToList": {
+  "node": "Calculates a field a number of times and collects the results into a list.",
+  "inputs": {
+   "Count": "How many items the list has. Higher gives a longer list."
+  }
+ },
+ "GeometryNodeFieldVariance": {
+  "node": "Calculates the standard deviation and variance of a field. Both tell how spread out the values are.",
+  "inputs": {
+   "Value": "The values to measure.",
+   "Group Index": "Elements with the same ID are measured separately. Leave empty to measure everything."
+  }
+ },
+ "GeometryNodeFillCurve": {
+  "node": "Fills the inside of closed curves with flat faces on the XY plane.",
+  "inputs": {
+   "Group ID": "Curves with the same ID are filled together as one shape.",
+   "Mode": "A menu: fill with triangles or with n-gon faces.",
+   "Fill Rule": "A menu that decides how overlapping curves are filled: Even-Odd leaves holes, Non-Zero fills overlaps."
+  }
+ },
+ "GeometryNodeFilletCurve": {
+  "node": "Rounds the corners of curves by adding circular arcs at the control points.",
+  "inputs": {
+   "Radius": "How round the corners become. 0 keeps them sharp, higher rounds them more.",
+   "Limit Radius": "If on, the radius is lowered where needed so the arcs do not overlap.",
+   "Mode": "A menu: Bezier or Poly rounding.",
+   "Count": "Points per rounded corner (Poly mode). Higher is smoother."
+  }
+ },
+ "GeometryNodeFilterList": {
+  "node": "Removes items from a list. Only items marked true in the selection are kept.",
+  "inputs": {
+   "List": "The list to filter.",
+   "Selection": "True keeps the item, false removes it."
+  }
+ },
+ "GeometryNodeFlipFaces": {
+  "node": "Reverses the direction a face points (its normal). Use it when a surface looks inside out.",
+  "inputs": {
+   "Selection": "Chooses which elements are affected. True means the element is used, false means it is left alone."
+  }
+ },
+ "GeometryNodeForeachGeometryElementInput": {
+  "node": "Start of a loop that runs the nodes inside once for every point, edge, face and so on.",
+  "inputs": {
+   "Selection": "Only the selected elements go through the loop."
+  }
+ },
+ "GeometryNodeForeachGeometryElementOutput": {
+  "node": "End of a loop that runs the nodes inside once for every element, then collects the results.",
+  "inputs": {}
+ },
+ "GeometryNodeGeometryToInstance": {
+  "node": "Turns each input geometry into an instance. This is often much faster than joining them.",
+  "inputs": {}
+ },
+ "GeometryNodeGetAttributeNames": {
+  "node": "Gets a list of the attribute names on a geometry, optionally filtered by type or domain.",
+  "inputs": {
+   "Filter Data Type": "If on, only attributes of the chosen data type are listed.",
+   "Data Type": "A menu for the data type to filter by, such as Float or Vector.",
+   "Filter Domain": "If on, only attributes on the chosen domain are listed.",
+   "Domain": "A menu for the domain to filter by, such as Point or Face."
+  }
+ },
+ "GeometryNodeGetGeometryBundle": {
+  "node": "Pulls the bundle (a package of named values) out of a geometry.",
+  "inputs": {
+   "Remove": "If on, the picked part is also removed from the geometry output, so it is not left in twice."
+  }
+ },
+ "GeometryNodeGetGeometryComponent": {
+  "node": "Picks out one type of geometry (mesh, curves, point cloud and so on) from a mixed geometry.",
+  "inputs": {
+   "Type": "A menu to choose which component to take out.",
+   "Remove": "If on, the picked part is also removed from the geometry output, so it is not left in twice."
+  }
+ },
+ "GeometryNodeGetNamedGrid": {
+  "node": "Gets one volume grid from a volume by its name.",
+  "inputs": {
+   "Name": "The exact name of the grid to get.",
+   "Remove": "If on, the picked part is also removed from the geometry output, so it is not left in twice."
+  }
+ },
+ "GeometryNodeGizmoDial": {
+  "node": "Shows a dial in the 3D viewport that you can drag to change a value, like an angle.",
+  "inputs": {
+   "Value": "The value the dial controls. Dragging the dial changes it.",
+   "Position": "Where the dial sits in the viewport.",
+   "Up": "The direction the dial's rotation axis points.",
+   "Screen Space": "If on, the dial is drawn facing the screen.",
+   "Radius": "Size of the dial. Higher makes a bigger dial."
+  }
+ },
+ "GeometryNodeGizmoLinear": {
+  "node": "Shows an arrow in the 3D viewport that you can drag to change a value.",
+  "inputs": {
+   "Value": "The value the arrow controls. Dragging it changes the value.",
+   "Position": "Where the arrow starts.",
+   "Direction": "The direction the arrow points and moves along."
+  }
+ },
+ "GeometryNodeGizmoTransform": {
+  "node": "Shows move, rotate and scale handles in the viewport for changing a transform.",
+  "inputs": {
+   "Value": "The transformation matrix the handles control.",
+   "Position": "Where the handles are placed.",
+   "Rotation": "How the handles are turned."
+  }
+ },
+ "GeometryNodeGreasePencilToCurves": {
+  "node": "Converts Grease Pencil layers into curve instances.",
+  "inputs": {
+   "Selection": "Chooses which elements are affected. True means the element is used, false means it is left alone.",
+   "Layers as Instances": "If on, each layer becomes its own instance."
+  }
+ },
+ "GeometryNodeGridAdvect": {
+  "node": "Moves grid values along a velocity field, like smoke carried by wind.",
+  "inputs": {
+   "Grid": "The grid whose values are moved.",
+   "Velocity": "A vector grid giving the direction and speed of the flow.",
+   "Time Step": "How far in time to move. Small is gentle and accurate, large moves farther but gets less accurate.",
+   "Integration Scheme": "A menu for how the movement is calculated. More advanced options are more accurate but slower.",
+   "Limiter": "A menu for how overshooting values are kept in check."
+  }
+ },
+ "GeometryNodeGridClip": {
+  "node": "Switches off voxels outside a box. Their values go back to the background value.",
+  "inputs": {
+   "Grid": "The grid to clip.",
+   "Min X": "Lowest voxel kept along X.",
+   "Min Y": "Lowest voxel kept along Y.",
+   "Min Z": "Lowest voxel kept along Z.",
+   "Max X": "Highest voxel kept along X.",
+   "Max Y": "Highest voxel kept along Y.",
+   "Max Z": "Highest voxel kept along Z."
+  }
+ },
+ "GeometryNodeGridCurl": {
+  "node": "Measures how much a vector grid swirls around each point, and the swirl direction.",
+  "inputs": {
+   "Grid": "A vector grid, such as a velocity field."
+  }
+ },
+ "GeometryNodeGridDilateAndErode": {
+  "node": "Grows or shrinks the active area of a grid. Only which voxels are active changes, not their values.",
+  "inputs": {
+   "Grid": "The grid to grow or shrink.",
+   "Connectivity": "A menu for which neighbors count: faces only, or also edges and corners.",
+   "Tiles": "A menu for how big blocks of voxels (tiles) are handled.",
+   "Steps": "How many voxels to grow or shrink by. Positive grows the area, negative shrinks it."
+  }
+ },
+ "GeometryNodeGridDivergence": {
+  "node": "Measures the flow into and out of each point of a vector grid. Positive means flowing out.",
+  "inputs": {
+   "Grid": "A vector grid, such as a velocity field."
+  }
+ },
+ "GeometryNodeGridGradient": {
+  "node": "Finds the direction and strength of the steepest change in a number grid, like the slope on a map.",
+  "inputs": {
+   "Grid": "The number grid to measure."
+  }
+ },
+ "GeometryNodeGridInfo": {
+  "node": "Reads facts about a volume grid, such as its transform and background value.",
+  "inputs": {
+   "Grid": "The grid to look up."
+  }
+ },
+ "GeometryNodeGridLaplacian": {
+  "node": "Measures how much each value differs from the average of its neighbors. Used for smoothing and fluid math.",
+  "inputs": {
+   "Grid": "The number grid to measure."
+  }
+ },
+ "GeometryNodeGridMean": {
+  "node": "Smooths a grid by replacing each voxel with the average of its surroundings, like a box blur.",
+  "inputs": {
+   "Grid": "The grid to smooth.",
+   "Width": "How far around each voxel to average. Higher blurs more.",
+   "Iterations": "How many times to repeat the blur. Higher is smoother."
+  }
+ },
+ "GeometryNodeGridMedian": {
+  "node": "Smooths a grid by replacing each voxel with the middle value of its surroundings. Keeps edges sharper than a mean blur.",
+  "inputs": {
+   "Grid": "The grid to smooth.",
+   "Width": "How far around each voxel to look. Higher smooths more.",
+   "Iterations": "How many times to repeat. Higher is smoother."
+  }
+ },
+ "GeometryNodeGridPrune": {
+  "node": "Makes a grid use less memory by merging areas of equal values into larger blocks.",
+  "inputs": {
+   "Grid": "The grid to shrink in memory.",
+   "Mode": "A menu for how values are judged as equal: exactly, within a threshold, or by inactive state.",
+   "Threshold": "Values closer together than this count as equal and get merged. Higher saves more memory but loses detail."
+  }
+ },
+ "GeometryNodeGridToMesh": {
+  "node": "Makes a mesh along the surface of a volume grid, where the values cross a chosen level.",
+  "inputs": {
+   "Grid": "The grid to turn into a surface.",
+   "Threshold": "The value at which the surface forms. Raising it shrinks the shape, lowering it grows it.",
+   "Adaptivity": "How much the mesh simplifies. 0 keeps full detail, higher gives fewer faces."
+  }
+ },
+ "GeometryNodeGridToPoints": {
+  "node": "Makes a point for each active voxel of a grid.",
+  "inputs": {
+   "Grid": "The grid whose active voxels become points."
+  }
+ },
+ "GeometryNodeGridVoxelize": {
+  "node": "Turns big active blocks (tiles) of a grid into individual voxels, making the grid fully detailed. Uses more memory.",
+  "inputs": {
+   "Grid": "The grid to voxelize."
+  }
+ },
+ "GeometryNodeImageInfo": {
+  "node": "Reads facts about an image, such as its width, height and number of frames.",
+  "inputs": {
+   "Image": "The image to look up.",
+   "Frame": "Which frame to read from, for animated images or sequences."
+  }
+ },
+ "GeometryNodeImageTexture": {
+  "node": "Reads the color of an image at a chosen spot. Use it to drive geometry with a picture.",
+  "inputs": {
+   "Image": "The image to read from.",
+   "Vector": "Where in the image to read (UV style, 0 to 1). By default it uses the element's position.",
+   "Frame": "Which frame to read, for animated images or sequences."
+  }
+ },
+ "GeometryNodeImportCSV": {
+  "node": "Loads a CSV table file (rows and columns of numbers or text) as a point cloud of data.",
+  "inputs": {
+   "Path": "Location of the file on your disk. It must point to a real file.",
+   "Delimiter": "The character that separates columns in the file, usually a comma."
+  }
+ },
+ "GeometryNodeImportOBJ": {
+  "node": "Loads a 3D model from an OBJ file as geometry.",
+  "inputs": {
+   "Path": "Location of the file on your disk. It must point to a real file."
+  }
+ },
+ "GeometryNodeImportPLY": {
+  "node": "Loads a point cloud from a PLY file.",
+  "inputs": {
+   "Path": "Location of the file on your disk. It must point to a real file."
+  }
+ },
+ "GeometryNodeImportSTL": {
+  "node": "Loads a mesh from an STL file, often used for 3D printing.",
+  "inputs": {
+   "Path": "Location of the file on your disk. It must point to a real file."
+  }
+ },
+ "GeometryNodeImportText": {
+  "node": "Loads the text inside a text file as a string.",
+  "inputs": {
+   "Path": "Location of the file on your disk. It must point to a real file."
+  }
+ },
+ "GeometryNodeImportVDB": {
+  "node": "Loads volume data (smoke, clouds, fog) from a .vdb file.",
+  "inputs": {
+   "Path": "Location of the file on your disk. It must point to a real file."
+  }
+ },
+ "GeometryNodeIndexOfNearest": {
+  "node": "For each element, finds the closest other element and its index. Use it to link neighbors.",
+  "inputs": {
+   "Position": "The positions used to measure distance. Usually the element positions.",
+   "Group ID": "Only elements with the same group ID are compared with each other."
+  }
+ },
+ "GeometryNodeIndexSwitch": {
+  "node": "Picks one of several values using a number. Index 0 gives the first value, 1 the second, and so on.",
+  "inputs": {
+   "Index": "Which value to output. Out-of-range numbers use the nearest valid choice.",
+   "Item_0": "The value used when the index is 0.",
+   "Item_1": "The value used when the index is 1."
+  }
+ },
+ "GeometryNodeInputActiveCamera": {
+  "node": "Gives the camera that is currently active in the scene.",
+  "inputs": {}
+ },
+ "GeometryNodeInputCollection": {
+  "node": "Gives a single collection you choose from a dropdown.",
+  "inputs": {}
+ },
+ "GeometryNodeInputCurveHandlePositions": {
+  "node": "Reads the positions of the two handles on each Bezier control point.",
+  "inputs": {
+   "Relative": "If on, positions are measured from the control point. If off, they are in object space."
+  }
+ },
+ "GeometryNodeInputCurveTilt": {
+  "node": "Reads the twist angle at each curve point. Tilt rotates the curve's surface around its direction.",
+  "inputs": {}
+ },
+ "GeometryNodeInputEdgeSmooth": {
+  "node": "Tells whether each edge is marked smooth. Smooth edges blend shading, sharp ones show a crease.",
+  "inputs": {}
+ },
+ "GeometryNodeInputFont": {
+  "node": "Gives a font you choose, for use with text nodes.",
+  "inputs": {}
+ },
+ "GeometryNodeInputID": {
+  "node": "Gives each point its stable ID number, which stays the same even if points are deleted or reordered.",
+  "inputs": {}
+ },
+ "GeometryNodeInputImage": {
+  "node": "Gives an image you choose from your loaded images.",
+  "inputs": {}
+ }
+}

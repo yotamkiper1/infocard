@@ -1,0 +1,819 @@
+{
+ "CompositorNodeAlphaOver": {
+  "node": "Lays a foreground image on top of a background, using the foreground's transparency, like stacking a sticker on a photo.",
+  "inputs": {
+   "Background": "The bottom picture, seen wherever the foreground is see-through.",
+   "Foreground": "The top picture, placed over the background. Its transparent parts let the background show.",
+   "Fac": "How strongly the foreground is laid on. 0 shows only the background, 1 shows the full overlay.",
+   "Type": "Chooses how the two images are mixed. Convert Premultiplied handles images whose colors were already multiplied by their transparency.",
+   "Straight Alpha": "Turn on if the foreground has straight (unpremultiplied) alpha. Wrong setting causes dark or bright halos at edges."
+  }
+ },
+ "CompositorNodeAntiAliasing": {
+  "node": "Smooths jagged, stair-step edges in an image, Use it on renders with hard edges.",
+  "inputs": {
+   "Image": "The picture this node works on. Connect a render, a photo or another node's output here.",
+   "Threshold": "How big a color jump must be to count as an edge. Low smooths more edges, high only the sharpest ones.",
+   "Contrast Limit": "Limits how much weaker nearby edges can be before they are ignored. Low smooths more, high keeps fine detail.",
+   "Corner Rounding": "How much sharp corners get rounded. 0 keeps corners crisp, higher values soften them."
+  }
+ },
+ "CompositorNodeBilateralblur": {
+  "node": "Blurs an image but tries to keep edges sharp, like smoothing skin without blurring the outline of a face.",
+  "inputs": {
+   "Image": "The picture to blur.",
+   "Determinator": "A guide image that tells the blur where the edges are. Often the same picture, or a normal or depth pass.",
+   "Size": "How far the blur reaches, in pixels. Low is a light smoothing, high is a strong smoothing.",
+   "Threshold": "How different two colors must be to stop the blur. Low protects more edges, high blurs across more of them."
+  }
+ },
+ "CompositorNodeBlankImage": {
+  "node": "Makes a flat, single-color image of a chosen size. Use it as a plain background or a starting canvas.",
+  "inputs": {
+   "Color": "The color that fills the whole image.",
+   "Size": "Width and height of the new image in pixels. Bigger numbers make a larger image."
+  }
+ },
+ "CompositorNodeBlur": {
+  "node": "Softens an image by mixing each pixel with its neighbors, like frosted glass.",
+  "inputs": {
+   "Image": "The picture to blur.",
+   "Size": "How far the blur spreads sideways (X) and up and down (Y). Low is slightly soft, high is very smeared.",
+   "Type": "The blur style. Different types trade speed for look, such as Gaussian for natural softness or Box for a blocky blur.",
+   "Extend Bounds": "If on, the blur may spread past the image edges so the borders fade out instead of staying sharp.",
+   "Separable": "If on, blurs sideways and up and down separately. Faster, but only on blur types where this gives the same look."
+  }
+ },
+ "CompositorNodeBokehBlur": {
+  "node": "Blurs an image using a custom shape, like the soft bright discs of an out-of-focus camera lens.",
+  "inputs": {
+   "Image": "The picture to blur.",
+   "Bokeh": "A small image whose shape becomes the look of the blur, such as a circle or hexagon. Make one with Bokeh Image.",
+   "Size": "How strong the blur is. Low is slight, high is very out of focus.",
+   "Mask": "A gray map that picks where to blur. White areas are blurred fully, black areas stay sharp.",
+   "Extend Bounds": "If on, the blur may spread past the image edges so borders fade out naturally."
+  }
+ },
+ "CompositorNodeBokehImage": {
+  "node": "Draws the shape of a camera lens opening, like a hexagon. Feed it into Bokeh Blur to shape the blur.",
+  "inputs": {
+   "Flaps": "How many sides the shape has, like the blades of a camera iris. 3 is a triangle, higher gets rounder.",
+   "Angle": "Turns the shape around its center, like rotating a hexagon.",
+   "Roundness": "Blends from sharp straight sides (0) to a perfect circle (1).",
+   "Catadioptric Size": "Cuts a hole in the middle like a mirror lens (donut look). 0 is solid, higher makes a bigger hole.",
+   "Color Shift": "Adds color fringes to the shape edges. 0 is none, higher gives stronger rainbow edges."
+  }
+ },
+ "CompositorNodeBoxMask": {
+  "node": "Draws a white rectangle on black. Use it as a mask to show or hide part of an image, like a window cut in paper.",
+  "inputs": {
+   "Operation": "How this mask joins the one plugged into Mask. Add combines them, Subtract cuts it out, Multiply keeps the overlap, Not inverts.",
+   "Mask": "An existing mask to combine with this shape. If nothing is connected, it starts from black (empty).",
+   "Value": "How bright the shape is. 1 is full white, lower values make a softer, see-through shape.",
+   "Position": "Where the center of the box sits. 0 to 1 across the image, so 0.5 is the middle.",
+   "Size": "Width and height of the box as part of the image. 1 fills the whole image.",
+   "Rotation": "Turns the box in degrees around its center."
+  }
+ },
+ "CompositorNodeBrightContrast": {
+  "node": "Makes an image lighter or darker and adjusts how different bright and dark areas are, like a simple photo editor.",
+  "inputs": {
+   "Image": "The picture this node works on. Connect a render, a photo or another node's output here.",
+   "Bright": "Adds or removes light. Negative makes it darker, 0 is no change, positive makes it brighter.",
+   "Contrast": "Pushes light and dark further apart. Negative looks flat and gray, positive looks punchy."
+  }
+ },
+ "CompositorNodeChannelMatte": {
+  "node": "Cuts out parts of an image by comparing one color channel to others, like removing a green screen by its green amount.",
+  "inputs": {
+   "Image": "The picture to cut a background from.",
+   "Minimum": "Below this key strength, pixels become fully transparent. Raise it to cut out more.",
+   "Maximum": "Above this key strength, pixels stay fully solid. The range between Minimum and Maximum is a soft fade.",
+   "Color Space": "The color system used for the test: RGB, HSV, YUV or YCbCr. Pick the one that separates your key color best.",
+   "RGB Key Channel": "Which of Red, Green or Blue is the color you want to remove, such as Green for a green screen.",
+   "HSV Key Channel": "Which of Hue, Saturation or Value is the part used to find the background.",
+   "YUV Key Channel": "Which YUV channel is used to find the background (Y is brightness, U and V are color).",
+   "YCbCr Key Channel": "Which YCbCr channel is used to find the background (Y is brightness, Cb and Cr are color).",
+   "Limit Method": "How the key strength is limited. Single compares to the strongest other channel, Max to the brightest of the rest.",
+   "RGB Limit Channel": "Which RGB channel the key is compared against. Pick the one that tends to be higher than the key in your background.",
+   "HSV Limit Channel": "Which HSV channel the key is compared against when limiting.",
+   "YUV Limit Channel": "Which YUV channel the key is compared against when limiting.",
+   "YCbCr Limit Channel": "Which YCbCr channel the key is compared against when limiting."
+  }
+ },
+ "CompositorNodeChromaMatte": {
+  "node": "Removes a chosen color (like green screen) from an image and makes it transparent, so you can place a subject on a new background.",
+  "inputs": {
+   "Image": "The footage with the colored backdrop.",
+   "Key Color": "The color to remove, such as the green of your screen. Use the eyedropper for best results.",
+   "Minimum": "Angle of color difference that is fully removed. Higher removes more shades near the key color.",
+   "Maximum": "Angle of color difference past which pixels are fully kept. Larger gap with Minimum gives a softer edge.",
+   "Falloff": "How softly the edge fades between removed and kept. 0 is hard-edged, higher is smoother."
+  }
+ },
+ "CompositorNodeColorBalance": {
+  "node": "Tints an image's dark, mid and bright areas separately, like the color grading in a movie. Use it to set a mood.",
+  "inputs": {
+   "Image": "The picture this node works on. Connect a render, a photo or another node's output here.",
+   "Fac": "How strongly the effect is applied. 0 leaves the image alone, 1 is full effect.",
+   "Type": "Chooses the method: Lift/Gamma/Gain, Offset/Power/Slope (ASC CDL), or White Point (temperature and tint).",
+   "Base Lift": "Brightens or darkens the shadows without changing the highlights much.",
+   "Color Lift": "Tints the shadows (dark areas) toward a color.",
+   "Base Gamma": "Makes the mid-tones lighter or darker. Below 1 darker, above 1 brighter.",
+   "Color Gamma": "Tints the mid-tones toward a color.",
+   "Base Gain": "Scales the highlights (bright areas). Low dims them, high makes them brighter.",
+   "Color Gain": "Tints the highlights (bright areas) toward a color.",
+   "Base Offset": "Adds or subtracts the same amount from every pixel. Negative makes it darker, positive lifts it all.",
+   "Color Offset": "Adds a color tint to the whole picture evenly.",
+   "Base Power": "Bends the mid-tones like gamma. Higher values make the picture darker in the middle.",
+   "Color Power": "Tints the mid-tones by color, using the power curve.",
+   "Base Slope": "Scales overall brightness, strongest on bright areas. Low is dimmer, high is brighter.",
+   "Color Slope": "Tints bright areas toward a color, using the slope control.",
+   "Input Temperature": "How warm or cool the original lighting looks, so it can be neutralized. Low is cool blue, high is warm orange.",
+   "Input Tint": "Green or magenta lean of the original lighting, so it can be neutralized.",
+   "Output Temperature": "The warmth you want the final picture to have. Low is cool blue, high is warm orange.",
+   "Output Tint": "The green or magenta lean you want in the final picture."
+  }
+ },
+ "CompositorNodeColorCorrection": {
+  "node": "Adjusts saturation, contrast, gamma, gain and offset separately for shadows, midtones and highlights. A full color grading toolbox.",
+  "inputs": {
+   "Image": "The picture this node works on. Connect a render, a photo or another node's output here.",
+   "Mask": "A gray map choosing where the correction shows. White applies it fully, black leaves the image untouched.",
+   "Master Saturation": "Color strength of the whole image. 0 is gray, 1 is unchanged, higher is more vivid.",
+   "Master Contrast": "Contrast of the whole image. Below 1 looks flatter, above 1 pushes light and dark apart.",
+   "Master Gamma": "Brightness of the mid-values within the whole image. Below 1 is brighter, above 1 darker.",
+   "Master Gain": "Multiplies the brightness of the whole image. Low dims, high brightens.",
+   "Master Offset": "Adds or subtracts light evenly from the whole image. Negative darkens, positive lightens.",
+   "Highlights Saturation": "Color strength of the bright areas. 0 is gray, 1 is unchanged, higher is more vivid.",
+   "Highlights Contrast": "Contrast of the bright areas. Below 1 looks flatter, above 1 pushes light and dark apart.",
+   "Highlights Gamma": "Brightness of the mid-values within the bright areas. Below 1 is brighter, above 1 darker.",
+   "Highlights Gain": "Multiplies the brightness of the bright areas. Low dims, high brightens.",
+   "Highlights Offset": "Adds or subtracts light evenly from the bright areas. Negative darkens, positive lightens.",
+   "Midtones Saturation": "Color strength of the middle brightness areas. 0 is gray, 1 is unchanged, higher is more vivid.",
+   "Midtones Contrast": "Contrast of the middle brightness areas. Below 1 looks flatter, above 1 pushes light and dark apart.",
+   "Midtones Gamma": "Brightness of the mid-values within the middle brightness areas. Below 1 is brighter, above 1 darker.",
+   "Midtones Gain": "Multiplies the brightness of the middle brightness areas. Low dims, high brightens.",
+   "Midtones Offset": "Adds or subtracts light evenly from the middle brightness areas. Negative darkens, positive lightens.",
+   "Shadows Saturation": "Color strength of the dark areas. 0 is gray, 1 is unchanged, higher is more vivid.",
+   "Shadows Contrast": "Contrast of the dark areas. Below 1 looks flatter, above 1 pushes light and dark apart.",
+   "Shadows Gamma": "Brightness of the mid-values within the dark areas. Below 1 is brighter, above 1 darker.",
+   "Shadows Gain": "Multiplies the brightness of the dark areas. Low dims, high brightens.",
+   "Shadows Offset": "Adds or subtracts light evenly from the dark areas. Negative darkens, positive lightens.",
+   "Midtones Start": "Brightness where shadows end and midtones begin. Raising it widens the shadow range.",
+   "Midtones End": "Brightness where midtones end and highlights begin. Lowering it widens the highlight range.",
+   "Apply On Red": "If on, the correction changes the red channel. Turn off to leave red untouched.",
+   "Apply On Green": "If on, the correction changes the green channel. Turn off to leave green untouched.",
+   "Apply On Blue": "If on, the correction changes the blue channel. Turn off to leave blue untouched."
+  }
+ },
+ "CompositorNodeColorMatte": {
+  "node": "Makes pixels close to a chosen color transparent, based on hue, saturation and value. Good for removing a solid-color backdrop.",
+  "inputs": {
+   "Image": "The picture with a colored backdrop.",
+   "Key Color": "The color you want to remove.",
+   "Hue": "How far the hue (the color itself) may differ from the key and still be removed. Higher removes more shades.",
+   "Saturation": "How far color strength may differ from the key and still be removed. Higher removes more pale or vivid versions.",
+   "Value": "How far brightness may differ from the key and still be removed. Higher removes more lighter or darker versions."
+  }
+ },
+ "CompositorNodeColorSpill": {
+  "node": "Removes the leftover tint of a green or blue screen that bounced onto your subject, like cleaning green light off a person's hair.",
+  "inputs": {
+   "Image": "The keyed picture that has a color cast on its edges.",
+   "Fac": "How much of the spill is removed. 0 does nothing, 1 removes as much as the settings allow.",
+   "Spill Channel": "The color channel (Red, Green or Blue) that is spilling. Choose the color of your screen.",
+   "Limit Method": "How the spill is measured. Single compares to one other channel, Average to the mix of the other two.",
+   "Limit Channel": "Which other channel the spill is compared to when Limit Method is Single.",
+   "Limit Strength": "How much the limiting channel counts. Higher removes less spill, lower removes more.",
+   "Use Spill Strength": "If on, you can set a separate removal strength for each color channel with Strength.",
+   "Spill Strength": "Per-channel amount of spill removed (red, green, blue). Only used if Use Spill Strength is on."
+  }
+ },
+ "CompositorNodeCombineColor": {
+  "node": "Builds a color image from separate red, green, blue and alpha numbers or images. The reverse of Separate Color.",
+  "inputs": {
+   "Red": "The red amount for each pixel. 0 is none, 1 is full red.",
+   "Green": "The green amount for each pixel. 0 is none, 1 is full green.",
+   "Blue": "The blue amount for each pixel. 0 is none, 1 is full blue.",
+   "Alpha": "How solid each pixel is. 0 is invisible, 1 is fully visible."
+  }
+ },
+ "CompositorNodeConvertColorSpace": {
+  "node": "Changes the color system of an image from one to another, so colors look right when used somewhere else.",
+  "inputs": {
+   "Image": "The picture whose color system will be converted."
+  }
+ },
+ "CompositorNodeConvertToDisplay": {
+  "node": "Changes an image so it looks the same as on your screen, with the view and look settings baked in. Use before saving a display-ready image.",
+  "inputs": {
+   "Image": "The picture to convert for display.",
+   "Invert": "If on, does the reverse: turns display-ready colors back into scene colors."
+  }
+ },
+ "CompositorNodeConvolve": {
+  "node": "Applies a custom filter shape to an image by blending each pixel using a small pattern, which can blur, sharpen or create glows.",
+  "inputs": {
+   "Image": "The picture to filter.",
+   "Kernel Data Type": "Whether the filter pattern is a gray-only map (Float) or has color (Color).",
+   "Float Kernel": "A gray image used as the pattern. Bright spots decide how pixels are spread around.",
+   "Color Kernel": "A color image used as the pattern. Its colors and shapes are stamped across the picture.",
+   "Normalize Kernel": "If on, scales the pattern so brightness stays the same. Turn off and the picture may get much brighter."
+  }
+ },
+ "CompositorNodeCornerPin": {
+  "node": "Squeezes and stretches an image into any four-cornered shape, like pinning a poster onto a wall in perspective.",
+  "inputs": {
+   "Image": "The picture to reshape.",
+   "Upper Left": "Where the top-left corner of the image lands. Move it to bend the picture.",
+   "Upper Right": "Where the top-right corner of the image lands.",
+   "Lower Left": "Where the bottom-left corner of the image lands.",
+   "Lower Right": "Where the bottom-right corner of the image lands.",
+   "Interpolation": "How pixels are blended when moved or resampled. Nearest is crisp and blocky, Bilinear and Bicubic are smoother.",
+   "Extension X": "What fills space past the left and right edges. Clip leaves it empty, Extend stretches the edge pixels, Repeat tiles the image.",
+   "Extension Y": "What fills space past the top and bottom edges. Clip leaves it empty, Extend stretches the edge pixels, Repeat tiles the image."
+  }
+ },
+ "CompositorNodeCrop": {
+  "node": "Cuts away the edges of an image, keeping only a rectangle. Use it to trim a picture or focus on one part.",
+  "inputs": {
+   "Image": "The picture to crop.",
+   "X": "Left edge of the crop box, in pixels from the left. Higher cuts more from the left side.",
+   "Y": "Bottom edge of the crop box, in pixels from the bottom. Higher cuts more from the bottom.",
+   "Width": "Width of the crop box in pixels. Smaller keeps a narrower piece.",
+   "Height": "Height of the crop box in pixels. Smaller keeps a shorter piece.",
+   "Alpha Crop": "If on, the cropped-away area becomes transparent and the image keeps its size. If off, the image gets smaller."
+  }
+ },
+ "CompositorNodeCryptomatte": {
+  "node": "Older tool that picks objects or materials out of a render using special ID passes, to make masks without extra renders.",
+  "inputs": {
+   "Image": "The regular picture to show with the picked parts.",
+   "Crypto 00": "First Cryptomatte data layer from your render. Connect the matching pass.",
+   "Crypto 01": "Second Cryptomatte data layer from your render.",
+   "Crypto 02": "Third Cryptomatte data layer from your render."
+  }
+ },
+ "CompositorNodeCryptomatteV2": {
+  "node": "Picks objects, materials or assets out of a render to make clean masks, by clicking their names. No extra rendering needed.",
+  "inputs": {
+   "Image": "The regular picture shown with the picked parts removed or kept."
+  }
+ },
+ "CompositorNodeCurveRGB": {
+  "node": "Reshapes brightness and color with drawn curves, like the curves tool in a photo editor. Great for contrast and color tweaks.",
+  "inputs": {
+   "Image": "The picture this node works on. Connect a render, a photo or another node's output here.",
+   "Fac": "How strongly the curves are applied. 0 leaves the image unchanged, 1 is full effect.",
+   "Black Level": "The color that counts as pure black. Pixels at this color become black. Raising it deepens the shadows.",
+   "White Level": "The color that counts as pure white. Pixels at this color become white. Lowering it brightens the picture."
+  }
+ },
+ "CompositorNodeDBlur": {
+  "node": "Smears an image in a direction, spinning, or zooming, like motion lines from a fast camera move.",
+  "inputs": {
+   "Image": "The picture to smear.",
+   "Samples": "How many copies are blended. Low is choppy and fast, high is smooth and slower.",
+   "Center": "The middle point for the spin and zoom smear. 0.5 is the image center.",
+   "Rotation": "How much the smear spins around the center, in degrees. 0 is none.",
+   "Scale": "How much the smear zooms in or out from the center. 0 is none, higher streaks outward.",
+   "Translation Amount": "How far the smear slides, as part of the image size. 0 is none, higher is a longer streak.",
+   "Translation Direction": "The angle that the slide smear points in, in degrees."
+  }
+ },
+ "CompositorNodeDefocus": {
+  "node": "Blurs an image based on a depth map, so things far from focus look soft like a camera with shallow depth of field.",
+  "inputs": {
+   "Image": "The picture this node works on. Connect a render, a photo or another node's output here.",
+   "Z": "A depth map that says how far each pixel is. Without it, the blur is the same everywhere."
+  }
+ },
+ "CompositorNodeDenoise": {
+  "node": "Removes grain and speckles (noise) from a rendered image using a smart filter, so renders look clean with fewer samples.",
+  "inputs": {
+   "Image": "The noisy picture to clean.",
+   "Albedo": "Optional pass of pure surface colors. Helps the cleaner keep texture detail.",
+   "Normal": "Optional pass of surface directions. Helps the cleaner keep shapes and edges sharp.",
+   "HDR": "Turn on for images with very bright values (like renders). Off clamps to normal brightness.",
+   "Prefilter": "How the helper passes are cleaned first. None is fastest, Fast is quick, Accurate is slow but best.",
+   "Quality": "Speed versus result. High gives the cleanest picture but takes longer, Balanced and Fast take less time."
+  }
+ },
+ "CompositorNodeDespeckle": {
+  "node": "Removes tiny bright or dark specks from an image, like dust, while leaving larger shapes alone.",
+  "inputs": {
+   "Image": "The picture this node works on. Connect a render, a photo or another node's output here.",
+   "Fac": "How strongly the cleanup is applied. 0 does nothing, 1 is the full effect.",
+   "Color Threshold": "How different a pixel's color must be from neighbors to count as a speck. Low cleans more, high cleans less.",
+   "Neighbor Threshold": "How many nearby pixels must differ before it is cleaned. Low cleans more, high only strong specks."
+  }
+ },
+ "CompositorNodeDiffMatte": {
+  "node": "Makes a pixel transparent if it is nearly the same in two images. Use it to remove a still background by comparing it to a shot without the subject.",
+  "inputs": {
+   "Image 1": "The shot with the subject in it.",
+   "Image 2": "The clean shot of just the background to compare against.",
+   "Tolerance": "How different two pixels may be and still count as the same. Low removes less, high removes more.",
+   "Falloff": "How softly the cutout edge fades. 0 is hard, higher gives a smoother, partly see-through edge."
+  }
+ },
+ "CompositorNodeDilateErode": {
+  "node": "Grows or shrinks the white area of a mask, so a shape gets thicker or thinner. Good for fixing mask edges.",
+  "inputs": {
+   "Mask": "The black and white mask to grow or shrink.",
+   "Size": "How many pixels to change. Positive grows white areas, negative shrinks them.",
+   "Type": "The method used. Steps is a plain grow or shrink, Threshold, Distance and Feather give different edge looks.",
+   "Falloff Size": "Width of the soft edge in Feather mode. Larger gives a softer, longer fade.",
+   "Falloff": "The shape of the soft edge fade, such as Smooth, Sphere, Root or Sharp."
+  }
+ },
+ "CompositorNodeDisplace": {
+  "node": "Pushes pixels of an image around using another image as a guide, like distorting a picture seen through rippled glass.",
+  "inputs": {
+   "Image": "The picture to distort.",
+   "Displacement": "A vector map that says how far to move each pixel in X and Y. Bigger values shift pixels farther.",
+   "Interpolation": "How pixels are blended when moved or resampled. Nearest is crisp and blocky, Bilinear and Bicubic are smoother.",
+   "Extension X": "What fills space past the left and right edges. Clip leaves it empty, Extend stretches the edge pixels, Repeat tiles the image.",
+   "Extension Y": "What fills space past the top and bottom edges. Clip leaves it empty, Extend stretches the edge pixels, Repeat tiles the image."
+  }
+ },
+ "CompositorNodeDistanceMatte": {
+  "node": "Removes pixels whose color is close to a chosen color. Works like Chroma Key but by simple color distance.",
+  "inputs": {
+   "Image": "The picture with a backdrop to remove.",
+   "Key Color": "The color to remove.",
+   "Color Space": "Which color system distance is measured in, RGB or YCC. Pick whichever isolates your color better.",
+   "Tolerance": "How close a color must be to the key to be removed. Low removes only near matches, high removes many shades.",
+   "Falloff": "How softly the edge fades between removed and kept. 0 is hard, higher is smoother."
+  }
+ },
+ "CompositorNodeDoubleEdgeMask": {
+  "node": "Builds a soft border between an inner and an outer mask, helpful for blending an object edge in the gap between them.",
+  "inputs": {
+   "Outer Mask": "A mask drawn loosely around the outside of the shape.",
+   "Inner Mask": "A mask drawn tightly inside the shape. The gap between inner and outer becomes the edge.",
+   "Image Edges": "If on, the borders of the image itself also count as edges.",
+   "Only Inside Outer": "If on, the edge result is kept only inside the outer mask. Off may leak outside it."
+  }
+ },
+ "CompositorNodeEllipseMask": {
+  "node": "Draws a white oval on black. Use it as a mask to show or hide part of an image, like a spotlight or a vignette.",
+  "inputs": {
+   "Operation": "How this mask joins the one plugged into Mask. Add combines them, Subtract cuts it out, Multiply keeps the overlap, Not inverts.",
+   "Mask": "An existing mask to combine with this shape. If nothing is connected, it starts from black (empty).",
+   "Value": "How bright the shape is. 1 is full white, lower values make a softer, see-through shape.",
+   "Position": "Where the center of the oval sits. 0 to 1 across the image, so 0.5 is the middle.",
+   "Size": "Width and height of the oval as part of the image. 1 fills the whole image.",
+   "Rotation": "Turns the oval in degrees around its center."
+  }
+ },
+ "CompositorNodeExposure": {
+  "node": "Brightens or darkens an image like changing camera exposure. Each whole step doubles or halves the light.",
+  "inputs": {
+   "Image": "The picture this node works on. Connect a render, a photo or another node's output here.",
+   "Exposure": "Camera-style stops of light. 0 is no change, +1 doubles the brightness, -1 halves it."
+  }
+ },
+ "CompositorNodeFilter": {
+  "node": "Applies a classic image filter such as sharpen, edge detect or emboss, like a quick effect in a photo editor.",
+  "inputs": {
+   "Image": "The picture this node works on. Connect a render, a photo or another node's output here.",
+   "Fac": "How strongly the filter is applied. 0 leaves the picture as is, 1 is the full effect.",
+   "Type": "Which filter to use: Soften, Box Sharpen, Diamond Sharpen, Laplace, Sobel, Prewitt, Kirsch or Shadow."
+  }
+ },
+ "CompositorNodeFlip": {
+  "node": "Mirrors an image sideways, upside down, or both, like flipping a photo over.",
+  "inputs": {
+   "Image": "The picture this node works on. Connect a render, a photo or another node's output here.",
+   "Flip X": "If on, flips the image left to right.",
+   "Flip Y": "If on, flips the image top to bottom."
+  }
+ },
+ "CompositorNodeGlare": {
+  "node": "Adds glowing light around bright parts of an image, like bloom, light streaks, stars or a sun beam. Makes lights feel brighter.",
+  "inputs": {
+   "Image": "The picture this node works on. Connect a render, a photo or another node's output here.",
+   "Type": "The style of glow: Bloom, Ghosts, Streaks, Fog Glow, Simple Star, Sun Beams or Kernel.",
+   "Quality": "Speed versus smoothness of the glow. High looks best but is slower, Low is fast but rougher.",
+   "Highlights Threshold": "Brightness a pixel must reach to glow. Low makes many things glow, high only the brightest lights.",
+   "Highlights Smoothness": "How softly pixels near the threshold fade in. 0 is a hard cut, higher is a gentle start.",
+   "Clamp Highlights": "If on, extremely bright pixels are capped at the Maximum value before glowing.",
+   "Maximum Highlights": "The brightest value allowed to glow when Clamp is on. Lower stops very bright lights from overpowering.",
+   "Strength": "How bright the glow is added back. 0 is none, higher is stronger.",
+   "Saturation": "Color strength of the glow. 0 is gray, 1 is normal, higher is more vivid.",
+   "Tint": "Colors the glow. White keeps it natural, other colors tint it.",
+   "Size": "How far the glow spreads. Low is a tight halo, high is a wide soft cloud.",
+   "Streaks": "How many light rays are drawn. More gives a fuller star pattern.",
+   "Streaks Angle": "Turns the whole streak pattern, in degrees.",
+   "Iterations": "How many times the glow is repeated. More makes streaks longer and ghosts more numerous but slower.",
+   "Fade": "How quickly streaks dim along their length. Low fades fast, high lets them run long.",
+   "Color Modulation": "How much the repeated glows shift in color. 0 keeps them the same, higher gives rainbow shades.",
+   "Diagonal Star": "If on, the simple star also has diagonal rays. Off draws only a plus-shaped star.",
+   "Sun Position": "Where the light beams come from, 0 to 1 across the image. 0.5 is the center.",
+   "Jitter": "Randomly shifts the rays for a rougher, more natural beam. 0 is smooth.",
+   "Kernel Data Type": "Whether the custom glow shape is gray-only (Float) or has color (Color).",
+   "Float Kernel": "A gray image whose shape stamps the glow at each bright spot.",
+   "Color Kernel": "A color image whose shape and colors stamp the glow at each bright spot."
+  }
+ },
+ "CompositorNodeHueCorrect": {
+  "node": "Changes the hue, saturation and value of only certain colors using curves, like making blues deeper without touching reds.",
+  "inputs": {
+   "Image": "The picture this node works on. Connect a render, a photo or another node's output here.",
+   "Fac": "How strongly the change is applied. 0 leaves the image unchanged, 1 is full effect."
+  }
+ },
+ "CompositorNodeHueSat": {
+  "node": "Shifts the colors, how vivid they are, and their brightness, like the hue and saturation sliders in a photo editor.",
+  "inputs": {
+   "Image": "The picture this node works on. Connect a render, a photo or another node's output here.",
+   "Hue": "Rotates all colors around the color wheel. 0.5 is no change, away from it shifts reds toward other colors.",
+   "Saturation": "Color strength. 0 is black and white, 1 is normal, higher is more vivid.",
+   "Value": "Brightness. 0 is black, 1 is normal, higher is brighter.",
+   "Fac": "How much of the change is mixed in. 0 shows the original, 1 shows the full adjustment."
+  }
+ },
+ "CompositorNodeIDMask": {
+  "node": "Turns one object ID from a render into a black and white mask, so you can change just that object.",
+  "inputs": {
+   "ID value": "The Object or Material Index pass from the render, where each object has its own number.",
+   "Index": "The ID number to pick. Everything with that number turns white, the rest black.",
+   "Anti-Alias": "If on, the mask edges are smoothed so they do not look jagged."
+  }
+ },
+ "CompositorNodeImage": {
+  "node": "Loads a picture, image sequence or video file into the compositor so you can edit it.",
+  "inputs": {}
+ },
+ "CompositorNodeImageCoordinates": {
+  "node": "Outputs the position of each pixel in the image, as a map. Handy for making gradients or warping effects.",
+  "inputs": {
+   "Image": "The image whose size is used to work out pixel positions."
+  }
+ },
+ "CompositorNodeImageInfo": {
+  "node": "Reports facts about an image, such as its width, height and brightness range, as numbers you can use elsewhere.",
+  "inputs": {
+   "Image": "The image to read information from."
+  }
+ },
+ "CompositorNodeInpaint": {
+  "node": "Fills in transparent or missing spots by stretching in nearby colors, like patching a hole with surrounding pixels.",
+  "inputs": {
+   "Image": "The picture with holes (transparent areas) to fill.",
+   "Size": "How far, in pixels, to grab colors from to fill holes. Low fills only tiny gaps, high fills bigger ones."
+  }
+ },
+ "CompositorNodeInvert": {
+  "node": "Flips colors to their opposites, like a photo negative, and can also flip transparency.",
+  "inputs": {
+   "Color": "The picture to invert.",
+   "Fac": "How much to flip. 0 leaves it unchanged, 1 is a full negative, 0.5 turns it flat gray.",
+   "Invert Color": "If on, the colors are flipped to their opposites.",
+   "Invert Alpha": "If on, the transparency is flipped too: see-through becomes solid and solid becomes see-through."
+  }
+ },
+ "CompositorNodeKeying": {
+  "node": "An all-in-one green screen remover with cleaning steps: it cuts out the background, tidies the edge and removes color spill.",
+  "inputs": {
+   "Image": "The footage with a colored backdrop.",
+   "Key Color": "The backdrop color to remove, such as screen green.",
+   "Preprocess Blur Size": "Blurs the picture slightly before keying to reduce noise. 0 is none, higher smooths more.",
+   "Key Balance": "Balance between the other two colors when finding the key. 0 favors one, 1 favors the other, 0.5 is even.",
+   "Black Level": "Values below this become fully transparent in the mask. Raise it to remove more background.",
+   "White Level": "Values above this become fully solid in the mask. Lower it to keep more of the subject.",
+   "Edge Search Size": "How far from the edge to search when cleaning it, in pixels. Larger looks farther.",
+   "Edge Tolerance": "How similar colors must be near the edge to count as the same. Higher treats more as matching.",
+   "Garbage Matte": "A mask of areas to always remove, such as lights or stands outside the screen. White areas are cut away.",
+   "Core Matte": "A mask of areas to always keep, such as the subject's solid body. White areas stay solid.",
+   "Postprocess Blur Size": "Blurs the final mask edge. 0 is none, higher gives a softer edge.",
+   "Postprocess Dilate Size": "Grows (positive) or shrinks (negative) the final mask. Use it to trim leftover edge halos.",
+   "Postprocess Feather Size": "Makes the mask edge softer by growing or shrinking it with a gradient. Higher gives a wider fade.",
+   "Feather Falloff": "The shape of the edge fade, such as Smooth, Sphere or Sharp.",
+   "Despill Strength": "How much leftover screen color is removed from the subject. 0 is none, 1 is full cleanup.",
+   "Despill Balance": "Balance between the other two colors when removing spill. 0.5 is even."
+  }
+ },
+ "CompositorNodeKeyingScreen": {
+  "node": "Makes a smooth color backdrop from tracking markers on a green screen, helping the Keying node remove uneven screens.",
+  "inputs": {
+   "Smoothness": "How smoothly colors blend between tracked points. Low follows every marker closely, high gives a gentler blend."
+  }
+ },
+ "CompositorNodeKuwahara": {
+  "node": "Turns an image into a painting-like look by smoothing areas while keeping edges, like an oil painting filter.",
+  "inputs": {
+   "Image": "The picture this node works on. Connect a render, a photo or another node's output here.",
+   "Size": "Size of the brush strokes. Low keeps detail, high gives big, flat paint patches.",
+   "Type": "Classic is faster and simpler, Anisotropic follows the direction of edges for a more natural painted look.",
+   "Uniformity": "How evenly the strokes are shaped in Anisotropic mode. Higher makes stroke directions more consistent.",
+   "Sharpness": "How crisp the borders between paint patches are. Low is soft, high is sharp.",
+   "Eccentricity": "How stretched the brush strokes are along edges. 0 is round, higher is long strokes.",
+   "High Precision": "If on, uses a more accurate but slower calculation in Classic mode for smoother results."
+  }
+ },
+ "CompositorNodeLensdist": {
+  "node": "Bends an image like a camera lens does, or splits colors at the edges. Adds a realistic, imperfect camera look.",
+  "inputs": {
+   "Image": "The picture this node works on. Connect a render, a photo or another node's output here.",
+   "Type": "Projector gives a simple fixed distortion, Screen Distortion lets you choose the amount and color spreading.",
+   "Distortion": "Bends straight lines. Negative bulges outward like a pincushion, positive pinches like a barrel.",
+   "Dispersion": "Splits red and blue apart toward the edges, like a cheap lens. 0 is none, higher is more rainbow edges.",
+   "Jitter": "If on, adds a little randomness to reduce banding in the color split. Faster but a bit noisy.",
+   "Fit": "If on, scales the image so no empty edges show after the distortion."
+  }
+ },
+ "CompositorNodeLevels": {
+  "node": "Measures the brightness of an image and reports its average and spread as numbers. Handy for automatic adjustments.",
+  "inputs": {
+   "Image": "The picture this node works on. Connect a render, a photo or another node's output here.",
+   "Channel": "Which part to measure: Combined, Red, Green, Blue or Luminance (brightness)."
+  }
+ },
+ "CompositorNodeLumaMatte": {
+  "node": "Makes pixels transparent based on how bright they are. Use it to cut out very bright or very dark areas.",
+  "inputs": {
+   "Image": "The picture to cut by brightness.",
+   "Minimum": "Brightness below this becomes fully transparent. Raise it to remove more of the dark parts.",
+   "Maximum": "Brightness above this stays fully solid. The space between Minimum and Maximum fades smoothly."
+  }
+ },
+ "CompositorNodeMapUV": {
+  "node": "Wraps an image onto surfaces using UV coordinates from a render, so you can change a texture after rendering.",
+  "inputs": {
+   "Image": "The texture picture to wrap on.",
+   "UV": "The UV render pass that tells where each pixel of the texture goes.",
+   "Interpolation": "How pixels are blended when moved or resampled. Nearest is crisp and blocky, Bilinear and Bicubic are smoother.",
+   "Extension X": "What fills space past the left and right edges. Clip leaves it empty, Extend stretches the edge pixels, Repeat tiles the image.",
+   "Extension Y": "What fills space past the top and bottom edges. Clip leaves it empty, Extend stretches the edge pixels, Repeat tiles the image."
+  }
+ },
+ "CompositorNodeMask": {
+  "node": "Outputs a hand-drawn mask from the Mask Editor as a black and white image, for cutting out or hiding shapes.",
+  "inputs": {
+   "Size Source": "Where the mask size comes from: the scene render size or a size you type in.",
+   "Size X": "Width of the mask in pixels when using a fixed size.",
+   "Size Y": "Height of the mask in pixels when using a fixed size.",
+   "Feather": "If on, the soft edges set on the mask shape are used. Off gives hard edges.",
+   "Motion Blur": "If on, the mask is smeared by its movement, matching moving footage.",
+   "Motion Blur Samples": "How many in-between positions are blended. Low is choppy, high is smooth but slower.",
+   "Motion Blur Shutter": "How long the virtual shutter stays open. Low gives light smear, high gives a longer smear."
+  }
+ },
+ "CompositorNodeMaskToSDF": {
+  "node": "Turns a mask into a map of distances from its edge, which makes it easy to grow, shrink or soften the shape.",
+  "inputs": {
+   "Mask": "The black and white mask to measure distances from."
+  }
+ },
+ "CompositorNodeMovieClip": {
+  "node": "Loads a movie clip you opened in Blender into the compositor, to use with tracking tools or as footage.",
+  "inputs": {}
+ },
+ "CompositorNodeMovieDistortion": {
+  "node": "Adds or removes the lens warp measured from a tracked clip, so graphics and footage match each other.",
+  "inputs": {
+   "Image": "The picture this node works on. Connect a render, a photo or another node's output here.",
+   "Type": "Undistort removes the lens bend from footage. Distort adds the same bend to a clean image."
+  }
+ },
+ "CompositorNodeNormal": {
+  "node": "Turns a direction you set with a sphere widget into a vector, and checks how well each normal map pixel lines up with it.",
+  "inputs": {}
+ },
+ "CompositorNodeNormalize": {
+  "node": "Rescales numbers so the lowest becomes 0 and the highest becomes 1. Use it to make a depth map easy to see.",
+  "inputs": {
+   "Value": "The gray image or numbers to stretch to fit between 0 and 1."
+  }
+ },
+ "CompositorNodeOutputFile": {
+  "node": "Saves the image to a file on your computer when you render. You can save several images at once.",
+  "inputs": {}
+ },
+ "CompositorNodePixelate": {
+  "node": "Makes an image blocky, like a low-resolution retro game, by turning small squares into one color.",
+  "inputs": {
+   "Color": "The picture to pixelate.",
+   "Size": "Width of each block in pixels. 1 changes nothing, higher makes bigger blocks."
+  }
+ },
+ "CompositorNodePlaneTrackDeform": {
+  "node": "Sticks an image onto a flat area tracked in a video, like replacing a screen or sign that moves.",
+  "inputs": {
+   "Image": "The picture to stick on the tracked area.",
+   "Motion Blur": "If on, adds motion blur based on how the plane moves.",
+   "Motion Blur Samples": "How many in-between positions are blended. Low is choppy, high is smooth but slower.",
+   "Motion Blur Shutter": "How long the virtual shutter stays open. Low gives light blur, high gives strong blur."
+  }
+ },
+ "CompositorNodePosterize": {
+  "node": "Reduces the number of color levels, so smooth gradients become flat bands, like a screen-printed poster.",
+  "inputs": {
+   "Image": "The picture this node works on. Connect a render, a photo or another node's output here.",
+   "Steps": "How many levels each color keeps. Low gives a bold, flat look, high looks close to normal."
+  }
+ },
+ "CompositorNodePremulKey": {
+  "node": "Switches an image between straight and premultiplied alpha, two ways of storing transparency. Fixes dark or bright edge halos.",
+  "inputs": {
+   "Image": "The picture this node works on. Connect a render, a photo or another node's output here.",
+   "Type": "Chooses the direction: Straight to Premultiplied, or Premultiplied to Straight."
+  }
+ },
+ "CompositorNodeRGB": {
+  "node": "Outputs a single color you pick. Use it as a flat color source for mixing or backgrounds.",
+  "inputs": {}
+ },
+ "CompositorNodeRGBToBW": {
+  "node": "Turns a color image into black and white, using brightness as seen by the eye.",
+  "inputs": {
+   "Image": "The color picture to turn into gray tones."
+  }
+ },
+ "CompositorNodeRLayers": {
+  "node": "Brings in the render result from your scene, with all its passes like color, depth and normals, ready to edit.",
+  "inputs": {}
+ },
+ "CompositorNodeRelativeToPixel": {
+  "node": "Converts a position or size given as part of the image (0 to 1) into real pixel numbers.",
+  "inputs": {
+   "Vector Value": "A 2D value as a fraction of the image. 0.5 means half the width or height.",
+   "Float Value": "A single value as a fraction of the image size. 0.5 means half.",
+   "Image": "The image whose pixel size is used to convert the value."
+  }
+ },
+ "CompositorNodeRotate": {
+  "node": "Turns an image around its center by an angle, like spinning a photo on a table.",
+  "inputs": {
+   "Image": "The picture this node works on. Connect a render, a photo or another node's output here.",
+   "Angle": "How far to turn, in degrees. Positive turns one way, negative turns the other.",
+   "Interpolation": "How pixels are blended when moved or resampled. Nearest is crisp and blocky, Bilinear and Bicubic are smoother.",
+   "Extension X": "What fills space past the left and right edges. Clip leaves it empty, Extend stretches the edge pixels, Repeat tiles the image.",
+   "Extension Y": "What fills space past the top and bottom edges. Clip leaves it empty, Extend stretches the edge pixels, Repeat tiles the image."
+  }
+ },
+ "CompositorNodeScale": {
+  "node": "Makes an image bigger or smaller, or fits it to the frame size.",
+  "inputs": {
+   "Image": "The picture this node works on. Connect a render, a photo or another node's output here.",
+   "Type": "How size is set: Relative (by percent), Absolute (pixels), Scene Size (fit render size) or Render Size.",
+   "X": "Horizontal size. In Relative mode 1 is the original width, 2 is twice as wide.",
+   "Y": "Vertical size. In Relative mode 1 is the original height, 2 is twice as tall.",
+   "Frame Type": "For scene-size scaling: Fit keeps all of the image, Crop fills the frame and cuts the overflow, Stretch fills by distorting.",
+   "Interpolation": "How pixels are blended when moved or resampled. Nearest is crisp and blocky, Bilinear and Bicubic are smoother.",
+   "Extension X": "What fills space past the left and right edges. Clip leaves it empty, Extend stretches the edge pixels, Repeat tiles the image.",
+   "Extension Y": "What fills space past the top and bottom edges. Clip leaves it empty, Extend stretches the edge pixels, Repeat tiles the image."
+  }
+ },
+ "CompositorNodeSceneTime": {
+  "node": "Gives the current time of your animation, as a frame number and in seconds. Use it to animate other nodes.",
+  "inputs": {}
+ },
+ "CompositorNodeSeparateColor": {
+  "node": "Splits a color image into its parts, such as red, green, blue and alpha, so you can edit each one on its own.",
+  "inputs": {
+   "Image": "The color picture to split into separate channels."
+  }
+ },
+ "CompositorNodeSequencerStripInfo": {
+  "node": "Reports information about the video strip being edited, such as its position and length, for use in compositing.",
+  "inputs": {}
+ },
+ "CompositorNodeSetAlpha": {
+  "node": "Replaces or adds the transparency of an image, using a gray map or a number.",
+  "inputs": {
+   "Image": "The picture to change the transparency of.",
+   "Alpha": "The new transparency. 0 is invisible, 1 is solid. Connect a gray map for changing opacity per pixel.",
+   "Type": "Apply Mask multiplies old and new transparency. Replace Alpha throws away the old one."
+  }
+ },
+ "CompositorNodeSplit": {
+  "node": "Shows two images side by side, split by a line, for comparing before and after.",
+  "inputs": {
+   "Position": "Where the dividing line sits, 0 to 1 across the image. 0.5 is the middle.",
+   "Rotation": "Turns the dividing line in degrees. 0 is a vertical split, 90 is horizontal.",
+   "Image": "The picture shown on the first side of the split.",
+   "Image_001": "The picture shown on the other side of the split."
+  }
+ },
+ "CompositorNodeStabilize": {
+  "node": "Removes camera shake from footage using tracked motion, so the image holds steady.",
+  "inputs": {
+   "Image": "The shaky footage to steady.",
+   "Frame": "The frame number to read stabilization from. Usually the current frame.",
+   "Invert": "If on, puts the shake back in, so you can apply the same camera motion to other graphics.",
+   "Interpolation": "How pixels are blended when moved or resampled. Nearest is crisp and blocky, Bilinear and Bicubic are smoother.",
+   "Extension X": "What fills space past the left and right edges. Clip leaves it empty, Extend stretches the edge pixels, Repeat tiles the image.",
+   "Extension Y": "What fills space past the top and bottom edges. Clip leaves it empty, Extend stretches the edge pixels, Repeat tiles the image."
+  }
+ },
+ "CompositorNodeStringToImage": {
+  "node": "Turns typed text into an image, so you can put words, labels or titles into your picture.",
+  "inputs": {
+   "String": "The words to draw.",
+   "Font": "The font file or style used for the text.",
+   "Size": "How big the letters are. Low is small, high is big.",
+   "Horizontal Alignment": "Lines the text left, center or right inside its box.",
+   "Vertical Alignment": "Lines the text to the top, middle or bottom inside its box.",
+   "Wrap": "If on, long text breaks onto new lines when it reaches the Width.",
+   "Wrap Width": "Width in pixels where a line breaks. Smaller gives narrower lines."
+  }
+ },
+ "CompositorNodeSwitch": {
+  "node": "Picks between two inputs with a checkbox, Use it to turn an effect on and off.",
+  "inputs": {
+   "Switch": "If on, the On input is passed through. If off, the Off input is used.",
+   "Off": "The image or value used when the switch is off.",
+   "On": "The image or value used when the switch is on."
+  }
+ },
+ "CompositorNodeSwitchView": {
+  "node": "Picks the left or right eye image for 3D stereo renders, so you can edit each eye on its own.",
+  "inputs": {
+   "left": "The picture for the left eye of a 3D stereo view.",
+   "right": "The picture for the right eye of a 3D stereo view."
+  }
+ },
+ "CompositorNodeTime": {
+  "node": "Makes a value that changes over time using a curve you draw, like a custom animation timer.",
+  "inputs": {
+   "Start Frame": "The frame where the curve starts. Before this the value stays at the curve's beginning.",
+   "End Frame": "The frame where the curve ends. After this the value stays at the curve's end."
+  }
+ },
+ "CompositorNodeTonemap": {
+  "node": "Squeezes a very bright (HDR) image into a range screens can show, keeping detail in lights and darks.",
+  "inputs": {
+   "Image": "The HDR picture to compress into a normal brightness range.",
+   "Type": "The method: R/D Photoreceptor (mimics eyes) or Rh Simple (a simple formula).",
+   "Key": "The overall brightness target. Low makes a darker image, high makes it brighter.",
+   "Balance": "Controls the contrast. Low gives a brighter image with softer lights, high gives darker contrast.",
+   "Gamma": "Adjusts the mid-tones. Below 1 brightens them, above 1 darkens them.",
+   "Intensity": "Overall lightness of the result. Negative darkens, positive brightens.",
+   "Contrast": "Difference between lights and darks. Low is flatter, high is more dramatic.",
+   "Light Adaptation": "How much each pixel adapts to its own light versus the whole image. 0 is overall, 1 is per pixel.",
+   "Chromatic Adaptation": "How much colors adapt to the lighting. 0 keeps the original colors, 1 makes them more neutral."
+  }
+ },
+ "CompositorNodeTrackPos": {
+  "node": "Reads the position of a tracked point in a video clip as numbers, so you can attach other things to it.",
+  "inputs": {
+   "Mode": "How the position is given: Absolute, Relative to the first frame, Relative to a chosen frame, or the position at a frame.",
+   "Frame": "The frame number to compare against when the mode is relative to a frame or reads a certain frame."
+  }
+ },
+ "CompositorNodeTransform": {
+  "node": "Moves, turns and resizes an image in one step. A simple combo of Translate, Rotate and Scale.",
+  "inputs": {
+   "Image": "The picture this node works on. Connect a render, a photo or another node's output here.",
+   "X": "Moves the image sideways in pixels. Positive goes right, negative goes left.",
+   "Y": "Moves the image up or down in pixels. Positive goes up, negative goes down.",
+   "Angle": "Turns the image in degrees around its center.",
+   "Scale": "Size multiplier. 1 is original, 2 is twice as big, 0.5 is half.",
+   "Interpolation": "How pixels are blended when moved or resampled. Nearest is crisp and blocky, Bilinear and Bicubic are smoother.",
+   "Extension X": "What fills space past the left and right edges. Clip leaves it empty, Extend stretches the edge pixels, Repeat tiles the image.",
+   "Extension Y": "What fills space past the top and bottom edges. Clip leaves it empty, Extend stretches the edge pixels, Repeat tiles the image."
+  }
+ },
+ "CompositorNodeTranslate": {
+  "node": "Slides an image sideways or up and down, like moving a photo across a table.",
+  "inputs": {
+   "Image": "The picture this node works on. Connect a render, a photo or another node's output here.",
+   "X": "Moves the image sideways in pixels. Positive goes right, negative goes left.",
+   "Y": "Moves the image up or down in pixels. Positive goes up, negative goes down.",
+   "Interpolation": "How pixels are blended when moved or resampled. Nearest is crisp and blocky, Bilinear and Bicubic are smoother.",
+   "Extension X": "What fills space past the left and right edges. Clip leaves it empty, Extend stretches the edge pixels, Repeat tiles the image.",
+   "Extension Y": "What fills space past the top and bottom edges. Clip leaves it empty, Extend stretches the edge pixels, Repeat tiles the image."
+  }
+ },
+ "CompositorNodeVecBlur": {
+  "node": "Adds motion blur to a render using a speed pass, so fast moving things get smeared like in a real camera.",
+  "inputs": {
+   "Image": "The picture this node works on. Connect a render, a photo or another node's output here.",
+   "Speed": "The Vector pass that says how fast and which way each pixel moves.",
+   "Z": "A depth map, used so near objects do not smear over things farther away.",
+   "Samples": "How many in-between positions are blended. Low is grainy and fast, high is smooth and slower.",
+   "Shutter": "How long the camera shutter stays open. Low gives light blur, high gives long streaks."
+  }
+ },
+ "CompositorNodeViewer": {
+  "node": "Shows the image at this point in the node tree inside the Backdrop or Image Editor, so you can check your work. It saves nothing.",
+  "inputs": {
+   "Image": "The picture to show in the viewer."
+  }
+ },
+ "CompositorNodeZcombine": {
+  "node": "Combines two images by depth, so whichever is closer to the camera appears in front.",
+  "inputs": {
+   "A": "The first picture.",
+   "Depth A": "How far each pixel of the first picture is from the camera. Smaller is closer.",
+   "B": "The second picture.",
+   "Depth B": "How far each pixel of the second picture is from the camera. Smaller is closer.",
+   "Use Alpha": "If on, transparent parts of the front picture let the one behind show through.",
+   "Anti-Alias": "If on, smooths the jagged edges where one picture overlaps the other."
+  }
+ }
+}

@@ -1,0 +1,152 @@
+{
+ "Geometry Nodes/Normals": [
+  [
+   "Smooth by Angle",
+   "nodes/geometry_nodes_essentials.blend"
+  ]
+ ],
+ "Geometry Nodes/Generate": [
+  [
+   "Scatter on Surface",
+   "nodes/geometry_nodes_essentials.blend"
+  ],
+  [
+   "Curve to Tube",
+   "nodes/geometry_nodes_essentials.blend"
+  ],
+  [
+   "Array",
+   "nodes/geometry_nodes_essentials.blend"
+  ]
+ ],
+ "Geometry Nodes/Instances": [
+  [
+   "Randomize Transforms",
+   "nodes/geometry_nodes_essentials.blend"
+  ],
+  [
+   "Instance on Elements",
+   "nodes/geometry_nodes_essentials.blend"
+  ]
+ ],
+ "Geometry Nodes/Geometry": [
+  [
+   "Geometry Input",
+   "nodes/geometry_nodes_essentials.blend"
+  ]
+ ],
+ "Geometry Nodes/Geometry/Write": [
+  [
+   "Capture Rest Geometry",
+   "nodes/geometry_nodes_essentials.blend"
+  ]
+ ],
+ "Hair/Deformation": [
+  [
+   "Trim Hair Curves",
+   "nodes/procedural_hair_node_assets.blend"
+  ],
+  [
+   "Straighten Hair Curves",
+   "nodes/procedural_hair_node_assets.blend"
+  ],
+  [
+   "Smooth Hair Curves",
+   "nodes/procedural_hair_node_assets.blend"
+  ],
+  [
+   "Shrinkwrap Hair Curves",
+   "nodes/procedural_hair_node_assets.blend"
+  ],
+  [
+   "Rotate Hair Curves",
+   "nodes/procedural_hair_node_assets.blend"
+  ],
+  [
+   "Roll Hair Curves",
+   "nodes/procedural_hair_node_assets.blend"
+  ],
+  [
+   "Hair Curves Noise",
+   "nodes/procedural_hair_node_assets.blend"
+  ],
+  [
+   "Frizz Hair Curves",
+   "nodes/procedural_hair_node_assets.blend"
+  ],
+  [
+   "Displace Hair Curves",
+   "nodes/procedural_hair_node_assets.blend"
+  ],
+  [
+   "Blend Hair Curves",
+   "nodes/procedural_hair_node_assets.blend"
+  ]
+ ],
+ "Hair/Write": [
+  [
+   "Set Hair Curve Profile",
+   "nodes/procedural_hair_node_assets.blend"
+  ]
+ ],
+ "Hair/Utility": [
+  [
+   "Restore Curve Segment Length",
+   "nodes/procedural_hair_node_assets.blend"
+  ],
+  [
+   "Redistribute Curve Points",
+   "nodes/procedural_hair_node_assets.blend"
+  ],
+  [
+   "Attach Hair Curves to Surface",
+   "nodes/procedural_hair_node_assets.blend"
+  ]
+ ],
+ "Hair/Generation": [
+  [
+   "Interpolate Hair Curves",
+   "nodes/procedural_hair_node_assets.blend"
+  ],
+  [
+   "Generate Hair Curves",
+   "nodes/procedural_hair_node_assets.blend"
+  ],
+  [
+   "Duplicate Hair Curves",
+   "nodes/procedural_hair_node_assets.blend"
+  ]
+ ],
+ "Hair/Guides": [
+  [
+   "Curl Hair Curves",
+   "nodes/procedural_hair_node_assets.blend"
+  ],
+  [
+   "Create Guide Index Map",
+   "nodes/procedural_hair_node_assets.blend"
+  ],
+  [
+   "Clump Hair Curves",
+   "nodes/procedural_hair_node_assets.blend"
+  ],
+  [
+   "Braid Hair Curves",
+   "nodes/procedural_hair_node_assets.blend"
+  ]
+ ],
+ "Geometry Nodes/Simulation": [
+  [
+   "Hair Dynamics",
+   "nodes/geometry_nodes_dynamics_assets.blend"
+  ],
+  [
+   "Collider",
+   "nodes/geometry_nodes_dynamics_assets.blend"
+  ],
+  [
+   "Cloth Dynamics (Experimental)",
+   "nodes/geometry_nodes_dynamics_assets.blend"
+  ]
+ ]
+}
