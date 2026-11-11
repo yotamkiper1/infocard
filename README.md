@@ -3,7 +3,7 @@
 <h1 align="center">Infocard</h1>
 
 <p align="center">A Blender add-on that shows a picture of what a setting does when you hover it.<br>
-<a href="../../releases">Download</a> · <a href="https://github.com/yotamkiper1/infocard-recipes">Infocard Recipes</a> · <a href="../../issues">Report a missing picture</a></p>
+<a href="../../releases">Download</a> · <a href="../../issues">Report a missing picture</a></p>
 
 <p align="center"><img src="docs/hero.png" width="760" alt="An Infocard for Roughness: a shiny sphere at 0.1 next to a matte one at 0.8"></p>
 
