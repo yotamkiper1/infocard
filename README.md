@@ -1,64 +1,104 @@
-<p align="center"><img src="docs/icon.png" width="96" alt=""></p>
+<p align="center">
+  <img src="docs/hero.png" alt="Infocard" width="100%">
+</p>
 
 <h1 align="center">Infocard</h1>
 
-<p align="center">A Blender add-on that shows a picture of what a setting does when you hover it.<br>
-<a href="../../releases">Download</a> · <a href="../../issues">Report a missing picture</a></p>
-
-<p align="center"><img src="docs/hero.png" width="760" alt="An Infocard for Roughness: a shiny sphere at 0.1 next to a matte one at 0.8"></p>
-
-## Features
-
-- **Pictures, not words.** Rest the mouse on a setting for a moment. A card shows it low and high, off and on, or without and with, plus a sentence or two in plain language.
-- **4,700+ settings with their own picture.** Shader, Geometry Nodes and Compositor nodes and their sockets, every modifier and constraint, physics, render passes, world, color management, viewport overlays, snapping, paint and sculpt brushes, animation.
-- **Motion where it matters.** Physics and animation settings play as short looping clips.
-- **Everything else explained.** Settings that can't be pictured get a short, human explanation.
-- **Out of your way.** The card waits 1.5 seconds, swaps instantly once it's open, and hides when you start editing or move away.
-- **Your layout.** Snap the card to a corner, type an exact position, or drag it anywhere. Resize it, and choose the picture ratio.
-
 <p align="center">
-  <img src="docs/screenshot_1.png" width="372" alt="Cards for modifiers and nodes">
-  <img src="docs/screenshot_2.png" width="372" alt="Hundreds of card pictures across Blender">
+  <strong>Visual explanations for every setting in Blender.</strong><br>
+  Hover a setting and see what it does, with before/after pictures and a plain-language description.
 </p>
 
-## Requirements
+<p align="center">
+  <a href="../../releases/latest"><img src="https://img.shields.io/github/v/release/yotamkiper1/infocard?label=release" alt="Latest release"></a>
+  <img src="https://img.shields.io/badge/Blender-4.2%2B-orange" alt="Blender 4.2+">
+  <img src="https://img.shields.io/badge/license-GPL--3.0-blue" alt="License GPL-3.0">
+</p>
 
-Blender 4.2 or later. The pictures were made in Blender 5.x.
+---
 
-## Install
+## Overview
 
-- **Extensions platform:** Preferences › Get Extensions, search for *Infocard*.
-- **From GitHub:** download `infocard-1.0.0.zip` from [Releases](../../releases), then use Preferences › Add-ons › Install from Disk.
+Blender's tooltips describe settings in technical terms. Infocard replaces guesswork with a picture.
+Rest the cursor on any setting and a compact card appears showing that setting at two values
+(*low vs high*, *off vs on*, *without vs with*), together with a short explanation written for people learning Blender.
 
-Then press **N** in the 3D View and open the **Infocard** tab. Hover anything.
+It works entirely offline, adds nothing to your files, and gets out of the way the moment you start working.
 
-## Two builds
+<p align="center"><img src="docs/screenshot_1.png" width="90%" alt="Infocard showing a modifier setting"></p>
 
-| | Extensions platform | GitHub release |
-|---|:-:|:-:|
-| Cards on every setting, node and socket | ✓ | ✓ |
-| Cards inside Add Modifier, Add Node, Add Constraint and the toolbar | | ✓ |
+## Key features
 
-The GitHub build wraps a few of Blender's own menu-drawing functions to show cards inside those menus. The platform build leaves Blender's code alone.
+- **4,700+ illustrated settings.** Every image was rendered in Blender specifically for the setting it explains.
+- **Animated where motion matters.** Physics and animation settings play as short looping clips.
+- **Full coverage.** Settings without a picture still get a clear, human-written explanation.
+- **Non-intrusive.**
+  - The card appears after a 1.5-second hover.
+  - It switches instantly between settings.
+  - It hides when you edit a value or move away.
+- **Flexible layout.** Anchor the card to a corner, set an exact position, or place it by hand. Adjust its size and picture aspect ratio.
+- **Lightweight.**
+  - Images are uploaded straight to the GPU.
+  - No data-blocks are created and nothing is written to disk.
 
-## Privacy
+## Coverage
 
-Infocard has no account, no server and no analytics, and it never goes online. Pictures are loaded straight to the GPU: nothing is added to your .blend file and nothing is written to disk.
-
-## Development
-
-| Path | Contents |
+| Area | Included |
 |---|---|
-| `__init__.py` | Hover detection, the card, layout settings |
-| `catalog.py` | Hand-written cards and lookup tables |
-| `explain/` | Plain-language explanations |
-| `pics/` | The pictures, in folders by area |
-| `blender_manifest.toml` | Extension manifest |
+| Shading | Principled BSDF, all shader and texture nodes, node sockets |
+| Geometry Nodes | 480+ nodes and 650+ node inputs |
+| Compositor | All nodes and 360+ inputs |
+| Modifiers | All modifier types and 750+ settings |
+| Constraints | All constraint types and 340+ settings |
+| Physics | Cloth, soft body, fluid, rigid body, force fields, particles, dynamic paint |
+| Render & World | Render passes, light paths, film, color management, EEVEE and Cycles settings |
+| Viewport | Overlays, shading, gizmos, snapping, pivot, proportional editing |
+| Paint & Sculpt | Brush and stroke settings, Grease Pencil |
+| Animation | Interpolation, easing, NLA, F-curve modifiers |
 
-## Feedback
+<p align="center"><img src="docs/screenshot_2.png" width="90%" alt="A selection of Infocard images"></p>
 
-[Open an issue](../../issues), and include a screenshot if a setting is missing a picture.
+## Getting started
+
+1. Download `infocard-1.0.0.zip` from the [latest release](../../releases/latest).
+2. In Blender, open **Edit › Preferences › Add-ons**, click the menu in the top-right corner and choose **Install from Disk**, then select the zip.
+3. In the 3D Viewport press **N** and open the **Infocard** tab.
+4. Hover any setting.
+
+## Configuration
+
+All options are in the **Infocard** tab of the 3D Viewport sidebar:
+
+| Option | Description |
+|---|---|
+| Infocard | Turns the cards on or off |
+| Size | Scales the card |
+| Edit Card Layout | Shows a preview card for positioning |
+| Corner / Position / Manual | Snap to a corner, enter exact coordinates, or drag the card freely |
+| Picture ratio | Sets the aspect ratio of the images (1:1, 4:3, 3:2, 16:9, 2:1) |
+
+## Compatibility
+
+- Blender 4.2 LTS or later (developed and tested on Blender 5.2).
+- Windows, macOS and Linux.
+- No internet connection, account or external dependencies required.
+
+## FAQ
+
+**Does Infocard affect performance?**
+No. It only responds to mouse movement over the interface and adds no data to your scene.
+
+**Can I use it with other add-ons?**
+Yes. Infocard only reads the setting under the cursor and does not change other add-ons.
+
+**A setting has no picture. What should I do?**
+Please [open an issue](../../issues) with a screenshot of the setting. Missing pictures are added in updates.
+
+## Support
+
+Bug reports and suggestions are welcome through [GitHub Issues](../../issues).
 
 ## License
 
-Code GPL-3.0-or-later. Pictures CC0. Every picture was rendered in Blender for this project.
+The source code is licensed under the [GNU General Public License v3.0 or later](LICENSE).
+The images are released under CC0.
