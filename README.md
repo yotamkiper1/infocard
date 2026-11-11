@@ -1,100 +1,64 @@
-<p align="center">
-  <img src="docs/hero.png" alt="Infocard: hover any setting to see what it does" width="100%">
-</p>
+<p align="center"><img src="docs/icon.png" width="96" alt=""></p>
 
 <h1 align="center">Infocard</h1>
 
-<p align="center">
-  <b>Stop guessing what a setting does. Hover it and see.</b><br>
-  A picture card for every setting in Blender. Offline, instant, free.
-</p>
+<p align="center">A Blender add-on that shows a picture of what a setting does when you hover it.<br>
+<a href="../../releases">Download</a> · <a href="https://github.com/yotamkiper1/infocard-recipes">Infocard Recipes</a> · <a href="../../issues">Report a missing picture</a></p>
+
+<p align="center"><img src="docs/hero.png" width="760" alt="An Infocard for Roughness: a shiny sphere at 0.1 next to a matte one at 0.8"></p>
+
+## Features
+
+- **Pictures, not words.** Rest the mouse on a setting for a moment. A card shows it low and high, off and on, or without and with, plus a sentence or two in plain language.
+- **4,700+ settings with their own picture.** Shader, Geometry Nodes and Compositor nodes and their sockets, every modifier and constraint, physics, render passes, world, color management, viewport overlays, snapping, paint and sculpt brushes, animation.
+- **Motion where it matters.** Physics and animation settings play as short looping clips.
+- **Everything else explained.** Settings that can't be pictured get a short, human explanation.
+- **Out of your way.** The card waits 1.5 seconds, swaps instantly once it's open, and hides when you start editing or move away.
+- **Your layout.** Snap the card to a corner, type an exact position, or drag it anywhere. Resize it, and choose the picture ratio.
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Blender-4.2%2B-orange" alt="Blender 4.2+">
-  <img src="https://img.shields.io/badge/license-GPL--3.0-blue" alt="GPL-3.0">
-  <img src="https://img.shields.io/badge/settings%20with%20pictures-4%2C700%2B-success" alt="4,700+ settings">
-  <img src="https://img.shields.io/badge/works-offline-lightgrey" alt="Offline">
+  <img src="docs/screenshot_1.png" width="372" alt="Cards for modifiers and nodes">
+  <img src="docs/screenshot_2.png" width="372" alt="Hundreds of card pictures across Blender">
 </p>
 
----
+## Requirements
 
-## The problem
+Blender 4.2 or later. The pictures were made in Blender 5.x.
 
-Blender has thousands of settings. Most of them come with a one-line tooltip like *"Amount of
-subsurface scattering"*, which tells you nothing until you already know the answer.
-So you stop, open a browser, search, watch a 12-minute video, and come back.
+## Install
 
-## The fix
+- **Extensions platform:** Preferences › Get Extensions, search for *Infocard*.
+- **From GitHub:** download `infocard-1.0.0.zip` from [Releases](../../releases), then use Preferences › Add-ons › Install from Disk.
 
-Rest your mouse on any setting for a second. **Infocard** shows two pictures side by side
-(*low vs high*, *off vs on*, *without vs with*) and one or two plain sentences. You *see* what
-the setting does, right where you are.
+Then press **N** in the 3D View and open the **Infocard** tab. Hover anything.
 
-<p align="center"><img src="docs/screenshot_1.png" width="90%"></p>
+## Two builds
 
-## What's covered
-
-| Area | Pictures |
-|---|---|
-| **Shading:** Principled BSDF, every shader and texture node and their sockets | ✔ |
-| **Geometry Nodes:** 480+ nodes, 650+ node inputs | ✔ |
-| **Compositor:** every node, 360+ inputs | ✔ |
-| **Modifiers:** every type, 750+ settings | ✔ |
-| **Constraints:** every type, 340+ settings | ✔ |
-| **Physics:** cloth, soft body, fluid, rigid body, fields, particles, dynamic paint | ✔ animated |
-| **Render and World:** passes, light paths, film, color management, EEVEE and Cycles | ✔ |
-| **Viewport:** overlays, shading, gizmos, snapping, pivot, proportional editing | ✔ |
-| **Paint, Sculpt and Grease Pencil:** brush and stroke settings | ✔ |
-| **Animation:** interpolation, easing, NLA, F-curve modifiers | ✔ animated |
-
-**4,700+ settings have their own picture**, many as small looping animations.
-Every other setting gets a short, human explanation, written for someone learning Blender.
-
-<p align="center"><img src="docs/screenshot_2.png" width="90%"></p>
-
-## Designed to stay out of your way
-
-- **Waits for you:** the card appears only after 1.5 s of hovering. Move on and it's gone. Start editing and it's gone.
-- **Instant swaps:** once a card is open, moving to the next setting swaps it immediately.
-- **Your layout:** *Corner*, *Position* (exact pixels) or *Manual* (drag it anywhere). Resize it, and pick the picture ratio (1:1, 4:3, 16:9…).
-- **Light:** pictures load straight to the GPU, with no data-blocks added to your file and nothing written to disk.
-- **Private:** no internet, no account, no tracking.
-
-## Quick start
-
-1. Install from **Preferences › Get Extensions** (search *Infocard*), or download the zip from [Releases](../../releases) and use **Install from Disk**.
-2. In the 3D View press **N** and open the **Infocard** tab.
-3. Hover anything.
-
-## Store version vs full version
-
-| | Extensions platform | GitHub release (full) |
+| | Extensions platform | GitHub release |
 |---|:-:|:-:|
-| Cards on every setting, node and socket | ✔ | ✔ |
-| Cards inside *Add Modifier*, *Add Node*, *Add Constraint* menus and the toolbar | — | ✔ |
+| Cards on every setting, node and socket | ✓ | ✓ |
+| Cards inside Add Modifier, Add Node, Add Constraint and the toolbar | | ✓ |
 
-The full version wraps a few of Blender's built-in menu drawing functions so it can show cards inside those menus.
-The store version never touches Blender's own code.
+The GitHub build wraps a few of Blender's own menu-drawing functions to show cards inside those menus. The platform build leaves Blender's code alone.
 
-## Pairs well with
+## Privacy
 
-**[Infocard Recipes](https://github.com/yotamkiper1/infocard-recipes)** has 3,000 one-click node recipes and smart
-*Alt-drag* effects for shaders, Geometry Nodes and the compositor. With both installed, recipe previews appear in your Infocard.
+Infocard has no account, no server and no analytics, and it never goes online. Pictures are loaded straight to the GPU: nothing is added to your .blend file and nothing is written to disk.
 
-## FAQ
+## Development
 
-**Does it slow Blender down?**
-No. It only reacts when the mouse moves, and it never adds data to your file.
+| Path | Contents |
+|---|---|
+| `__init__.py` | Hover detection, the card, layout settings |
+| `catalog.py` | Hand-written cards and lookup tables |
+| `explain/` | Plain-language explanations |
+| `pics/` | The pictures, in folders by area |
+| `blender_manifest.toml` | Extension manifest |
 
-**Which Blender version?**
-4.2 or newer. The pictures were made in Blender 5.x.
+## Feedback
 
-**Can I turn it off quickly?**
-Yes. There's one toggle at the top of the Infocard tab.
-
-**Found a setting without a picture?**
-[Open an issue](../../issues) with a screenshot and it'll be added to the next update.
+[Open an issue](../../issues), and include a screenshot if a setting is missing a picture.
 
 ## License
 
-Code: GPL-3.0-or-later · Pictures: CC0. Every picture was rendered in Blender for this project.
+Code GPL-3.0-or-later. Pictures CC0. Every picture was rendered in Blender for this project.
