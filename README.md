@@ -60,7 +60,7 @@ It works entirely offline, adds nothing to your files, and gets out of the way t
 
 ## Getting started
 
-1. Download `infocard-1.0.0.zip` from the [latest release](../../releases/latest).
+1. Download `infocard-1.1.0.zip` from the [latest release](../../releases/latest).
 2. In Blender, open **Edit › Preferences › Add-ons**, click the menu in the top-right corner and choose **Install from Disk**, then select the zip.
 3. In the 3D Viewport press **N** and open the **Infocard** tab.
 4. Hover any setting.

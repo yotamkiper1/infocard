@@ -1,7 +1,7 @@
 schema_version = "1.0.0"
 
 id = "infocard"
-version = "1.0.0"
+version = "1.1.0"
 name = "Infocard"
 tagline = "Hover any setting to see a picture of what it does"
 maintainer = "Yotam Kiper"

@@ -1,13 +1,108 @@
 
-import bpy, blf, gpu, math, os, sys, time
+import bpy, blf, gpu, math, os, re, sys, time
+from collections import OrderedDict
 from gpu_extras.batch import batch_for_shader
 from . import catalog
 import importlib
-importlib.reload(catalog)
-  # pick up new cards when the add-on is turned off and on
+importlib.reload(catalog)  # pick up new cards when the add-on is turned off and on
 
 PICS = os.path.join(os.path.dirname(__file__), "pics")
 MENU_HOOKS = True  # the store build sets this to False
+
+_reported = set()
+
+
+def _report(where, e):
+    """Print each different error once (so real breakage shows in the console without flooding it)."""
+    k = (where, type(e).__name__, str(e))
+    if k not in _reported and len(_reported) < 200:
+        _reported.add(k)
+        print(f"Infocard: {where}: {type(e).__name__}: {e}")
+
+
+# ------------------------------------------------------------------ where the pictures are
+# The packaged add-on ships pics/index.json: picture name (like "props/x_hi") -> [file, frames].
+# A clip (frames > 0) is one file with its frames side by side. Identical pictures share one file.
+# Without index.json (a folder of loose .png/.jpg/.webp files, as while making cards) the folder is
+# scanned once instead, so nothing ever checks the disk while you move the mouse.
+_INDEX = None
+_ABS = {}  # pictures given by full path (the Recipes add-on) -> same entry as in _INDEX
+_EXTS = ("png", "jpg", "webp")
+
+
+def _scan(root):
+    still, frames = {}, {}
+    for dirpath, _, files in os.walk(root):
+        for f in files:
+            base, _, ext = f.rpartition(".")
+            if ext not in _EXTS:
+                continue
+            rel = os.path.relpath(os.path.join(dirpath, base), root).replace(os.sep, "/")
+            m = re.match(r"(.+)_f(\d+)$", rel)
+            if m:
+                frames.setdefault(m.group(1), {}).setdefault(int(m.group(2)), os.path.join(dirpath, f))
+            elif rel not in still or _EXTS.index(ext) < _EXTS.index(still[rel].rpartition(".")[2]):
+                still[rel] = os.path.join(dirpath, f)  # .png wins over .jpg over .webp, like before
+    idx = {k: (p, 0) for k, p in still.items()}
+    for k, fr in frames.items():
+        n = 0
+        while n in fr:
+            n += 1
+        if n:
+            idx[k] = (tuple(fr[i] for i in range(n)), n)  # loose frame files
+    return idx
+
+
+def pics_index():
+    global _INDEX
+    if _INDEX is None:
+        import json
+        idx = {}
+        try:
+            with open(os.path.join(PICS, "index.json")) as f:
+                d = json.load(f)
+            for k, (rel, n) in d["pics"].items():
+                idx[k] = (os.path.join(PICS, rel), n)
+        except FileNotFoundError:
+            idx = _scan(PICS)
+        except Exception as e:
+            _report("pics/index.json", e)
+            idx = _scan(PICS)
+        _INDEX = idx
+    return _INDEX
+
+
+def _abs_entry(name):
+    """A picture given by its full path (no index): look on disk once, then remember."""
+    if name in _ABS:
+        return _ABS[name]
+    e = None
+    fr = []
+    while True:
+        p = next((f"{name}_f{len(fr)}.{x}" for x in _EXTS if os.path.exists(f"{name}_f{len(fr)}.{x}")), None)
+        if p is None:
+            break
+        fr.append(p)
+    if fr:
+        e = (tuple(fr), len(fr))
+    else:
+        p = next((f"{name}.{x}" for x in _EXTS if os.path.exists(f"{name}.{x}")), None)
+        e = (p, 0) if p else None
+    if len(_ABS) > 2000:
+        _ABS.clear()
+    _ABS[name] = e
+    return e
+
+
+def pic_entry(name):
+    """(file or tuple of frame files, number of frames) for a picture name like 'props/x_hi', or None."""
+    if os.path.isabs(name):
+        return _abs_entry(name)
+    return pics_index().get(name)
+
+
+def has_pic(name):
+    return pic_entry(name) is not None
 
 
 def _load_auto():
@@ -59,7 +154,7 @@ def tool_card(tool_id, context=None):
         pass
     desc = catalog.TOOL_TEXTS.get(tool_id) or desc
     pk = TOOLMAP.get(tool_id)
-    if pk and any(os.path.exists(os.path.join(PICS, "tools", pk + "_hi." + x)) for x in ("png", "jpg")):
+    if pk and has_pic("tools/" + pk + "_hi"):
         S.auto = (label, desc, "Before", "After", "tools/" + pk)
         return "auto:tool:" + tool_id
     if not desc:
@@ -115,12 +210,36 @@ def mod_card(t, name=None):
         title, say = item.name, item.description
     except Exception:
         title, say = name or t, ""
-    for struct, d in EX_PROPS.items():
-        if struct.lower().replace("modifier", "") == title.lower().replace(" ", "").replace("/", "") and d.get("_"):
-            say = d["_"]
-            break
+    say = _mod_say(title) or say
     S.auto = (title, say, "Without", "With", "mods/" + pk)
     return "auto:mod:" + t
+
+
+_say_cache = {}
+
+
+def _mod_say(title):
+    """The add-on's own sentence for a whole modifier (explain/*.json "_"), looked up once per type."""
+    k = ("mod", title)
+    if k not in _say_cache:
+        say = None
+        for struct, d in EX_PROPS.items():
+            if struct.lower().replace("modifier", "") == title.lower().replace(" ", "").replace("/", "") and d.get("_"):
+                say = d["_"]
+                break
+        _say_cache[k] = say
+    return _say_cache[k]
+
+
+def _cons_say(name):
+    k = ("cons", name)
+    if k not in _say_cache:
+        say = None
+        for sname, d in EX_PROPS.items():
+            if sname.lower().replace("constraint", "") == name.lower().replace(" ", "") and d.get("_"):
+                say = d["_"]
+        _say_cache[k] = say
+    return _say_cache[k]
 
 
 def _load_explain():
@@ -170,18 +289,17 @@ def ex_prop(ptr, ident):
 
 class S:
     key = None        # card on screen
-    seen = 0.0        # last time the mouse was on a known setting
-    tex = {}          # key_end -> GPUTexture (or None if missing)
+    tex = OrderedDict()  # picture file -> GPUTexture (or None if it can't be read), least recently used first
+    tex_bytes = 0     # GPU memory used by S.tex
     handlers = []
     kmis = []
     log = []
     n = 0
     last_event = 0.0
     text = ("", "")
-    off = 0.0         # when the mouse left a known setting
     pending = None    # card waiting for the mouse to rest
     pending_t = 0.0
-    ref = None        # (owner, property) under the mouse
+    ref = None        # (data-block path, property path) under the mouse: text only, never a live pointer
     ref_val = None
     editing = False
     last_k = None
@@ -214,6 +332,7 @@ def key_for(ctx):
     ptr = getattr(ctx, "button_pointer", None)
     prop = getattr(ctx, "button_prop", None)
     op = getattr(ctx, "button_operator", None)
+    S.ref = None  # forget the last setting, so a value changing there can't hide this card
     if op is not None:
         try:
             if op.bl_rna.identifier == "OBJECT_OT_modifier_add":
@@ -231,6 +350,7 @@ def key_for(ctx):
         gn = gn_input(ptr, ident)
         if gn:
             S.what = ("GN input",) + gn
+            S.ref = make_ref(ptr, ident)
             S.text = gn
             return "__text__:" + gn[0] + gn[1][:20]
         # sometimes it's a path, like nodes["Principled BSDF"].inputs[2].default_value
@@ -365,6 +485,31 @@ def socket_rows(n):
     return rows
 
 
+_boxes = {}  # node tree -> (when, where each node is): reading every node on each mouse move is slow
+
+
+def _node_boxes(tree, s):
+    """(name, x, y, width, height) of each node, top-most first. Re-read 4 times a second at most,
+    or right away when the number of nodes changes."""
+    k = (tree.as_pointer(), s)  # only a number to look the tree up by, never used to reach the data
+    now = time.time()
+    c = _boxes.get(k)
+    nodes = tree.nodes
+    if c is not None and now - c[0] < 0.25 and c[1] == len(nodes):
+        return c[2]
+    boxes = []
+    for n in reversed(nodes):
+        if n.type in ("FRAME", "REROUTE"):
+            continue
+        loc = getattr(n, "location_absolute", n.location)
+        w, h = n.dimensions
+        boxes.append((n.name, loc.x * s, loc.y * s, w, h))
+    if len(_boxes) > 16:
+        _boxes.clear()
+    _boxes[k] = (now, len(nodes), boxes)
+    return boxes
+
+
 def node_under_mouse(ctx, event):
     sp = ctx.space_data
     tree = getattr(sp, "edit_tree", None) or getattr(sp, "node_tree", None)
@@ -373,13 +518,12 @@ def node_under_mouse(ctx, event):
         return None
     x, y = region.view2d.region_to_view(event.mouse_region_x, event.mouse_region_y)
     s = ctx.preferences.system.ui_scale
-    for n in reversed(tree.nodes):
-        if n.type in ("FRAME", "REROUTE"):
-            continue
-        loc = getattr(n, "location_absolute", n.location)
-        lx, ly = loc.x * s, loc.y * s
-        w, h = n.dimensions
+    for name, lx, ly, w, h in _node_boxes(tree, s):
         if lx - 12 * s <= x <= lx + w + 12 * s and ly - h <= y <= ly:
+            n = tree.nodes.get(name)
+            if n is None:
+                _boxes.clear()
+                return None
             # on a socket row without a slider (like Normal, Displacement, Shader)? show that socket
             try:
                 best = min(socket_rows(n), key=lambda r: abs(r[1] - y))
@@ -500,12 +644,25 @@ def text_for(ptr, ident):
 
 def redraw():
     """Redraw only the editor that shows the card (and the one that showed it last)."""
-    want_ptrs = {S.area, S.rect[0] if S.rect else None}
-    wm = bpy.context.window_manager
-    for w in wm.windows:
-        for a in w.screen.areas:
-            if a.type in ("VIEW_3D", "NODE_EDITOR") and (a.as_pointer() in want_ptrs or (not S.area and a.type == "VIEW_3D")):
+    want_ptrs = {S.area, S.rect[0] if S.rect else 0}
+    want_ptrs.discard(0)
+    try:
+        windows = bpy.context.window_manager.windows
+    except Exception:
+        return
+    for w in windows:
+        screen = w.screen
+        if screen is None:
+            continue
+        biggest, size = None, -1
+        for a in screen.areas:
+            t = a.type
+            if t in ("VIEW_3D", "NODE_EDITOR") and a.as_pointer() in want_ptrs:
                 a.tag_redraw()
+            elif not S.area and t == "VIEW_3D" and a.width * a.height > size:
+                biggest, size = a, a.width * a.height
+        if biggest is not None:
+            biggest.tag_redraw()  # with the mouse in another editor the card is in the biggest 3D view
 
 
 DELAY = 1.5  # seconds the mouse must rest on something before the card shows
@@ -513,26 +670,62 @@ WARM = 1.0   # after a card was showing, the next one appears right away for thi
 
 
 def make_ref(ptr, ident):
-    """Remember the setting by its data-block and path (never keep raw pointers: they can vanish)."""
+    """Remember the setting by the text path of its data-block and property. No Python object of the
+    data is kept: after undo, deleting or opening a file those can point at freed memory."""
     try:
         idd = ptr.id_data
         if idd is None:
             return None
         path = ptr.path_from_id(ident)
-        return (idd, path) if path else None
+        if not path:
+            return None
+        return (_id_path(idd), path)
     except Exception:
         return None
+
+
+_id_paths = {}
+
+
+def _id_path(idd):
+    """bpy.data path of a data-block, like materials["Material"] or materials["Material"].node_tree."""
+    r = repr(idd)  # bpy.data.materials['Material'] / bpy.data.materials['Material'].node_tree
+    p = _id_paths.get(r)
+    if p is None:
+        if len(_id_paths) > 512:
+            _id_paths.clear()
+        p = _id_paths[r] = _make_id_path(r)
+    return p
+
+
+def _make_id_path(r):
+    import ast
+    if not r.startswith("bpy.data."):
+        raise ValueError("not in bpy.data")
+    coll, _, rest = r[len("bpy.data."):].partition("[")
+    key, _, tail = rest.rpartition("]")
+    name = ast.literal_eval(key)
+    if not isinstance(name, str):
+        raise ValueError("linked from a library")  # ('Name', 'lib.blend'): can't be written as a path
+    return f'{coll}["{bpy.utils.escape_identifier(name)}"]{tail}'
 
 
 def _val(ref):
+    """The setting's value as plain Python data (numbers, text, tuples): never a live Blender object."""
     try:
-        v = ref[0].path_resolve(ref[1])
-        try:
-            return tuple(v)
-        except TypeError:
-            return v
+        v = bpy.data.path_resolve(ref[0]).path_resolve(ref[1])
     except Exception:
         return None
+    if isinstance(v, bpy.types.bpy_prop_collection):
+        return ("items", len(v))  # a list (it can hold millions of vertices: never copy it)
+    if isinstance(v, bpy.types.bpy_struct):
+        return ("data", v.as_pointer())  # which data-block it points at, as a number
+    if isinstance(v, (str, bytes, int, float, bool)):
+        return v
+    try:
+        return tuple(v)
+    except TypeError:
+        return v
 
 
 def _tick():
@@ -553,10 +746,6 @@ def _tick():
     if S.key and S.animating:
         redraw()  # play the clip
     return 0.1 if (S.key or S.pending) else None
-
-
-def _expire():  # kept for the menu hooks
-    return _tick()
 
 
 def want(k, show_now=False):
@@ -607,6 +796,7 @@ class PTIPS_OT_hover(bpy.types.Operator):
         except Exception as e:
             k = None
             S.log.append("error: %s" % e)
+            _report("hover", e)
         if S.log[-1:] != [k if k else S.what]:
             S.log.append(k if k else S.what)
             del S.log[:-40]
@@ -658,6 +848,7 @@ def show_op(cls, desc):
 def hook_menus():
     """Blender asks Python operators for their tooltip while you hover them (menu items,
     tool buttons, Add Node...). We listen there and swap the card."""
+    unhook_menus()  # never wrap twice
     S.hooks = []
     for cls in _all_op_classes():
         if not cls.__module__.startswith("bl_") or cls.__module__.startswith(("bl_pkg", "bl_ext", "bl_app")):
@@ -671,7 +862,9 @@ def hook_menus():
                     break
         if base is None or not isinstance(base, classmethod):
             continue
-        description = _make_desc(base.__func__)
+        f = base.__func__
+        f = getattr(f, "_ptips_orig", f)  # a parent class already wrapped by us: wrap Blender's own
+        description = _make_desc(f)
         try:
             cls.description = classmethod(description)
             S.hooks.append((cls, own))
@@ -681,21 +874,22 @@ def hook_menus():
 
 def _make_desc(f):
     """A tooltip function with exactly Blender's signature (cls, context, properties)."""
-    def description(c, context, properties):
-        d = f(c, context, properties)
+    def description(cls, context, properties):
+        d = f(cls, context, properties)
         try:
             t = None
             try:
                 t = properties["type"]
             except Exception:
                 t = getattr(properties, "type", None)
-            if c.__name__ == "NODE_OT_add_node" and t:
+            if cls.__name__ == "NODE_OT_add_node" and t:
                 show_node(t)
             else:
-                show_op(c, d)
-        except Exception:
-            pass
+                show_op(cls, d)
+        except Exception as e:
+            _report("menu tooltip", e)  # never break Blender's own tooltip
         return d
+    description._ptips_orig = f
     return description
 
 
@@ -877,6 +1071,7 @@ def draw_builtin_assets(layout, label, skip_essentials=False):
 def hook_asset_menus():
     import inspect, textwrap
     from bl_ui import properties_data_modifier as pdm
+    unhook_asset_menus()
     S.asset_orig = []
     make_ess_menus()
     for name in dir(pdm):
@@ -924,10 +1119,7 @@ class PTIPS_OT_constraint_add(bpy.types.Operator):
             if is_on():
                 k = CONSMAP.get("_types", {}).get(t)
                 item = bpy.types.Constraint.bl_rna.properties["type"].enum_items[t]
-                say = item.description
-                for sname, d in EX_PROPS.items():
-                    if sname.lower().replace("constraint", "") == item.name.lower().replace(" ", "") and d.get("_"):
-                        say = d["_"]
+                say = _cons_say(item.name) or item.description
                 if k:
                     S.auto = (item.name, say, "Without", "With", "cons/" + k)
                     key = "auto:cons:" + t
@@ -967,6 +1159,7 @@ PTIPS_MT_bone_constraint_add = _constraint_menu(True)
 
 def hook_constraint_panels():
     from bl_ui import properties_constraint as pc
+    unhook_constraint_panels()
     S.cons_orig = []
     for cls, menu, text in ((pc.OBJECT_PT_constraints, "PTIPS_MT_constraint_add", "Add Object Constraint"),
                             (pc.BONE_PT_constraints, "PTIPS_MT_bone_constraint_add", "Add Bone Constraint")):
@@ -1000,7 +1193,7 @@ def unhook_asset_menus():
 
 def asset_card(name):
     key = "ma_" + "".join(c if c.isalnum() else "_" for c in name)
-    if any(os.path.exists(os.path.join(PICS, "assets", key + "_hi." + x)) for x in ("png", "jpg")):
+    if has_pic("assets/" + key + "_hi"):
         S.auto = (name, catalog.ASSET_TEXTS.get(name, ""), "Without", "With", "assets/" + key)
         return "auto:asset:" + name
     t = catalog.ASSET_TEXTS.get(name)
@@ -1025,7 +1218,10 @@ def hook_modifier_menu():
         from bl_ui.properties_data_modifier import ModifierAddMenu
     except Exception:
         return
-    orig = ModifierAddMenu.__dict__["operator_modifier_add"]
+    orig = ModifierAddMenu.__dict__.get("operator_modifier_add")
+    if orig is None or not all(hasattr(ModifierAddMenu, a) for a in (
+            "MODIFIER_TYPES_TO_LABELS", "MODIFIER_TYPES_TO_ICONS", "MODIFIER_TYPES_I18N_CONTEXT")):
+        return  # a Blender whose Add Modifier menu works differently: leave it alone
 
     def operator_modifier_add(cls, layout, mod_type, text=None, no_icon=False):
         label = text if text else cls.MODIFIER_TYPES_TO_LABELS[mod_type]
@@ -1072,6 +1268,7 @@ class PTIPS_OT_tool_set(bpy.types.Operator):
 def hook_toolbar():
     """Toolbar buttons call our tool picker (which then calls Blender's), so we know which one you hover."""
     import inspect, textwrap
+    unhook_toolbar()
     try:
         from bl_ui import space_toolsystem_common as tsc
         H = tsc.ToolSelectPanelHelper
@@ -1096,6 +1293,7 @@ def unhook_toolbar():
     S.tool_hook = None
 
 
+@bpy.app.handlers.persistent  # keep working after you open another file
 def _watch_new_nodes(scene, depsgraph=None):
     """When a node appears in the active material (e.g. picked from the socket menu in the
     Material tab, which Blender draws in a way add-ons can't hover), show that node's card."""
@@ -1130,16 +1328,17 @@ def _watch_new_nodes(scene, depsgraph=None):
                 S.tool_shown = time.time()
                 S.last_tool_card = k
             return
-        if False:
-            n = tree.nodes[sorted(new)[0]]
-            k = node_card(n.bl_idname, n.label or n.name)
-            if k:
-                S.ref, S.last_event = None, time.time()
-                want(k, show_now=True)
-                S.tool_shown = time.time()
-                S.last_tool_card = k
-    except Exception:
-        pass
+    except Exception as e:
+        _report("new node card", e)
+
+
+@bpy.app.handlers.persistent
+def _on_load(*_args):
+    """A file was opened: nothing seen before belongs to it any more."""
+    S.node_names = {}
+    S.key = S.pending = S.ref = S.ref_val = None
+    S.rect = None
+    S.area = 0
 
 
 def _watch_tool():
@@ -1184,50 +1383,90 @@ def unhook_menus():
 
 # ------------------------------------------------------------------ pictures
 
-def texture(key, end):
-    name = f"{key}_{end}"
-    if name in S.tex:
-        return S.tex[name]
+TEX_CAP = 64 * 1024 * 1024  # GPU memory the pictures may use; the least recently shown go first
+
+
+def texture(path):
+    """GPU texture of a picture file (None if it can't be read). Kept in a small most-recently-used cache."""
+    if path in S.tex:
+        S.tex.move_to_end(path)
+        return S.tex[path]
     t = None
-    path = os.path.join(PICS, name + ".png")
-    if not os.path.exists(path):
-        path = os.path.join(PICS, name + ".jpg")  # the packaged add-on uses smaller JPEGs
-    if os.path.exists(path):
+    size = 0
+    try:
+        # read the file straight into GPU memory: no image is ever added to your .blend,
+        # so Blender doesn't have to refresh anything
+        import imbuf
+        import numpy as np
+        ib = imbuf.load(path)
         try:
-            # read the file straight into GPU memory: no image is ever added to your .blend,
-            # so Blender doesn't have to refresh anything
-            import imbuf
-            import numpy as np
-            ib = imbuf.load(path)
             w, h = ib.size
             with ib.with_buffer() as mv:
-                arr = np.frombuffer(mv.tobytes(), dtype=np.uint8)
+                arr = np.frombuffer(mv, dtype=np.uint8)
+                if arr.size != w * h * 4:
+                    raise ValueError("unexpected channels")
+                px = np.multiply(arr, 1.0 / 255.0, dtype=np.float32)
+        finally:
             ib.free()
-            if arr.size != w * h * 4:
-                raise ValueError("unexpected channels")
-            buf = gpu.types.Buffer("FLOAT", w * h * 4, arr.astype(np.float32) / 255.0)
-            t = gpu.types.GPUTexture((w, h), format="RGBA16F", data=buf)
-        except Exception as e:
-            print("Infocard:", e)
-    S.tex[name] = t
+        t = gpu.types.GPUTexture((w, h), format="RGBA16F", data=gpu.types.Buffer("FLOAT", w * h * 4, px))
+        size = w * h * 8
+    except Exception as e:
+        _report("picture " + os.path.basename(path), e)
+    S.tex[path] = t
+    S.tex_bytes += size
+    while S.tex_bytes > TEX_CAP and len(S.tex) > 2:
+        old_path, old = S.tex.popitem(last=False)  # dropping the last reference frees the GPU texture
+        if old is not None:
+            S.tex_bytes -= old.width * old.height * 8
     return t
+
+
+def picture(key, end):
+    """(texture, (frame, frames) or None) for one side of a card; clips pick the frame for now."""
+    e = pic_entry(f"{key}_{end}")
+    if e is None:
+        return None, None
+    src, n = e
+    if not n:
+        return texture(src), None
+    S.animating = True
+    i = int(time.time() * FPS) % n
+    if isinstance(src, tuple):  # loose frame files
+        return texture(src[i]), None
+    return texture(src), (i, n)  # all frames in one picture, side by side
+
 
 def nframes(key, end):
     """How many animation frames a picture has (0 = it's a still)."""
-    name = f"{key}_{end}#n"
-    if name not in S.tex:
-        n = 0
-        while any(os.path.exists(os.path.join(PICS, f"{key}_{end}_f{n}.{x}")) for x in ("png", "jpg")):
-            n += 1
-        S.tex[name] = n
-    return S.tex[name]
+    e = pic_entry(f"{key}_{end}")
+    return e[1] if e else 0
 
 
 FPS = 8
 
 # ------------------------------------------------------------------ drawing
 
+_batches = {}  # shapes already sent to the GPU (the card sits still, so most frames reuse them)
+
+
+def _batch(key, make):
+    b = _batches.get(key)
+    if b is None:
+        if len(_batches) > 256:
+            _batches.clear()
+        b = _batches[key] = make()
+    return b
+
+
 def rrect(x, y, w, h, r, color):
+    sh = gpu.shader.from_builtin("UNIFORM_COLOR")
+    b = _batch(("r", x, y, w, h, r), lambda: batch_for_shader(sh, "TRIS", {"pos": _rrect_tris(x, y, w, h, r)}))
+    sh.bind()
+    sh.uniform_float("color", color)
+    b.draw(sh)
+
+
+def _rrect_tris(x, y, w, h, r):
     r = min(r, w / 2, h / 2)
     pts = []
     for cx, cy, a0 in ((x + w - r, y + h - r, 0), (x + r, y + h - r, 90), (x + r, y + r, 180), (x + w - r, y + r, 270)):
@@ -1238,24 +1477,27 @@ def rrect(x, y, w, h, r, color):
     tris = []
     for i in range(len(pts)):
         tris += [c0, pts[i], pts[(i + 1) % len(pts)]]
-    sh = gpu.shader.from_builtin("UNIFORM_COLOR")
-    b = batch_for_shader(sh, "TRIS", {"pos": tris})
-    sh.bind()
-    sh.uniform_float("color", color)
-    b.draw(sh)
+    return tris
 
 
-def image(tex, x, y, w, h):
-    """Draw a square picture into a w x h box, cropping the middle so it never looks stretched."""
+def image(tex, x, y, w, h, frame=None):
+    """Draw a square picture into a w x h box, cropping the middle so it never looks stretched.
+    frame = (i, n): the picture is n frames side by side, draw frame i."""
     r = w / h if h else 1.0
     u0, u1, v0, v1 = 0.0, 1.0, 0.0, 1.0
     if r > 1:
         v0, v1 = 0.5 - 0.5 / r, 0.5 + 0.5 / r
     elif r < 1:
         u0, u1 = 0.5 - 0.5 * r, 0.5 + 0.5 * r
+    if frame:
+        i, n = frame
+        half = 0.5 / max(1, tex.width)  # stay half a pixel inside, so the next frame never bleeds in
+        u0 = max((i + u0) / n, i / n + half)
+        u1 = min((i + u1) / n, (i + 1) / n - half)
     sh = gpu.shader.from_builtin("IMAGE")
-    b = batch_for_shader(sh, "TRI_FAN", {"pos": ((x, y), (x + w, y), (x + w, y + h), (x, y + h)),
-                                         "texCoord": ((u0, v0), (u1, v0), (u1, v1), (u0, v1))})
+    b = _batch(("i", x, y, w, h, u0, u1, v0, v1), lambda: batch_for_shader(
+        sh, "TRI_FAN", {"pos": ((x, y), (x + w, y), (x + w, y + h), (x, y + h)),
+                        "texCoord": ((u0, v0), (u1, v0), (u1, v1), (u0, v1))}))
     sh.bind()
     sh.uniform_sampler("image", tex)
     b.draw(sh)
@@ -1271,12 +1513,26 @@ def text(t, x, y, size, color):
 
 def fit(t, size, width):
     blf.size(0, size)
-    while t and blf.dimensions(0, t)[0] > width:
-        t = t[:-2] + "…" if not t.endswith("…") else t[:-2] + "…"
+    while len(t) > 1 and blf.dimensions(0, t)[0] > width:
+        t = t[:-2] + "…"  # drop one letter before the dots (stops at the dots alone, never loops forever)
     return t
 
 
+_wraps = {}
+
+
 def wrap(t, size, width, max_lines=2):
+    """Lines of t that fit the width (remembered: the card asks for the same text every redraw)."""
+    k = (t, size, width, max_lines)
+    lines = _wraps.get(k)
+    if lines is None:
+        if len(_wraps) > 128:
+            _wraps.clear()
+        lines = _wraps[k] = _wrap(t, size, width, max_lines)
+    return lines
+
+
+def _wrap(t, size, width, max_lines):
     blf.size(0, size)
     lines, cur = [], ""
     for w in t.split():
@@ -1317,14 +1573,9 @@ def draw_card(key, x, y, s, card=None, dry=False):
     py = ly + fs_l + 8 * s
     for k, (end, lab) in enumerate((("lo", lo), ("hi", hi))):
         px = x + pad + k * (PW + gap)
-        n = nframes(pic, end)
-        if n:
-            S.animating = True
-            t = texture(pic, f"{end}_f{int(time.time() * FPS) % n}")
-        else:
-            t = texture(pic, end)
+        t, frame = picture(pic, end)
         if t is not None:
-            image(t, px, py, PW, P)
+            image(t, px, py, PW, P, frame)
         else:
             rrect(px, py, PW, P, 6 * s, (0.2, 0.2, 0.22, 1))
         gpu.state.blend_set("ALPHA")
@@ -1335,7 +1586,7 @@ def draw_card(key, x, y, s, card=None, dry=False):
     sy = py + P + 14 * s
     for i, ln in enumerate(reversed(say_lines)):  # drawn bottom-up
         text(ln, x + pad, sy + i * lh, fs_s, (0.86, 0.86, 0.88, 1))
-    text(title, x + pad, sy + lh * len(say_lines) + 6 * s, fs_t, (1, 1, 1, 1))
+    text(fit(title, fs_t, W - pad * 2), x + pad, sy + lh * len(say_lines) + 6 * s, fs_t, (1, 1, 1, 1))
     return W, H
 
 
@@ -1381,6 +1632,7 @@ def draw_px():
     key = card_key()
     if not key or not is_on():
         S.animating = False
+        S.rect = None  # nothing on screen: clicks there must reach Blender
         return
     if not key.startswith(("__text__", "auto:", "__layout")) and key not in catalog.CARDS:
         return
@@ -1473,9 +1725,10 @@ def draw_px():
             rrect(hx + o + 4 * ui, hy + hs - 2 * ui, hs - o - 4 * ui, 2 * ui, 1 * ui, (1, 1, 1, 0.35))
         S.rect = (area.as_pointer(), region.as_pointer(), x, y, W, H, hx, hy, hs)
         S.err = None
-    except Exception:
+    except Exception as e:
         import traceback
         S.err = traceback.format_exc()
+        _report("drawing the card", e)
     finally:
         gpu.state.blend_set("NONE")
 
@@ -1483,13 +1736,14 @@ def draw_px():
 def mouse_on_card(context, event):
     """'move', 'size' or None."""
     r = S.rect
-    if not r or not card_key() or context.region is None or context.region.as_pointer() != r[1]:
+    if not r or not card_key() or not is_on() or context.region is None or context.region.as_pointer() != r[1]:
         return None
     mx, my = event.mouse_region_x, event.mouse_region_y
     _, _, x, y, W, H, hx, hy, hs = r
     if not (x <= mx <= x + W and y <= my <= y + H):
         return None
-    if hx - 6 <= mx <= hx + hs + 6 and hy - 6 <= my <= hy + hs + 6:
+    m = 6 * context.preferences.system.ui_scale  # a little extra room around the handle (HiDPI too)
+    if hx - m <= mx <= hx + hs + m and hy - m <= my <= hy + hs + m:
         return "size"
     return "move"
 
@@ -1519,9 +1773,13 @@ class PTIPS_OT_grab(bpy.types.Operator):
         if not what:
             return {"PASS_THROUGH"}
         p = prefs()
+        if p is None:
+            return {"PASS_THROUGH"}
         self.what = what
         self.start = (event.mouse_x, event.mouse_y)
         self.off = tuple(p.offset)
+        self.pos0 = tuple(p.pos)
+        self.mode0 = p.place_mode
         self.corner0 = p.corner
         self.rect0 = S.rect[2:6] if S.rect else None
         self.size = p.size
@@ -1532,6 +1790,8 @@ class PTIPS_OT_grab(bpy.types.Operator):
 
     def modal(self, context, event):
         p = prefs()
+        if p is None:  # the add-on was turned off mid-drag
+            return {"CANCELLED"}
         ui = context.preferences.system.ui_scale
         S.last_event = time.time()  # keep the card up while dragging
         dx, dy = event.mouse_x - self.start[0], event.mouse_y - self.start[1]
@@ -1569,11 +1829,12 @@ class PTIPS_OT_grab(bpy.types.Operator):
                 p.size = max(0.5, min(2.0, self.size * (1 + (sx * dx + sy * dy) / (500 * ui))))
             redraw()
         elif event.type in ("LEFTMOUSE", "RIGHTMOUSE", "ESC") and event.value == "RELEASE" or event.type == "ESC":
-            if event.type in ("RIGHTMOUSE", "ESC"):
+            if event.type in ("RIGHTMOUSE", "ESC"):  # cancel: put everything back as it was
                 S.dragging = True
                 p.corner = self.corner0
                 S.dragging = False
                 p.offset, p.size, p.ratio = self.off, self.size, self.ratio
+                p.pos, p.place_mode = self.pos0, self.mode0
             redraw()
             return {"FINISHED"}
         return {"RUNNING_MODAL"}
@@ -1719,7 +1980,17 @@ class PTIPS_PT_panel(bpy.types.Panel):
 classes = (PTIPS_Prefs, PTIPS_OT_hover, PTIPS_OT_modifier_add, PTIPS_OT_modifier_add_asset, PTIPS_MT_more_assets, PTIPS_MT_other_libs, PTIPS_OT_constraint_add, PTIPS_MT_constraint_add, PTIPS_MT_bone_constraint_add, PTIPS_OT_tool_set, PTIPS_OT_grab, PTIPS_OT_reset, PTIPS_OT_layout, PTIPS_OT_corner, PTIPS_PT_panel)
 
 
+def _remove_handlers():
+    for lst, f in ((bpy.app.handlers.depsgraph_update_post, _watch_new_nodes), (bpy.app.handlers.load_post, _on_load)):
+        for h in [h for h in lst if getattr(h, "__name__", "") == f.__name__ and getattr(h, "__module__", "") == __name__]:
+            lst.remove(h)  # also the ones a previous copy of this add-on left behind
+    for t in (_watch_tool, _tick):
+        if bpy.app.timers.is_registered(t):
+            bpy.app.timers.unregister(t)
+
+
 def register():
+    _remove_handlers()
     for c in classes:
         bpy.utils.register_class(c)
     S.handlers = [
@@ -1727,19 +1998,15 @@ def register():
         (bpy.types.SpaceNodeEditor, bpy.types.SpaceNodeEditor.draw_handler_add(draw_px, (), "WINDOW", "POST_PIXEL")),
     ]
     if MENU_HOOKS:  # hover cards inside Blender's own Add menus and toolbar (full version only)
-        hook_menus()
-        hook_modifier_menu()
-        try:
-            hook_constraint_panels()
-        except Exception as e:
-            print("Infocard: constraint menu", e)
-        try:
-            hook_asset_menus()
-        except Exception as e:
-            print("Infocard: asset menus", e)
-        hook_toolbar()
+        for hook in (hook_menus, hook_modifier_menu, hook_constraint_panels, hook_asset_menus, hook_toolbar):
+            try:
+                hook()
+            except Exception as e:
+                _report(hook.__name__, e)
     bpy.app.timers.register(_watch_tool, first_interval=1.0, persistent=True)
     bpy.app.handlers.depsgraph_update_post.append(_watch_new_nodes)
+    bpy.app.handlers.load_post.append(_on_load)
+    S.kmis = []
     kc = bpy.context.window_manager.keyconfigs.addon
     if kc:
         for name in ("Window", "User Interface"):
@@ -1756,21 +2023,31 @@ def unregister():
     for km, kmi in S.kmis:
         try:
             km.keymap_items.remove(kmi)
-        except Exception:
-            pass
+        except Exception as e:
+            _report("keymap", e)
     S.kmis = []
-    unhook_menus()
-    unhook_constraint_panels()
-    unhook_asset_menus()
-    unhook_toolbar()
-    if _watch_new_nodes in bpy.app.handlers.depsgraph_update_post:
-        bpy.app.handlers.depsgraph_update_post.remove(_watch_new_nodes)
-    if bpy.app.timers.is_registered(_watch_tool):
-        bpy.app.timers.unregister(_watch_tool)
+    for unhook in (unhook_menus, unhook_constraint_panels, unhook_asset_menus, unhook_toolbar):
+        try:
+            unhook()
+        except Exception as e:
+            _report(unhook.__name__, e)
+    _remove_handlers()
     for space, h in S.handlers:
-        space.draw_handler_remove(h, "WINDOW")
+        try:
+            space.draw_handler_remove(h, "WINDOW")
+        except Exception as e:
+            _report("draw handler", e)
     S.handlers = []
-    S.tex = {}
-    S.key = None
+    S.tex.clear()  # frees the GPU textures
+    S.tex_bytes = 0
+    _batches.clear()
+    _boxes.clear()
+    S.key = S.pending = S.ref = S.ref_val = S.rect = S.auto = None
+    S.area = 0
+    S.node_names = {}
+    S.layout_edit = S.editing = S.animating = False
     for c in reversed(classes):
-        bpy.utils.unregister_class(c)
+        try:
+            bpy.utils.unregister_class(c)
+        except Exception as e:
+            _report("unregister " + c.__name__, e)
